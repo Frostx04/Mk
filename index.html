@@ -103,6 +103,9 @@ a.row { color: inherit; text-decoration: none; }
 .row-t { font-weight: 500; overflow-wrap: anywhere; }
 .row-s { font-size: 14px; color: var(--muted); overflow-wrap: anywhere; }
 .row-r { text-align: right; flex-shrink: 0; font-size: 14px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+.row-r { max-width: 52%; }
+.row-r .lab-val { white-space: normal; overflow-wrap: anywhere; line-height: 1.3; }
+.row-main { min-width: 38%; }
 .chev { width: 8px; height: 13px; flex-shrink: 0; color: var(--line); }
 .date-col { width: 48px; flex-shrink: 0; font-family: var(--mono); font-size: 13px; color: var(--muted); line-height: 1.25; }
 
@@ -649,7 +652,7 @@ V.today = () => {
   }
   if (abn.length) {
     h += sec('Вне нормы в последних анализах');
-    h += list(abn.map(l => row({ t: esc(l.name), s: `${fd(l.date)} · норма ${esc(refText(l)) || '—'}`, r: `<span class="lab-val flag ${l.flag}">${FLAG_MARK[l.flag]} ${valHtml(l)}</span>`, go: 'indicator', p: { k: indKey(l) } })));
+    h += list(abn.map(l => row({ t: esc(l.name), s: `${fd(l.date)} ${refText(l) ? ' · норма ' + esc(refText(l)) : ''}`, r: `<span class="lab-val flag ${l.flag}">${FLAG_MARK[l.flag]} ${valHtml(l)}</span>`, go: 'indicator', p: { k: indKey(l) } })));
     h += DISCLAIMER;
   }
   return { title: 'Сегодня', html: h };
@@ -1048,7 +1051,7 @@ V.prepFor = ({ s }) => {
   h += sec('Вопросы врачу') + (qs.length ? list(qs.map(q => row({ t: esc(q.title), r: `<button type="button" class="mark" data-act="taskDone" data-id="${q.id}">Ответ получен</button>` }))) : empty('Вопросов пока нет'));
   h += `<form class="f" id="qForm" style="margin-top:10px;grid-template-columns:1fr auto;align-items:end"><div class="field"><label for="qText">Новый вопрос</label><input id="qText" name="q" placeholder="Например: когда пересдать анализ?" required></div><button class="btn" type="submit">Добавить</button></form>`;
   if (tasks.length) h += sec('Зачем идём') + list(tasks.map(x => row({ t: esc(x.title), s: esc(x.reason) })));
-  h += sec('Отклонения в последних анализах') + (abn.length ? list(abn.map(l => row({ t: esc(l.name), s: `${fd(l.date)} · норма ${esc(refText(l)) || '—'}`, r: `<span class="lab-val flag ${l.flag}">${FLAG_MARK[l.flag]} ${valHtml(l)} <span class="small muted">${esc(l.unit || '')}</span></span>`, go: 'indicator', p: { k: indKey(l) } }))) : empty('Отклонений нет'));
+  h += sec('Отклонения в последних анализах') + (abn.length ? list(abn.map(l => row({ t: esc(l.name), s: `${fd(l.date)} ${refText(l) ? ' · норма ' + esc(refText(l)) : ''}`, r: `<span class="lab-val flag ${l.flag}">${FLAG_MARK[l.flag]} ${valHtml(l)} <span class="small muted">${esc(l.unit || '')}</span></span>`, go: 'indicator', p: { k: indKey(l) } }))) : empty('Отклонений нет'));
   h += sec('Принимает сейчас') + (meds.length ? list(meds.map(m => row({ t: esc(m.name), s: esc([m.dose, m.schedule?.text, m.end ? 'до ' + fd(m.end) : ''].filter(Boolean).join(' · ')), go: 'med', p: { id: m.id } }))) : empty('Лекарств нет'));
   if (visits.length) h += sec('Прошлые приёмы') + list(visits.map(e => row({ left: `<div class="date-col">${fds(e.date)}<br>${e.date.slice(0, 4)}</div>`, t: esc(e.title), s: esc((e.conclusion || '').slice(0, 140)), go: 'event', p: { id: e.id } })));
   if (exams.length) h += sec('Последние обследования') + list(exams.map(e => row({ left: `<div class="date-col">${fds(e.date)}<br>${e.date.slice(0, 4)}</div>`, t: esc(e.title), s: esc((e.conclusion || '').slice(0, 140)), go: 'event', p: { id: e.id } })));
