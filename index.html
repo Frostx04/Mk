@@ -229,6 +229,14 @@ a.row { color: inherit; text-decoration: none; }
 .today-date { margin: 0 0 2px; color: var(--muted); font-size: 15px; }
 .cheer { margin: 2px 0 6px; font-size: 18px; font-weight: 500; color: var(--good-strong); text-wrap: balance; }
 
+.ico { width: 34px; height: 34px; border-radius: 10px; flex-shrink: 0; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); }
+.ico svg { width: 20px; height: 20px; }
+.ico.sos { background: var(--hi-soft); color: var(--hi); }
+.ico.good { background: var(--good-bg); color: var(--good); }
+.meta { margin: 0 4px 8px; color: var(--muted); font-size: 15px; font-variant-numeric: tabular-nums; }
+::selection { background: var(--accent-soft); color: var(--ink); }
+input, textarea { caret-color: var(--accent); }
+
 /* ---------- общая картина ---------- */
 .picture { margin-top: 18px; background: var(--good-bg); border-radius: 18px; padding: 18px 16px 6px; color: var(--good-ink); }
 .picture-head h2 { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -.01em; }
@@ -818,6 +826,7 @@ V.doc = ({ id }) => {
 V.more = () => {
   const openQ = D.tasks.filter(x => x.status === 'open').length;
   const tiles = [
+    ['summary', 'Общая картина', 'Что хорошо и что обсудить', '<path d="M4 13.5 9 18l11-12"/>', 'good'],
     ['card', 'Медкарта', 'Профиль и важное', '<path d="M4 5h16v14H4z"/><circle cx="9" cy="11" r="2.2"/><path d="M6 16c.6-1.6 1.8-2.4 3-2.4s2.4.8 3 2.4M14 10h4M14 13h3"/>'],
     ['sos', 'Экстренная карточка', 'Для скорой', '<path d="M12 3 2.5 20h19z"/><path d="M12 10v4M12 17v.5"/>', 'sos'],
     ['history', 'История', `${D.events.length} ${plural(D.events.length, 'событие', 'события', 'событий')}`, '<circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 2"/>'],
@@ -829,7 +838,11 @@ V.more = () => {
   ];
   if (D.cases.length) tiles.push(['cases', esc(D.cases[0].title.split(/[—:]/)[0].trim()), esc(D.cases[0].status || ''), '<path d="M5 16h14l-1.5-5h-11zM7 16v2M17 16v2M8 11l1.5-4h5L16 11"/>']);
   tiles.push(['data', 'Данные и копия', 'Обновить, отправить', '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>']);
-  let h = `<div class="grid2" style="margin-top:6px">${tiles.map(([v, t, s, ic, cls]) => `<button type="button" class="tile ${cls || ''}" data-go="${v}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ic}</svg><b>${t}</b><span>${s}</span></button>`).join('')}</div>`;
+  const tile = v => tiles.find(x => x[0] === v);
+  const group = vs => list(vs.map(tile).filter(Boolean).map(([v, t, s, ic, cls]) => row({ left: `<span class="ico ${cls || ''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ic}</svg></span>`, t, s, go: v })));
+  let h = sec('Здоровье') + group(['summary', 'card', 'sos', 'history']);
+  h += sec('Врачи и приёмы') + group(['prep', 'tasks', 'doctors', 'clinics']);
+  h += sec('Прочее') + group(['money', 'cases', 'data']);
   h += sec('Добавить');
   h += list([['lab', 'Анализ'], ['med', 'Лекарство'], ['appt', 'Запись к врачу'], ['event', 'Прошедший приём или обследование'], ['doc', 'Документ или фото'], ['task', 'Дело или напоминание'], ['question', 'Вопрос врачу'], ['expense', 'Расход'], ['doctor', 'Врач'], ['clinic', 'Клиника']]
     .map(([k, t]) => row({ t, go: 'form', p: { k } })));
@@ -1423,6 +1436,11 @@ function render() {
   $('#back').hidden = stack.length < 2;
   $('#main').innerHTML = r.html;
   document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-current', t.dataset.tab === stack[0].v ? 'page' : 'false'));
+  // Подпись (дата, тип) — под заголовком, а не над ним
+  document.querySelectorAll('#main .eyebrow').forEach(e => {
+    const t = e.nextElementSibling;
+    if (t && t.classList.contains('big-title')) { e.className = 'meta'; if (e.textContent.trim()) t.after(e); else e.remove(); }
+  });
   if (r.after) r.after();
   hydratePhotos();
 }
