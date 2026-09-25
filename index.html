@@ -163,6 +163,7 @@ a.row { color: inherit; text-decoration: none; }
 .course h3 { margin: 0; font-size: 18px; }
 .bar { height: 8px; background: var(--surface-2); border-radius: 99px; overflow: hidden; margin: 12px 0 6px; }
 .bar > i { display: block; height: 100%; background: var(--accent); border-radius: 99px; }
+.med-form { font-size: .78em; font-weight: 500; color: var(--muted); }
 .times { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
 .times span { font-family: var(--mono); font-size: 13px; background: var(--surface-2); border-radius: 8px; padding: 3px 8px; }
 
@@ -340,7 +341,7 @@ form.f { display: grid; gap: 14px; }
 
 <script>
 'use strict';
-const APP_VERSION = '25.09.2026 22:30';
+const APP_VERSION = '25.09.2026 22:45';
 /* =========================================================
    Справочники и форматирование
    ========================================================= */
@@ -490,6 +491,7 @@ async function getFile(name) {
    ========================================================= */
 const RECENT_DAYS = 183;
 const MED_DONE = new Set(['completed', 'stopped', 'unknown_duration']);
+const medTitle = m => `${esc(m.name)}${m.form ? ` <span class="med-form">${esc(m.form)}</span>` : ''}`;
 const activeMeds = t => D.medications.filter(m => !MED_DONE.has(m.status) && m.start <= t && (!m.end || m.end >= t));
 const indKey = l => l.code || `${l.panel || ''}:${l.name}`;
 const isAbn = f => f === 'high' || f === 'low' || f === 'abnormal';
@@ -715,7 +717,7 @@ V.meds = () => {
   h += `<div class="stack">${active.map(m => {
     const st = courseStats(m, t), started = m.start <= t;
     const pct = st.total ? Math.round(Math.max(0, st.day) / st.total * 100) : 0;
-    return `<article class="course"><button type="button" class="row" style="padding:0;min-height:0;border:0" ${nav('med', { id: m.id })}><div class="row-main"><h3>${esc(m.name)}</h3><div class="row-s">${esc([m.dose, m.schedule?.text].filter(Boolean).join(' · '))}</div></div>${CHEV}</button>
+    return `<article class="course"><button type="button" class="row" style="padding:0;min-height:0;border:0" ${nav('med', { id: m.id })}><div class="row-main"><h3>${medTitle(m)}</h3><div class="row-s">${esc([m.generic, m.dose, m.schedule?.text].filter(Boolean).join(' · '))}</div></div>${CHEV}</button>
       <div class="times">${(m.schedule?.times || []).map(x => `<span>${x}</span>`).join('')}</div>
       ${st.total ? `<div class="bar"><i style="width:${pct}%"></i></div><div class="small muted">${started ? `День ${st.day} из ${st.total}` : `Начало ${fd(m.start)}`} · до ${fd(m.end)}, осталось ${Math.max(0, daysBetween(t, m.end))} ${plural(Math.max(0, daysBetween(t, m.end)), 'день', 'дня', 'дней')}</div>` : `<div class="small muted" style="margin-top:8px">С ${fd(m.start)}, без даты окончания</div>`}
       ${st.expected ? `<div class="small muted">Отмечено с ${fd(st.track)}: принято ${st.taken} из ${st.expected} ${plural(st.expected, 'дозы', 'доз', 'доз')}</div>` : ''}
@@ -723,11 +725,11 @@ V.meds = () => {
   }).join('')}</div>`;
   if (unknown.length) {
     h += sec('Срок курса не указан');
-    h += list(unknown.map(m => row({ t: esc(m.name), s: esc([m.dose, `с ${fd(m.start)}`, m.notes].filter(Boolean).join(' · ')), go: 'med', p: { id: m.id } })));
+    h += list(unknown.map(m => row({ t: medTitle(m), s: esc([m.generic, m.dose, `с ${fd(m.start)}`, m.notes].filter(Boolean).join(' · ')), go: 'med', p: { id: m.id } })));
   }
   if (done.length) {
     h += sec('Завершённые');
-    h += list(done.map(m => row({ t: esc(m.name), s: esc([m.dose, m.reason].filter(Boolean).join(' · ')), r: `<span class="num small">${fds(m.start)}–${m.end ? fds(m.end) : '…'}</span>`, go: 'med', p: { id: m.id } })));
+    h += list(done.map(m => row({ t: medTitle(m), s: esc([m.generic, m.dose, m.reason].filter(Boolean).join(' · ')), r: `<span class="num small">${fds(m.start)}–${m.end ? fds(m.end) : '…'}</span>`, go: 'med', p: { id: m.id } })));
   }
   h += `<p class="note">Напоминания приходят из Календаря iPhone: нажмите «Напоминания в Календарь» у курса и подтвердите добавление. Программа не меняет назначения врача.</p>`;
   return { title: 'Лечение', html: h };
@@ -738,6 +740,7 @@ V.med = ({ id }) => {
   const doc = byId('doctors', m.doctor_id), ev = byId('events', m.event_id), t = todayISO();
   const isActive = !MED_DONE.has(m.status) && (!m.end || m.end >= t);
   let h = `<div class="big-title">${esc(m.name)}</div><p class="muted">${esc([m.form, m.reason].filter(Boolean).join(' · '))}</p>`;
+  if (m.generic) h += `<p class="small" style="margin-top:-4px">Действующее вещество: ${esc(m.generic)}</p>`;
   h += kv([['Доза', esc(m.dose)], ['Как принимать', esc(m.schedule?.text)], ['Время', (m.schedule?.times || []).join(', ')],
     ['Начало', fd(m.start)], ['Окончание', m.end ? fd(m.end) : 'не указано'], ['Назначил', doc ? `<a href="#" ${nav('doctor', { id: doc.id })}>${esc(docName(doc))}</a>` : null],
     ['Приём', ev ? `<a href="#" ${nav('event', { id: ev.id })}>${esc(ev.title)}, ${fd(ev.date)}</a>` : null], ['Стоимость', m.cost_uzs ? money(m.cost_uzs) : null], ['Примечание', esc(m.notes)]]);
