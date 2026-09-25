@@ -1,0 +1,1434 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Медкарта</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Медкарта">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#F3F5F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#101412" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root {
+  color-scheme: light;
+  --bg: #F3F5F2; --surface: #FFFFFF; --surface-2: #E8EEEA; --ink: #18211D; --muted: #5E6B64;
+  --line: #D8DFDA; --accent: #246B55; --accent-ink: #FFFFFF; --accent-soft: #DCEBE4;
+  --hi: #B03A2E; --hi-soft: #F7E2DE; --lo: #2A5DA8; --lo-soft: #DFE8F6; --warn: #8F5C10; --warn-soft: #F4E8D2;
+  --ok: #2F7A4F;
+  --sans: "Golos Text", -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --r: 14px;
+  --tabbar: 64px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --bg: #101412; --surface: #181E1B; --surface-2: #212925; --ink: #E4EAE6; --muted: #95A39B;
+    --line: #2B3530; --accent: #6CC3A0; --accent-ink: #0D1A14; --accent-soft: #1D3229;
+    --hi: #F08A7C; --hi-soft: #3A221E; --lo: #8DB2EC; --lo-soft: #1E2A3C; --warn: #E0B060; --warn-soft: #352A17;
+    --ok: #73C995;
+  }
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink); font: 400 16px/1.45 var(--sans);
+  padding-bottom: calc(var(--tabbar) + env(safe-area-inset-bottom, 0px));
+}
+[hidden] { display: none !important; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+img { max-width: 100%; }
+a { color: var(--accent); }
+
+/* ---------- каркас ---------- */
+.top {
+  position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: saturate(1.4) blur(12px); -webkit-backdrop-filter: saturate(1.4) blur(12px);
+  padding: calc(env(safe-area-inset-top, 0px) + 8px) 16px 8px; border-bottom: 1px solid transparent;
+}
+.top-in { max-width: 680px; margin: 0 auto; display: flex; align-items: center; gap: 8px; min-height: 40px; }
+.top h1 { font-size: 17px; font-weight: 600; margin: 0; flex: 1; text-wrap: balance; }
+.icon-btn { border: 0; background: none; padding: 8px; margin: -8px; border-radius: 10px; display: grid; place-items: center; color: var(--accent); }
+.icon-btn svg { width: 24px; height: 24px; }
+.back { font-weight: 500; display: flex; align-items: center; gap: 2px; padding-right: 10px; }
+main { max-width: 680px; margin: 0 auto; padding: 8px 16px 32px; }
+
+.tabbar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; background: var(--surface);
+  border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.tabbar-in { max-width: 680px; margin: 0 auto; display: grid; grid-template-columns: repeat(5, 1fr); height: var(--tabbar); }
+.tab { border: 0; background: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 500; color: var(--muted); }
+.tab svg { width: 24px; height: 24px; }
+.tab[aria-current="page"] { color: var(--accent); }
+
+/* ---------- типографика ---------- */
+.eyebrow { font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); font-weight: 500; margin: 0; }
+.hello { font-size: 28px; line-height: 1.15; font-weight: 700; margin: 4px 0 2px; letter-spacing: -.01em; text-wrap: balance; }
+.lead { color: var(--muted); margin: 0; }
+h2.sec { font-size: 13px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 28px 4px 8px; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+h2.sec a, h2.sec button { text-transform: none; letter-spacing: 0; font-size: 14px; font-weight: 500; color: var(--accent); background: none; border: 0; padding: 0; text-decoration: none; }
+.big-title { font-size: 24px; font-weight: 700; line-height: 1.2; margin: 8px 0 4px; text-wrap: balance; }
+.muted { color: var(--muted); }
+.small { font-size: 14px; }
+.mono, .num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.note { font-size: 13px; color: var(--muted); margin: 16px 4px 0; }
+p { margin: 0 0 8px; }
+.prose { white-space: pre-line; }
+
+/* ---------- списки ---------- */
+.list { background: var(--surface); border-radius: var(--r); overflow: hidden; }
+.row {
+  width: 100%; display: flex; align-items: center; gap: 12px; text-align: left; border: 0; background: none;
+  padding: 12px 16px; min-height: 52px; border-top: 1px solid var(--line);
+}
+.list > .row:first-child, .list > :first-child .row { border-top: 0; }
+button.row:active, a.row:active { background: var(--surface-2); }
+a.row { color: inherit; text-decoration: none; }
+.row-main { flex: 1; min-width: 0; }
+.row-t { font-weight: 500; overflow-wrap: anywhere; }
+.row-s { font-size: 14px; color: var(--muted); overflow-wrap: anywhere; }
+.row-r { text-align: right; flex-shrink: 0; font-size: 14px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+.chev { width: 8px; height: 13px; flex-shrink: 0; color: var(--line); }
+.date-col { width: 48px; flex-shrink: 0; font-family: var(--mono); font-size: 13px; color: var(--muted); line-height: 1.25; }
+
+.kv { background: var(--surface); border-radius: var(--r); padding: 4px 16px; }
+.kv > div { display: grid; grid-template-columns: minmax(96px, 36%) 1fr; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
+.kv > div:first-child { border-top: 0; }
+.kv dt { color: var(--muted); font-size: 14px; }
+.kv dd { margin: 0; overflow-wrap: anywhere; }
+@media (max-width: 380px) { .kv > div { grid-template-columns: 1fr; gap: 2px; } }
+
+.card { background: var(--surface); border-radius: var(--r); padding: 16px; }
+.stack { display: grid; gap: 10px; }
+.block + .block { margin-top: 10px; }
+
+/* ---------- метки ---------- */
+.pill { display: inline-flex; align-items: center; gap: 4px; border-radius: 999px; padding: 2px 9px; font-size: 12.5px; font-weight: 600; white-space: nowrap; background: var(--surface-2); color: var(--muted); }
+.pill.hi { background: var(--hi-soft); color: var(--hi); }
+.pill.lo { background: var(--lo-soft); color: var(--lo); }
+.pill.warn { background: var(--warn-soft); color: var(--warn); }
+.pill.ok { background: var(--accent-soft); color: var(--accent); }
+.pill.local { background: none; border: 1px dashed var(--line); font-weight: 500; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.flag { font-weight: 700; }
+.flag.high { color: var(--hi); } .flag.low { color: var(--lo); } .flag.abnormal { color: var(--warn); } .flag.note { color: var(--muted); }
+
+/* ---------- кнопки ---------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 0; border-radius: 12px; padding: 12px 16px; font-weight: 600; background: var(--accent); color: var(--accent-ink); text-decoration: none; min-height: 46px; }
+.btn.soft { background: var(--accent-soft); color: var(--accent); }
+.btn.ghost { background: var(--surface); color: var(--ink); border: 1px solid var(--line); }
+.btn.danger { background: var(--hi-soft); color: var(--hi); }
+.btn.wide { width: 100%; }
+.btn.sm { min-height: 36px; padding: 7px 12px; font-size: 14px; border-radius: 10px; }
+.btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.btns > .btn { flex: 1 1 140px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 8px 14px; font-size: 15px; font-weight: 500; }
+.chip[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+
+/* ---------- сегодня: приёмы ---------- */
+.dose { display: grid; grid-template-columns: 64px 1fr; gap: 4px 12px; padding: 14px 16px; border-top: 1px solid var(--line); align-items: start; }
+.dose:first-child { border-top: 0; }
+.dose-time { font-family: var(--mono); font-size: 20px; line-height: 1.2; padding-top: 1px; }
+.dose-name { font-weight: 600; }
+.dose-sub { font-size: 14px; color: var(--muted); }
+.dose-acts { grid-column: 2; display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.dose.is-next .dose-time { color: var(--accent); font-weight: 600; }
+.dose.is-taken .dose-time, .dose.is-taken .dose-name { color: var(--muted); }
+.dose.is-taken .dose-name { text-decoration: line-through; text-decoration-color: var(--line); }
+.mark { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 7px 12px; font-size: 14px; font-weight: 600; min-height: 36px; }
+.mark.on.taken { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.mark.on.skipped { background: var(--surface-2); border-color: var(--surface-2); color: var(--muted); }
+
+/* ---------- лечение ---------- */
+.course { background: var(--surface); border-radius: var(--r); padding: 16px; }
+.course h3 { margin: 0; font-size: 18px; }
+.bar { height: 8px; background: var(--surface-2); border-radius: 99px; overflow: hidden; margin: 12px 0 6px; }
+.bar > i { display: block; height: 100%; background: var(--accent); border-radius: 99px; }
+.times { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.times span { font-family: var(--mono); font-size: 13px; background: var(--surface-2); border-radius: 8px; padding: 3px 8px; }
+
+/* ---------- анализы ---------- */
+.lab-row { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; align-items: center; }
+.lab-val { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 15px; text-align: right; white-space: nowrap; }
+.lab-ref { font-size: 13px; color: var(--muted); }
+.gauge { grid-column: 1 / -1; position: relative; height: 6px; background: var(--surface-2); border-radius: 99px; margin-top: 6px; }
+.gauge .band { position: absolute; top: 0; bottom: 0; background: var(--accent-soft); border-radius: 99px; }
+.gauge .dot { position: absolute; top: 50%; width: 11px; height: 11px; margin: -5.5px 0 0 -5.5px; border-radius: 50%; background: var(--accent); border: 2px solid var(--surface); }
+.gauge .dot.high { background: var(--hi); } .gauge .dot.low { background: var(--lo); }
+.search { width: 100%; border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 11px 14px 11px 40px; font-size: 16px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='none' stroke='%238a968f' stroke-width='2'%3E%3Ccircle cx='8' cy='8' r='6'/%3E%3Cpath d='m13 13 4 4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: 13px 50%; }
+.chart { background: var(--surface); border-radius: var(--r); padding: 12px 8px 4px; }
+.chart svg { display: block; width: 100%; height: auto; }
+.chart text { fill: var(--muted); font-family: var(--mono); font-size: 10px; }
+
+/* ---------- документы ---------- */
+.file-view { background: var(--surface); border-radius: var(--r); padding: 12px; display: grid; gap: 10px; justify-items: stretch; }
+.file-view img { border-radius: 8px; width: 100%; height: auto; }
+.file-missing { color: var(--muted); font-size: 14px; }
+
+/* ---------- ещё ---------- */
+.grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.tile { background: var(--surface); border: 0; border-radius: var(--r); padding: 14px; text-align: left; display: grid; gap: 6px; min-height: 92px; align-content: start; }
+.tile svg { width: 26px; height: 26px; color: var(--accent); }
+.tile b { font-weight: 600; }
+.tile span { font-size: 13px; color: var(--muted); }
+.tile.sos svg { color: var(--hi); }
+
+.sos-card { background: var(--surface); border-radius: var(--r); overflow: hidden; border: 2px solid var(--hi); }
+.sos-head { background: var(--hi); color: #fff; padding: 14px 16px; }
+.sos-head b { font-size: 20px; display: block; }
+.sos-body { padding: 4px 16px 12px; }
+.sos-body > div { padding: 10px 0; border-top: 1px solid var(--line); }
+.sos-body > div:first-child { border-top: 0; }
+.sos-body dt { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.sos-body dd { margin: 2px 0 0; font-size: 18px; font-weight: 600; }
+.sos-body dd.empty { color: var(--muted); font-weight: 400; font-size: 16px; }
+
+.money-total { font-family: var(--mono); font-size: 30px; font-weight: 500; letter-spacing: -.02em; }
+.cat-bar { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; padding: 10px 16px; border-top: 1px solid var(--line); }
+.cat-bar:first-child { border-top: 0; }
+.cat-bar .bar { grid-column: 1 / -1; margin: 0; height: 6px; }
+
+/* ---------- формы ---------- */
+form.f { display: grid; gap: 14px; }
+.field { display: grid; gap: 6px; }
+.field label { font-size: 14px; font-weight: 500; color: var(--muted); }
+.field input, .field select, .field textarea {
+  width: 100%; border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 12px 14px; font-size: 16px; min-height: 48px;
+}
+.field textarea { min-height: 96px; resize: vertical; }
+.field .hint { font-size: 13px; color: var(--muted); }
+.field input[type="date"], .field input[type="time"] { -webkit-appearance: none; appearance: none; }
+.err { color: var(--hi); font-size: 14px; }
+
+/* ---------- замок ---------- */
+.lock { min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; padding: 24px 16px; }
+.lock-box { width: 100%; max-width: 380px; display: grid; gap: 16px; }
+.lock-mark { width: 64px; height: 64px; border-radius: 18px; background: var(--accent); display: grid; place-items: center; }
+.lock-mark svg { width: 34px; height: 34px; color: var(--accent-ink); }
+.lock h1 { margin: 0; font-size: 28px; line-height: 1.15; }
+
+.toast { position: fixed; left: 16px; right: 16px; bottom: calc(var(--tabbar) + env(safe-area-inset-bottom, 0px) + 12px); z-index: 10; display: flex; justify-content: center; pointer-events: none; }
+.toast div { background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 12px; font-size: 15px; max-width: 480px; box-shadow: 0 6px 24px rgba(0,0,0,.18); }
+.banner { background: var(--accent-soft); color: var(--ink); border-radius: var(--r); padding: 12px 14px; font-size: 14px; display: flex; gap: 12px; align-items: start; margin-bottom: 12px; }
+.banner button { border: 0; background: none; color: var(--accent); font-weight: 600; padding: 0; }
+.empty { text-align: center; color: var(--muted); padding: 24px 16px; background: var(--surface); border-radius: var(--r); }
+.disclaimer { font-size: 13px; color: var(--muted); margin: 18px 4px 0; font-style: italic; }
+@media (prefers-reduced-motion: no-preference) {
+  main { animation: in .18s ease-out; }
+  @keyframes in { from { opacity: .4; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+}
+</style>
+</head>
+<body>
+
+<section class="lock" id="lock" hidden>
+  <form class="lock-box" id="lockForm" autocomplete="off">
+    <div class="lock-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M12 8v6M9 11h6M8 18h8"/></svg></div>
+    <div>
+      <h1>Медкарта</h1>
+      <p class="lead" id="lockLead">Введите пароль. Данные зашифрованы и расшифровываются только на этом телефоне.</p>
+    </div>
+    <div class="field">
+      <label for="pass">Пароль</label>
+      <input id="pass" type="password" autocomplete="current-password" required>
+    </div>
+    <div class="err" id="lockErr" hidden></div>
+    <button class="btn wide" id="lockBtn" type="submit">Открыть</button>
+  </form>
+</section>
+
+<div id="shell" hidden>
+  <header class="top">
+    <div class="top-in">
+      <button class="icon-btn back" id="back" type="button" hidden aria-label="Назад">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg>Назад
+      </button>
+      <h1 id="title">Сегодня</h1>
+      <button class="icon-btn" type="button" data-go="search" aria-label="Поиск">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      </button>
+    </div>
+  </header>
+  <main id="main"></main>
+  <nav class="tabbar" aria-label="Разделы">
+    <div class="tabbar-in">
+      <button class="tab" data-tab="today" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/><circle cx="12" cy="15" r="1.6" fill="currentColor" stroke="none"/></svg>Сегодня</button>
+      <button class="tab" data-tab="meds" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="3" y="8.5" width="18" height="7" rx="3.5" transform="rotate(-40 12 12)"/><path d="m9.3 8.8 5.4 6.4"/></svg>Лечение</button>
+      <button class="tab" data-tab="labs" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6l-5.2 9a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9V3"/><path d="M7.5 15h9"/></svg>Анализы</button>
+      <button class="tab" data-tab="docs" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>Документы</button>
+      <button class="tab" data-tab="more" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="4" y="4" width="6.5" height="6.5" rx="1.8"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.8"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.8"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.8"/></svg>Ещё</button>
+    </div>
+  </nav>
+</div>
+<div class="toast" id="toast" hidden><div></div></div>
+
+<script>
+'use strict';
+/* =========================================================
+   Справочники и форматирование
+   ========================================================= */
+const KIND = { doctor: 'Приём врача', lab: 'Анализы', us: 'УЗИ', mri: 'МРТ', xray: 'Рентген', ct: 'КТ',
+  expertise: 'Экспертиза', pharmacy: 'Аптека', exam: 'Обследование', procedure: 'Процедура', other: 'Событие' };
+const DOC_CATS = ['Анализы', 'Заключения', 'УЗИ', 'МРТ', 'Рентген', 'Назначения', 'Чеки', 'Справки', 'Другие'];
+const EXP_CATS = ['Врачи', 'Анализы', 'Обследования', 'Лекарства', 'Другое'];
+const TASK_TYPES = { appointment: 'Запись к врачу', lab: 'Анализы', exam: 'Обследование', other: 'Другое', question: 'Вопрос врачу' };
+const WD = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота'];
+const MG = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+const MN = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+const FLAG_MARK = { high: '▲', low: '▼', abnormal: '⚠', note: 'ℹ' };
+const FLAG_WORD = { high: 'выше нормы', low: 'ниже нормы', abnormal: 'отклонение', note: 'примечание' };
+const DISCLAIMER = '<p class="disclaimer">Информация для справки и не заменяет консультацию врача.</p>';
+const CHEV = '<svg class="chev" viewBox="0 0 8 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m1.5 1.5 5 5-5 5"/></svg>';
+
+const $ = s => document.querySelector(s);
+const esc = s => s == null ? '' : String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const pad = n => String(n).padStart(2, '0');
+const isoOf = dt => `${dt.getFullYear()}-${pad(dt.getMonth() + 1)}-${pad(dt.getDate())}`;
+const todayISO = () => isoOf(new Date());
+const nowHM = () => { const d = new Date(); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; };
+const fd = s => s ? `${s.slice(8, 10)}.${s.slice(5, 7)}.${s.slice(0, 4)}` : '—';
+const fds = s => s ? `${s.slice(8, 10)}.${s.slice(5, 7)}` : '—';
+const fdLong = s => s ? `${+s.slice(8, 10)} ${MG[+s.slice(5, 7) - 1]}` : '—';
+const dayNum = s => Math.round(Date.parse(s + 'T00:00:00Z') / 864e5);
+const daysBetween = (a, b) => dayNum(b) - dayNum(a);
+const addDays = (s, n) => { const d = new Date(Date.parse(s + 'T00:00:00Z') + n * 864e5); return d.toISOString().slice(0, 10); };
+const money = n => n == null ? '—' : String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' сум';
+const num = x => x == null ? '' : (Number.isInteger(x) ? String(x) : String(+x.toFixed(4)).replace('.', ','));
+const parseNum = t => { const v = parseFloat(String(t).replace(/\s/g, '').replace(',', '.')); return Number.isFinite(v) && /^-?[\d\s]+([.,]\d+)?$/.test(String(t).trim()) ? v : null; };
+const newId = p => p + '_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+const hash = s => { let h = 5381; for (const c of s) h = ((h << 5) + h + c.codePointAt(0)) >>> 0; return h.toString(36); };
+const nav = (v, p) => `data-go="${v}"` + (p ? ` data-p="${esc(JSON.stringify(p))}"` : '');
+const age = b => { if (!b) return null; const t = new Date(), d = new Date(b); let a = t.getFullYear() - d.getFullYear(); if (t < new Date(t.getFullYear(), d.getMonth(), d.getDate())) a--; return a; };
+const plural = (n, a, b, c) => { const m = n % 10, h = n % 100; return m === 1 && h !== 11 ? a : m >= 2 && m <= 4 && (h < 10 || h >= 20) ? b : c; };
+const mimeOf = n => { const e = n.split('.').pop().toLowerCase(); return { pdf: 'application/pdf', jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', heic: 'image/heic', webp: 'image/webp', gif: 'image/gif' }[e] || 'application/octet-stream'; };
+const b64d = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+const b64e = bytes => { let s = ''; const u = new Uint8Array(bytes); for (let i = 0; i < u.length; i += 0x8000) s += String.fromCharCode.apply(null, u.subarray(i, i + 0x8000)); return btoa(s); };
+
+function row({ t, s, r, go, p, act, data, left, href }) {
+  const attrs = go ? nav(go, p) : act ? `data-act="${act}"` + Object.entries(data || {}).map(([k, v]) => ` data-${k}="${esc(v)}"`).join('') : '';
+  const inner = `${left || ''}<div class="row-main"><div class="row-t">${t}</div>${s ? `<div class="row-s">${s}</div>` : ''}</div>${r != null ? `<div class="row-r">${r}</div>` : ''}${go || href ? CHEV : ''}`;
+  if (href) return `<a class="row" href="${esc(href)}" target="_blank" rel="noopener">${inner}</a>`;
+  return go || act ? `<button class="row" type="button" ${attrs}>${inner}</button>` : `<div class="row">${inner}</div>`;
+}
+const list = rows => rows.length ? `<div class="list">${rows.join('')}</div>` : '';
+const kv = pairs => { const r = pairs.filter(p => p[1] != null && p[1] !== ''); return r.length ? `<dl class="kv">${r.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>` : ''; };
+const sec = (title, extra = '') => `<h2 class="sec"><span>${title}</span>${extra}</h2>`;
+const empty = t => `<div class="empty">${t}</div>`;
+function toast(t) { const el = $('#toast'); el.firstElementChild.textContent = t; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 2600); }
+
+/* =========================================================
+   Хранилище в телефоне (IndexedDB)
+   ========================================================= */
+const idb = {
+  db: null,
+  open() {
+    return this.db ||= new Promise((res, rej) => {
+      const r = indexedDB.open('medkarta', 1);
+      r.onupgradeneeded = () => { r.result.createObjectStore('kv'); r.result.createObjectStore('files'); };
+      r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
+    });
+  },
+  async run(store, mode, fn) {
+    const db = await this.open();
+    return new Promise((res, rej) => {
+      const t = db.transaction(store, mode); const req = fn(t.objectStore(store));
+      t.oncomplete = () => res(req && req.result); t.onerror = () => rej(t.error); t.onabort = () => rej(t.error);
+    });
+  },
+  get(s, k) { return this.run(s, 'readonly', st => st.get(k)); },
+  put(s, k, v) { return this.run(s, 'readwrite', st => st.put(v, k)); },
+  del(s, k) { return this.run(s, 'readwrite', st => st.delete(k)); },
+  keys(s) { return this.run(s, 'readonly', st => st.getAllKeys()); },
+};
+
+/* =========================================================
+   Данные: «серверная» часть (зашифрованная, от вас) + записи Дары
+   ========================================================= */
+const LIST_KEYS = ['clinics', 'doctors', 'events', 'labs', 'medications', 'documents', 'tasks', 'expenses', 'cases'];
+let SERVER = null, LOCAL = null, D = null, KEY = null, SALT = null;
+const emptyLocal = () => ({ v: 1, intakes: {}, add: Object.fromEntries(LIST_KEYS.map(k => [k, []])), patch: {}, deleted: [], profile: {} });
+const expKey = x => 'x_' + hash(`${x.date}|${x.title}|${x.amount_uzs}`);
+
+function build() {
+  const s = SERVER || {}, del = new Set(LOCAL.deleted);
+  D = { profile: { ...(s.profile || {}), ...LOCAL.profile }, meta: s.meta || {}, file_map: s.file_map || {}, intakes: { ...(s.intakes || {}), ...LOCAL.intakes } };
+  for (const k of LIST_KEYS) {
+    const ids = new Set(), out = [];
+    for (const x of s[k] || []) {
+      const id = x.id || expKey(x); ids.add(id);
+      if (!del.has(id)) out.push({ ...x, id, ...(LOCAL.patch[id] || {}) });
+    }
+    for (const x of LOCAL.add[k] || []) if (!ids.has(x.id) && !del.has(x.id)) out.push({ ...x, _local: true });
+    D[k] = out;
+  }
+}
+async function saveLocal(msg) {
+  try { await idb.put('kv', 'local', LOCAL); } catch (e) { toast('Не удалось сохранить в памяти телефона'); }
+  build(); render(); if (msg) toast(msg);
+}
+function addItem(k, obj, msg) { obj.id ||= newId(k.slice(0, 3)); LOCAL.add[k].push(obj); return saveLocal(msg); }
+function patchItem(k, id, fields, msg) {
+  const loc = LOCAL.add[k].find(x => x.id === id);
+  if (loc) Object.assign(loc, fields); else LOCAL.patch[id] = { ...(LOCAL.patch[id] || {}), ...fields };
+  return saveLocal(msg);
+}
+function deleteItem(k, id, msg) {
+  const i = LOCAL.add[k].findIndex(x => x.id === id);
+  if (i >= 0) LOCAL.add[k].splice(i, 1); else LOCAL.deleted.push(id);
+  return saveLocal(msg);
+}
+const byId = (k, id) => id ? D[k].find(x => x.id === id) : null;
+const docName = d => d ? (d.name || d.specialty) : null;
+
+/* ---------- расшифровка ---------- */
+async function deriveKey(pass, salt, iter) {
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(pass), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({ name: 'PBKDF2', salt: b64d(salt), iterations: iter, hash: 'SHA-256' }, base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+}
+async function decryptBundle(env, key) {
+  const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64d(env.iv) }, key, b64d(env.ct));
+  return JSON.parse(new TextDecoder().decode(pt));
+}
+async function fetchEnvelope() {
+  const r = await fetch('data.enc?t=' + Date.now(), { cache: 'no-store' });
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  return r.json();
+}
+async function getFile(name) {
+  let blob = await idb.get('files', name).catch(() => null);
+  if (blob) return blob;
+  const path = D.file_map[name];
+  if (!path || !KEY) return null;
+  const r = await fetch(path);
+  if (!r.ok) return null;
+  const buf = new Uint8Array(await r.arrayBuffer());
+  const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: buf.slice(0, 12) }, KEY, buf.slice(12));
+  blob = new Blob([pt], { type: mimeOf(name) });
+  idb.put('files', name, blob).catch(() => {});
+  return blob;
+}
+
+/* =========================================================
+   Вычисления
+   ========================================================= */
+const MED_DONE = new Set(['completed', 'stopped', 'unknown_duration']);
+const activeMeds = t => D.medications.filter(m => !MED_DONE.has(m.status) && m.start <= t && (!m.end || m.end >= t));
+const indKey = l => l.code || `${l.panel || ''}:${l.name}`;
+const isAbn = f => f === 'high' || f === 'low' || f === 'abnormal';
+function latestAbnormal() {
+  const last = {};
+  for (const l of D.labs) { const k = indKey(l); if (!last[k] || l.date > last[k].date) last[k] = l; }
+  return Object.values(last).filter(l => isAbn(l.flag)).sort((a, b) => b.date.localeCompare(a.date));
+}
+const labSetId = l => l.event_id || `d:${l.date}|${l.lab || ''}`;
+function refText(l) {
+  if (l.ref_low != null && l.ref_high != null) return `${num(l.ref_low)}–${num(l.ref_high)}`;
+  if (l.ref_high != null) return `до ${num(l.ref_high)}`;
+  if (l.ref_low != null) return `от ${num(l.ref_low)}`;
+  return l.ref_text || '';
+}
+const valText = l => l.value != null ? num(l.value) : (l.value_text || '—');
+function flagOf(v, lo, hi) { if (v == null || (lo == null && hi == null)) return null; if (lo != null && v < lo) return 'low'; if (hi != null && v > hi) return 'high'; return 'normal'; }
+function gauge(l) {
+  if (l.value == null || l.ref_low == null || l.ref_high == null || l.ref_high <= l.ref_low) return '';
+  const span = l.ref_high - l.ref_low, lo = l.ref_low - span * 0.5, hi = l.ref_high + span * 0.5;
+  const pos = v => Math.max(0, Math.min(100, (v - lo) / (hi - lo) * 100));
+  return `<div class="gauge" aria-hidden="true"><div class="band" style="left:${pos(l.ref_low)}%;right:${100 - pos(l.ref_high)}%"></div><div class="dot ${l.flag || ''}" style="left:${pos(l.value)}%"></div></div>`;
+}
+function courseStats(m, t) {
+  const total = m.end ? daysBetween(m.start, m.end) + 1 : null;
+  const day = Math.min(daysBetween(m.start, t) + 1, total || Infinity);
+  const times = m.schedule?.times || [];
+  const track = [m.start, D.meta.tracking_start || m.start].sort().pop();
+  let expected = 0, taken = 0;
+  const lastDay = m.end && m.end < t ? m.end : t, hm = nowHM();
+  for (let d = track; d <= lastDay; d = addDays(d, 1)) for (const tm of times) {
+    if (d === t && tm > hm) continue;
+    expected++; if (D.intakes[`${m.id}|${d}|${tm}`] === 'taken') taken++;
+  }
+  return { total, day, expected, taken, track };
+}
+const specRoots = s => (s || '').toLowerCase().split(/[^а-яёa-z]+/).filter(w => w.length >= 5).map(w => w.slice(0, 6));
+const specMatch = (spec, text) => { const t = (text || '').toLowerCase(); return specRoots(spec).some(r => t.includes(r)); };
+
+/* =========================================================
+   Календарь iPhone (.ics)
+   ========================================================= */
+const icsEsc = s => String(s || '').replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
+const icsDT = (d, t) => d.replace(/-/g, '') + 'T' + (t || '00:00').replace(':', '') + '00';
+const stamp = () => new Date().toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z';
+function icsEvent({ uid, start, dur = 'PT15M', rrule, summary, desc, alarms = ['PT0M'], allDay }) {
+  const L = ['BEGIN:VEVENT', `UID:${uid}@medkarta`, `DTSTAMP:${stamp()}`,
+    allDay ? `DTSTART;VALUE=DATE:${start}` : `DTSTART:${start}`, allDay ? `DTEND;VALUE=DATE:${allDay}` : `DURATION:${dur}`,
+    `SUMMARY:${icsEsc(summary)}`];
+  if (desc) L.push(`DESCRIPTION:${icsEsc(desc)}`);
+  if (rrule) L.push(`RRULE:${rrule}`);
+  for (const a of alarms) L.push('BEGIN:VALARM', 'ACTION:DISPLAY', `DESCRIPTION:${icsEsc(summary)}`, `TRIGGER:${a}`, 'END:VALARM');
+  L.push('END:VEVENT'); return L.join('\r\n');
+}
+function icsForMed(m) {
+  const t = todayISO(), from = m.start > t ? m.start : t, out = [];
+  if (m.end && m.end < from) return out;
+  for (const tm of m.schedule?.times || []) {
+    out.push(icsEvent({ uid: `${m.id}-${tm.replace(':', '')}`, start: icsDT(from, tm),
+      rrule: 'FREQ=DAILY' + (m.end ? `;UNTIL=${m.end.replace(/-/g, '')}T235959` : ''),
+      summary: `💊 ${m.name}${m.dose ? ' — ' + m.dose : ''}`, desc: [m.schedule?.text, m.reason].filter(Boolean).join('. ') }));
+  }
+  if (m.end && daysBetween(from, m.end) >= 3) {
+    out.push(icsEvent({ uid: `${m.id}-end`, start: icsDT(addDays(m.end, -3), '10:00'), summary: `Курс «${m.name}» заканчивается ${fd(m.end)}`, desc: 'Решить с врачом, продолжать ли.' }));
+  }
+  return out;
+}
+function icsForEvent(e) {
+  if (!e.date || e.date < todayISO()) return [];
+  const doc = byId('doctors', e.doctor_id), cl = byId('clinics', e.clinic_id);
+  const desc = [doc && docName(doc), cl && (cl.short || cl.name), cl && cl.address, e.notes].filter(Boolean).join('\n');
+  if (e.time) return [icsEvent({ uid: e.id, start: icsDT(e.date, e.time), dur: 'PT1H', summary: e.title, desc, alarms: ['-P1D', '-PT2H'] })];
+  return [icsEvent({ uid: e.id, start: e.date.replace(/-/g, ''), allDay: addDays(e.date, 1).replace(/-/g, ''), summary: e.title, desc, alarms: ['-PT15H'] })];
+}
+function icsForTask(t) {
+  if (!t.due || t.status !== 'open' || t.due < todayISO()) return [];
+  return [icsEvent({ uid: t.id, start: t.due.replace(/-/g, ''), allDay: addDays(t.due, 1).replace(/-/g, ''), summary: t.title, desc: t.reason, alarms: ['-P6DT15H'] })];
+}
+function openCalendar(blocks, what) {
+  if (!blocks.length) { toast('Нечего добавлять: нет будущих напоминаний'); return; }
+  const text = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Medkarta//RU', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', ...blocks, 'END:VCALENDAR'].join('\r\n');
+  location.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(text);
+  toast(`iPhone предложит добавить ${what} в Календарь`);
+}
+async function shareFile(name, blob, fallbackMsg) {
+  const file = new File([blob], name, { type: blob.type });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try { await navigator.share({ files: [file], title: name }); return; } catch (e) { if (e.name === 'AbortError') return; }
+  }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  if (fallbackMsg) toast(fallbackMsg);
+}
+
+/* =========================================================
+   График показателя
+   ========================================================= */
+function chart(points, lo, hi, unit) {
+  const W = 340, H = 190, L = 40, R = 14, T = 12, B = 30;
+  const vals = points.map(p => p.v).concat([lo, hi].filter(x => x != null));
+  let mn = Math.min(...vals), mx = Math.max(...vals);
+  if (mn === mx) { mn -= Math.abs(mn) * 0.2 || 1; mx += Math.abs(mx) * 0.2 || 1; }
+  const padv = (mx - mn) * 0.12; mn -= padv; mx += padv;
+  const step = (() => { const raw = (mx - mn) / 4, p = 10 ** Math.floor(Math.log10(raw)), f = raw / p; return (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * p; })();
+  const t0 = Math.ceil(mn / step) * step, ticks = [];
+  for (let v = t0; v <= mx + 1e-9; v += step) ticks.push(+v.toFixed(6));
+  const d0 = dayNum(points[0].d), d1 = dayNum(points[points.length - 1].d);
+  const x = d => d0 === d1 ? L + (W - L - R) / 2 : L + (dayNum(d) - d0) / (d1 - d0) * (W - L - R);
+  const y = v => T + (mx - v) / (mx - mn) * (H - T - B);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Динамика показателя">`;
+  if (lo != null || hi != null) {
+    const y1 = y(hi != null ? Math.min(hi, mx) : mx), y2 = y(lo != null ? Math.max(lo, mn) : mn);
+    s += `<rect x="${L}" y="${y1}" width="${W - L - R}" height="${Math.max(0, y2 - y1)}" fill="var(--accent-soft)"/>`;
+  }
+  for (const v of ticks) s += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1"/><text x="${L - 6}" y="${y(v) + 3.5}" text-anchor="end">${num(v)}</text>`;
+  if (points.length > 1) s += `<polyline fill="none" stroke="var(--ink)" stroke-width="1.8" stroke-linejoin="round" points="${points.map(p => `${x(p.d)},${y(p.v)}`).join(' ')}"/>`;
+  const labelIdx = points.length <= 5 ? points.map((_, i) => i) : [0, points.length - 1];
+  points.forEach((p, i) => {
+    const c = p.f === 'high' ? 'var(--hi)' : p.f === 'low' ? 'var(--lo)' : 'var(--accent)';
+    s += `<circle cx="${x(p.d)}" cy="${y(p.v)}" r="4.5" fill="${c}" stroke="var(--surface)" stroke-width="2"/>`;
+    if (labelIdx.includes(i)) s += `<text x="${x(p.d)}" y="${H - 10}" text-anchor="middle">${fds(p.d)}</text>`;
+  });
+  return `<div class="chart">${s}</svg></div><p class="note">Зелёная полоса — норма по бланку лаборатории${unit ? `, ${esc(unit)}` : ''}.</p>`;
+}
+
+/* =========================================================
+   Экраны
+   ========================================================= */
+const V = {};
+
+V.today = () => {
+  const t = todayISO(), hm = nowHM(), dt = new Date();
+  const doses = activeMeds(t).flatMap(m => (m.schedule?.times || []).map(tm => ({ m, tm, k: `${m.id}|${t}|${tm}`, st: D.intakes[`${m.id}|${t}|${tm}`] })))
+    .sort((a, b) => a.tm.localeCompare(b.tm));
+  const next = doses.find(x => !x.st && x.tm >= hm) || doses.find(x => !x.st);
+  const left = doses.filter(x => !x.st).length;
+  const week = addDays(t, 7);
+  const soonEv = D.events.filter(e => e.status === 'planned' && e.date >= t && e.date <= week).sort((a, b) => (a.date + (a.time || '')).localeCompare(b.date + (b.time || '')));
+  const soonKey = x => x.due && x.due <= addDays(t, 30) ? '0' + x.due : x.due ? '2' + x.due : '1';
+  const openTasks = D.tasks.filter(x => x.status === 'open' && x.type !== 'question').sort((a, b) => soonKey(a).localeCompare(soonKey(b)));
+  const abn = latestAbnormal();
+  const hour = dt.getHours(), hi = hour < 5 ? 'доброй ночи' : hour < 12 ? 'доброе утро' : hour < 18 ? 'добрый день' : 'добрый вечер';
+
+  let h = `<p class="eyebrow">${WD[dt.getDay()]}, ${fdLong(t)}</p><div class="hello">${esc(D.profile.display_name || 'Здравствуйте')}, ${hi}</div>`;
+  h += `<p class="lead">${doses.length ? (left ? `Осталось ${left} ${plural(left, 'приём', 'приёма', 'приёмов')} лекарств` : 'Все лекарства на сегодня отмечены') : 'Лекарств по расписанию сегодня нет'}${openTasks.length ? ` · ${openTasks.length} ${plural(openTasks.length, 'дело', 'дела', 'дел')}` : ''}</p>`;
+  h += installBanner();
+
+  if (doses.length) {
+    h += sec('Лекарства сегодня');
+    h += `<div class="list">${doses.map(x => {
+      const cls = x.st === 'taken' ? 'is-taken' : x === next ? 'is-next' : '';
+      const b = (s, label) => `<button type="button" class="mark ${s}${x.st === s ? ' on' : ''}" data-act="intake" data-k="${esc(x.k)}" data-s="${s}" aria-pressed="${x.st === s}">${label}</button>`;
+      return `<div class="dose ${cls}"><div class="dose-time">${x.tm}</div><div><div class="dose-name">${esc(x.m.name)}</div><div class="dose-sub">${esc([x.m.dose, x.m.schedule?.text].filter(Boolean).join(' · '))}</div></div>
+        <div class="dose-acts">${b('taken', x.st === 'taken' ? '✓ Принято' : 'Принято')}${b('skipped', x.st === 'skipped' ? 'Пропущено' : 'Пропустить')}</div></div>`;
+    }).join('')}</div>`;
+  }
+  const future = D.events.filter(e => e.status === 'planned' && e.date > week);
+  h += sec('Ближайшие 7 дней', `<button type="button" data-go="form" data-p='{"k":"appt"}'>+ Запись</button>`);
+  const dueSoon = openTasks.filter(x => x.due && x.due <= week);
+  h += (soonEv.length || dueSoon.length) ? list([
+    ...soonEv.map(e => row({ left: `<div class="date-col">${fds(e.date)}<br>${e.time || ''}</div>`, t: esc(e.title), s: esc([docName(byId('doctors', e.doctor_id)), byId('clinics', e.clinic_id)?.short].filter(Boolean).join(' · ')), go: 'event', p: { id: e.id } })),
+    ...dueSoon.map(x => row({ left: `<div class="date-col">${fds(x.due)}</div>`, t: esc(x.title), s: 'срок', go: 'tasks' })),
+  ]) : empty(future.length ? `На неделю записей нет. Следующая — ${fd(future.sort((a, b) => a.date.localeCompare(b.date))[0].date)}` : 'Записей к врачам на неделю нет');
+
+  if (openTasks.length) {
+    h += sec('Нужно сделать', `<a href="#" data-go="tasks">Все</a>`);
+    h += list(openTasks.slice(0, 4).map(x => row({ t: esc(x.title), s: x.due ? `до ${fd(x.due)}` : esc(TASK_TYPES[x.type] || ''), go: 'tasks' })));
+  }
+  if (abn.length) {
+    h += sec('Вне нормы в последних анализах');
+    h += list(abn.map(l => row({ t: esc(l.name), s: `${fd(l.date)} · норма ${esc(refText(l)) || '—'}`, r: `<span class="lab-val flag ${l.flag}">${FLAG_MARK[l.flag]} ${esc(valText(l))}</span>`, go: 'indicator', p: { k: indKey(l) } })));
+    h += DISCLAIMER;
+  }
+  return { title: 'Сегодня', html: h };
+};
+
+function installBanner() {
+  const standalone = navigator.standalone || matchMedia('(display-mode: standalone)').matches;
+  let hidden = false; try { hidden = localStorage.getItem('mk-hide-install') === '1'; } catch (e) {}
+  if (standalone || hidden || !/iPhone|iPad/.test(navigator.userAgent)) return '';
+  return `<div class="banner" style="margin-top:14px"><div>Добавьте медкарту на экран «Домой»: кнопка «Поделиться» внизу Safari → «На экран „Домой“». Так она будет открываться как приложение.</div><button type="button" data-act="hideInstall">Скрыть</button></div>`;
+}
+
+V.meds = () => {
+  const t = todayISO();
+  const active = D.medications.filter(m => !MED_DONE.has(m.status) && (!m.end || m.end >= t)).sort((a, b) => a.start.localeCompare(b.start));
+  const unknown = D.medications.filter(m => m.status === 'unknown_duration');
+  const done = D.medications.filter(m => !active.includes(m) && !unknown.includes(m)).sort((a, b) => (b.end || b.start).localeCompare(a.end || a.start));
+  let h = '';
+  h += sec('Сейчас принимаю', `<button type="button" data-go="form" data-p='{"k":"med"}'>+ Лекарство</button>`);
+  if (!active.length) h += empty('Активных курсов нет');
+  h += `<div class="stack">${active.map(m => {
+    const st = courseStats(m, t), started = m.start <= t;
+    const pct = st.total ? Math.round(Math.max(0, st.day) / st.total * 100) : 0;
+    return `<article class="course"><button type="button" class="row" style="padding:0;min-height:0;border:0" ${nav('med', { id: m.id })}><div class="row-main"><h3>${esc(m.name)}</h3><div class="row-s">${esc([m.dose, m.schedule?.text].filter(Boolean).join(' · '))}</div></div>${CHEV}</button>
+      <div class="times">${(m.schedule?.times || []).map(x => `<span>${x}</span>`).join('')}</div>
+      ${st.total ? `<div class="bar"><i style="width:${pct}%"></i></div><div class="small muted">${started ? `День ${st.day} из ${st.total}` : `Начало ${fd(m.start)}`} · до ${fd(m.end)}, осталось ${Math.max(0, daysBetween(t, m.end))} ${plural(Math.max(0, daysBetween(t, m.end)), 'день', 'дня', 'дней')}</div>` : `<div class="small muted" style="margin-top:8px">С ${fd(m.start)}, без даты окончания</div>`}
+      ${st.expected ? `<div class="small muted">Отмечено с ${fd(st.track)}: принято ${st.taken} из ${st.expected} ${plural(st.expected, 'дозы', 'доз', 'доз')}</div>` : ''}
+      <div class="btns"><button type="button" class="btn soft sm" data-act="calMed" data-id="${m.id}">Напоминания в Календарь</button></div></article>`;
+  }).join('')}</div>`;
+  if (unknown.length) {
+    h += sec('Срок курса не указан');
+    h += list(unknown.map(m => row({ t: esc(m.name), s: esc([m.dose, `с ${fd(m.start)}`, m.notes].filter(Boolean).join(' · ')), go: 'med', p: { id: m.id } })));
+  }
+  if (done.length) {
+    h += sec('Завершённые');
+    h += list(done.map(m => row({ t: esc(m.name), s: esc([m.dose, m.reason].filter(Boolean).join(' · ')), r: `<span class="num small">${fds(m.start)}–${m.end ? fds(m.end) : '…'}</span>`, go: 'med', p: { id: m.id } })));
+  }
+  h += `<p class="note">Напоминания приходят из Календаря iPhone: нажмите «Напоминания в Календарь» у курса и подтвердите добавление. Программа не меняет назначения врача.</p>`;
+  return { title: 'Лечение', html: h };
+};
+
+V.med = ({ id }) => {
+  const m = byId('medications', id); if (!m) return gone();
+  const doc = byId('doctors', m.doctor_id), ev = byId('events', m.event_id), t = todayISO();
+  const isActive = !MED_DONE.has(m.status) && (!m.end || m.end >= t);
+  let h = `<div class="big-title">${esc(m.name)}</div><p class="muted">${esc([m.form, m.reason].filter(Boolean).join(' · '))}</p>`;
+  h += kv([['Доза', esc(m.dose)], ['Как принимать', esc(m.schedule?.text)], ['Время', (m.schedule?.times || []).join(', ')],
+    ['Начало', fd(m.start)], ['Окончание', m.end ? fd(m.end) : 'не указано'], ['Назначил', doc ? `<a href="#" ${nav('doctor', { id: doc.id })}>${esc(docName(doc))}</a>` : null],
+    ['Приём', ev ? `<a href="#" ${nav('event', { id: ev.id })}>${esc(ev.title)}, ${fd(ev.date)}</a>` : null], ['Стоимость', m.cost_uzs ? money(m.cost_uzs) : null], ['Примечание', esc(m.notes)]]);
+  h += `<div class="btns">${isActive ? `<button type="button" class="btn soft" data-act="calMed" data-id="${m.id}">Напоминания в Календарь</button>` : ''}
+    <button type="button" class="btn ghost" data-go="form" data-p='${esc(JSON.stringify({ k: 'med', id: m.id }))}'>Изменить</button>
+    ${isActive ? `<button type="button" class="btn ghost" data-act="confirm" data-then="finishMed" data-id="${m.id}">Завершить курс</button>` : ''}
+    ${m._local ? `<button type="button" class="btn danger" data-act="confirm" data-then="del" data-k="medications" data-id="${m.id}">Удалить</button>` : ''}</div>`;
+  h += `<p class="note">Менять дозу или отменять лекарство — только по решению врача.</p>`;
+  return { title: 'Лекарство', html: h };
+};
+
+V.labs = () => {
+  const sets = {};
+  for (const l of D.labs) { const k = labSetId(l); (sets[k] ||= []).push(l); }
+  const arr = Object.entries(sets).map(([k, ls]) => ({ k, ls, date: ls[0].date, ev: byId('events', ls[0].event_id) })).sort((a, b) => b.date.localeCompare(a.date));
+  let h = `<input class="search" id="labq" type="search" placeholder="Найти показатель: витамин D, ТТГ…" autocomplete="off">
+    <div id="labres"></div>`;
+  h += `<div id="labsets">`;
+  h += sec('Анализы по датам', `<button type="button" data-go="form" data-p='{"k":"lab"}'>+ Анализ</button>`);
+  h += arr.length ? list(arr.map(s => {
+    const abn = s.ls.filter(l => isAbn(l.flag)).length;
+    const panels = [...new Set(s.ls.map(l => l.panel).filter(Boolean))];
+    const lab = s.ev ? byId('clinics', s.ev.clinic_id)?.short : s.ls[0].lab;
+    return row({ left: `<div class="date-col">${fds(s.date)}<br>${s.date.slice(0, 4)}</div>`, t: esc(panels.join(', ') || s.ev?.title || 'Анализы'),
+      s: `${esc(lab || '')}${lab ? ' · ' : ''}${s.ls.length} ${plural(s.ls.length, 'показатель', 'показателя', 'показателей')}`,
+      r: abn ? `<span class="pill hi">${abn} вне нормы</span>` : `<span class="pill ok">в норме</span>`, go: 'labset', p: { k: s.k } });
+  })) : empty('Анализов пока нет');
+  h += `</div>`;
+  return {
+    title: 'Анализы', html: h, after() {
+      const q = $('#labq'), res = $('#labres'), sets = $('#labsets');
+      q.addEventListener('input', () => {
+        const s = q.value.trim().toLowerCase();
+        sets.hidden = !!s;
+        if (!s) { res.innerHTML = ''; return; }
+        const seen = {};
+        for (const l of D.labs) {
+          const k = indKey(l);
+          if (((l.name || '') + ' ' + (l.code || '') + ' ' + (l.panel || '')).toLowerCase().includes(s) && (!seen[k] || l.date > seen[k].date)) seen[k] = l;
+        }
+        const found = Object.values(seen);
+        res.innerHTML = found.length ? sec('Показатели') + list(found.map(l => row({ t: esc(l.name), s: `${esc(l.panel || '')} · последний ${fd(l.date)}`, r: `<span class="lab-val ${isAbn(l.flag) ? 'flag ' + l.flag : ''}">${FLAG_MARK[l.flag] || ''} ${esc(valText(l))}</span>`, go: 'indicator', p: { k: indKey(l) } })))
+          : `<div style="margin-top:12px">${empty('Такого показателя нет')}</div>`;
+      });
+    }
+  };
+};
+
+V.labset = ({ k }) => {
+  const ls = D.labs.filter(l => labSetId(l) === k); if (!ls.length) return gone();
+  const ev = byId('events', ls[0].event_id), cl = ev ? byId('clinics', ev.clinic_id) : null;
+  const panels = {};
+  for (const l of ls) (panels[l.panel || 'Показатели'] ||= []).push(l);
+  let h = `<p class="eyebrow">${fd(ls[0].date)}${cl ? ' · ' + esc(cl.short) : ls[0].lab ? ' · ' + esc(ls[0].lab) : ''}</p><div class="big-title">${esc(ev?.title || Object.keys(panels).join(', '))}</div>`;
+  const abn = ls.filter(l => isAbn(l.flag)).length;
+  h += `<p class="muted">${ls.length} ${plural(ls.length, 'показатель', 'показателя', 'показателей')}${abn ? `, вне нормы: ${abn}` : ', все в норме'}</p>`;
+  for (const [p, arr] of Object.entries(panels)) {
+    h += sec(esc(p));
+    h += `<div class="list">${arr.map(l => {
+      const mark = FLAG_MARK[l.flag] ? `<span class="flag ${l.flag}" title="${FLAG_WORD[l.flag]}">${FLAG_MARK[l.flag]}</span> ` : '';
+      const inner = `<div class="lab-row"><div class="row-t">${esc(l.name)}</div><div class="lab-val">${mark}${esc(valText(l))}${l.unit ? ` <span class="muted small">${esc(l.unit)}</span>` : ''}</div>
+        <div class="lab-ref">${refText(l) ? 'норма ' + esc(refText(l)) : ''}</div><div></div>${gauge(l)}</div>`;
+      return `<button type="button" class="row" style="display:block" ${nav('indicator', { k: indKey(l) })}>${inner}</button>`;
+    }).join('')}</div>`;
+  }
+  if (ev) h += `<div class="btns"><button type="button" class="btn ghost" ${nav('event', { id: ev.id })}>Событие и документы</button></div>`;
+  if (ls.every(l => l._local)) h += `<div class="btns"><button type="button" class="btn danger" data-act="confirm" data-then="delLabSet" data-k="${esc(k)}">Удалить этот анализ</button></div>`;
+  h += `<p class="note">▲ выше нормы · ▼ ниже нормы · ⚠ отклонение по бланку</p>` + DISCLAIMER;
+  return { title: 'Анализ', html: h };
+};
+
+V.indicator = ({ k }) => {
+  const ls = D.labs.filter(l => indKey(l) === k).sort((a, b) => a.date.localeCompare(b.date)); if (!ls.length) return gone();
+  const last = ls[ls.length - 1];
+  let h = `<p class="eyebrow">${esc(last.panel || '')}</p><div class="big-title">${esc(last.name)}</div>`;
+  h += `<p><span class="lab-val flag ${last.flag || ''}" style="font-size:22px">${FLAG_MARK[last.flag] || ''} ${esc(valText(last))}</span> <span class="muted">${esc(last.unit || '')}</span></p>`;
+  h += `<p class="muted small">Последний результат ${fd(last.date)}${refText(last) ? ` · норма ${esc(refText(last))}` : ''}${FLAG_WORD[last.flag] ? ` · ${FLAG_WORD[last.flag]}` : ''}</p>`;
+  if (last.ref_text && last.ref_low != null) h += `<p class="muted small">По бланку: ${esc(last.ref_text)}</p>`;
+  const pts = ls.filter(l => l.value != null).map(l => ({ d: l.date, v: l.value, f: l.flag }));
+  if (pts.length) h += sec('Динамика') + chart(pts, last.ref_low, last.ref_high, last.unit);
+  if (pts.length === 1) h += `<p class="note">Пока одно значение. После следующего анализа здесь появится линия.</p>`;
+  h += sec('Все результаты');
+  h += list(ls.slice().reverse().map(l => row({ left: `<div class="date-col">${fds(l.date)}<br>${l.date.slice(0, 4)}</div>`, t: `<span class="lab-val flag ${l.flag || ''}">${FLAG_MARK[l.flag] || ''} ${esc(valText(l))}</span> <span class="muted small">${esc(l.unit || '')}</span>`, s: `${refText(l) ? 'норма ' + esc(refText(l)) : ''}${l.lab ? ' · ' + esc(l.lab) : ''}`, go: 'labset', p: { k: labSetId(l) } })));
+  h += DISCLAIMER;
+  return { title: 'Показатель', html: h };
+};
+
+V.docs = () => {
+  const by = {};
+  for (const d of D.documents) (by[d.category || 'Другие'] ||= []).push(d);
+  const cats = [...DOC_CATS, ...Object.keys(by).filter(c => !DOC_CATS.includes(c))].filter(c => by[c]);
+  let h = `<div class="btns" style="margin-top:4px"><button type="button" class="btn" data-go="form" data-p='{"k":"doc"}'>+ Добавить документ или фото</button></div>`;
+  if (!cats.length) h += `<div style="margin-top:12px">${empty('Документов пока нет')}</div>`;
+  for (const c of cats) {
+    const arr = by[c].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    h += sec(`${esc(c)} <span class="muted">· ${arr.length}</span>`);
+    h += list(arr.map(d => row({ left: `<div class="date-col">${fds(d.date)}<br>${(d.date || '').slice(0, 4)}</div>`, t: esc(d.title), s: esc([(d.files || []).length > 1 ? `${d.files.length} файла` : '', d.note].filter(Boolean).join(' · ')), go: 'doc', p: { id: d.id } })));
+  }
+  return { title: 'Документы', html: h };
+};
+
+V.doc = ({ id }) => {
+  const d = byId('documents', id); if (!d) return gone();
+  const ev = byId('events', d.event_id), doc = byId('doctors', d.doctor_id), cl = byId('clinics', d.clinic_id);
+  let h = `<p class="eyebrow">${esc(d.category || '')} · ${fd(d.date)}</p><div class="big-title">${esc(d.title)}</div>`;
+  if (d.note) h += `<p class="muted">${esc(d.note)}</p>`;
+  h += `<div class="stack" style="margin-top:12px">${(d.files || []).map((f, i) => `<div class="file-view" id="fv${i}"><div class="file-missing">Загружаю файл…</div></div>`).join('')}</div>`;
+  const links = [ev && row({ t: esc(ev.title), s: `Событие · ${fd(ev.date)}`, go: 'event', p: { id: ev.id } }), doc && row({ t: esc(docName(doc)), s: esc(doc.specialty), go: 'doctor', p: { id: doc.id } }), cl && row({ t: esc(cl.short || cl.name), s: 'Клиника', go: 'clinic', p: { id: cl.id } })].filter(Boolean);
+  if (links.length) h += sec('Связано') + list(links);
+  if (d._local) h += `<div class="btns"><button type="button" class="btn danger" data-act="confirm" data-then="delDoc" data-id="${d.id}">Удалить документ</button></div>`;
+  return {
+    title: 'Документ', html: h, async after() {
+      for (const [i, f] of (d.files || []).entries()) {
+        const box = $('#fv' + i); if (!box) return;
+        let blob = null; try { blob = await getFile(f); } catch (e) { }
+        if (!box.isConnected) return;
+        if (!blob) { box.innerHTML = `<div class="file-missing">Файл «${esc(f.split('/').pop())}» не найден. Нужен интернет, чтобы загрузить его в первый раз.</div>`; continue; }
+        const url = URL.createObjectURL(blob);
+        const shareBtn = `<button type="button" class="btn ghost sm" data-act="shareFile" data-f="${esc(f)}">Поделиться</button>`;
+        box.innerHTML = blob.type.startsWith('image/')
+          ? `<img src="${url}" alt="${esc(d.title)}, страница ${i + 1}"><div class="btns" style="margin:0"><a class="btn ghost sm" href="${url}" target="_blank" rel="noopener">Открыть крупно</a>${shareBtn}</div>`
+          : `<div class="row" style="padding:0;border:0"><div class="row-main"><div class="row-t">${esc(f.split('/').pop())}</div><div class="row-s">PDF · ${Math.round(blob.size / 1024)} КБ</div></div></div><div class="btns" style="margin:0"><a class="btn sm" href="${url}" target="_blank" rel="noopener">Открыть PDF</a>${shareBtn}</div>`;
+      }
+    }
+  };
+};
+
+V.more = () => {
+  const openQ = D.tasks.filter(x => x.status === 'open').length;
+  const tiles = [
+    ['card', 'Медкарта', 'Профиль и важное', '<path d="M4 5h16v14H4z"/><circle cx="9" cy="11" r="2.2"/><path d="M6 16c.6-1.6 1.8-2.4 3-2.4s2.4.8 3 2.4M14 10h4M14 13h3"/>'],
+    ['sos', 'Экстренная карточка', 'Для скорой', '<path d="M12 3 2.5 20h19z"/><path d="M12 10v4M12 17v.5"/>', 'sos'],
+    ['history', 'История', `${D.events.length} ${plural(D.events.length, 'событие', 'события', 'событий')}`, '<circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 2"/>'],
+    ['prep', 'Подготовка к врачу', 'Что показать и спросить', '<path d="M9 4h6v3H9z"/><path d="M7 5.5H5.5v15h13v-15H17M9 12h6M9 16h4"/>'],
+    ['tasks', 'Дела и вопросы', openQ ? `Открыто: ${openQ}` : 'Всё сделано', '<path d="m5 12 4 4 10-10"/>'],
+    ['doctors', 'Врачи', `${D.doctors.length}`, '<circle cx="12" cy="8" r="3.5"/><path d="M5 20c1-4 4-6 7-6s6 2 7 6"/>'],
+    ['clinics', 'Клиники', `${D.clinics.length}`, '<path d="M4 20V8l8-4 8 4v12M9 20v-5h6v5M12 8v4M10 10h4"/>'],
+    ['money', 'Расходы', money(D.expenses.reduce((s, x) => s + (x.amount_uzs || 0), 0)), '<rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/>'],
+  ];
+  if (D.cases.length) tiles.push(['cases', esc(D.cases[0].title.split(/[—:]/)[0].trim()), esc(D.cases[0].status || ''), '<path d="M5 16h14l-1.5-5h-11zM7 16v2M17 16v2M8 11l1.5-4h5L16 11"/>']);
+  tiles.push(['data', 'Данные и копия', 'Обновить, отправить', '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>']);
+  let h = `<div class="grid2" style="margin-top:6px">${tiles.map(([v, t, s, ic, cls]) => `<button type="button" class="tile ${cls || ''}" data-go="${v}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ic}</svg><b>${t}</b><span>${s}</span></button>`).join('')}</div>`;
+  h += sec('Добавить');
+  h += list([['lab', 'Анализ'], ['med', 'Лекарство'], ['appt', 'Запись к врачу'], ['event', 'Прошедший приём или обследование'], ['doc', 'Документ или фото'], ['task', 'Дело или напоминание'], ['question', 'Вопрос врачу'], ['expense', 'Расход'], ['doctor', 'Врач'], ['clinic', 'Клиника']]
+    .map(([k, t]) => row({ t, go: 'form', p: { k } })));
+  return { title: 'Ещё', html: h };
+};
+
+V.card = () => {
+  const p = D.profile;
+  let h = `<div class="big-title">${esc(p.full_name || p.display_name)}</div>`;
+  if (p.full_name_note) h += `<p class="muted small">${esc(p.full_name_note)}</p>`;
+  h += kv([['Дата рождения', p.birth_date ? `${fd(p.birth_date)} · ${age(p.birth_date)} ${plural(age(p.birth_date), 'год', 'года', 'лет')}` : null], ['Рост', p.height_cm ? p.height_cm + ' см' : null], ['Вес', p.weight_kg ? p.weight_kg + ' кг' : null], ['ИМТ', p.bmi ? num(p.bmi) : null],
+    ['Группа крови', esc(p.blood_group) || '<span class="muted">не указана</span>'], ['Аллергии', esc(p.allergies) || '<span class="muted">не указаны</span>'], ['Противопоказания', esc(p.contraindications)], ['Привычки', esc(p.habits)], ['Наследственность', esc(p.heredity)],
+    ['Телефон', esc(p.phone)], ['Адрес', esc(p.address)], ['Работа', esc(p.workplace)], ['Контакт на экстренный случай', esc(p.emergency_contact) || '<span class="muted">не указан</span>']]);
+  h += `<div class="btns"><button type="button" class="btn ghost" data-go="form" data-p='{"k":"profile"}'>Изменить</button></div>`;
+  if ((p.chronic_and_important || []).length) h += sec('Важное о здоровье') + list(p.chronic_and_important.map(c => row({ t: esc(c.text), s: esc(c.status) })));
+  if (p.medical_record_numbers) h += sec('Номера медкарт') + kv(Object.entries(p.medical_record_numbers).map(([k, v]) => [esc(k), `<span class="num">${esc(v)}</span>`]));
+  if ((p.past_events || []).length) h += sec('Перенесённое') + list(p.past_events.map(e => row({ left: `<div class="date-col">${fds(e.date)}<br>${(e.date || '').slice(0, 4)}</div>`, t: esc(e.text) })));
+  if ((p.data_issues || []).length) h += sec('Ошибки в документах') + `<div class="card small stack">${p.data_issues.map(x => `<div>${esc(x)}</div>`).join('')}</div>`;
+  return { title: 'Медкарта', html: h };
+};
+
+V.sos = () => {
+  const p = D.profile, t = todayISO();
+  const meds = [...(p.permanent_medications || []).map(x => typeof x === 'string' ? x : x.name), ...activeMeds(t).map(m => `${m.name}${m.dose ? ', ' + m.dose : ''}`)];
+  const item = (label, v) => `<div><dt>${label}</dt><dd class="${v ? '' : 'empty'}">${v || 'не указано'}</dd></div>`;
+  let h = `<div class="sos-card"><div class="sos-head"><b>${esc(p.full_name || p.display_name)}</b>${p.birth_date ? `${fd(p.birth_date)} г. р., ${age(p.birth_date)} ${plural(age(p.birth_date), 'год', 'года', 'лет')}` : ''}</div><dl class="sos-body">
+    ${item('Группа крови', esc(p.blood_group))}${item('Аллергии', esc(p.allergies))}
+    ${item('Важные диагнозы', (p.chronic_and_important || []).map(c => esc(c.text)).join('<br>'))}
+    ${item('Принимает сейчас', meds.map(esc).join('<br>'))}${item('Противопоказания', esc(p.contraindications))}
+    ${item('Экстренный контакт', esc(p.emergency_contact))}${item('Телефон', esc(p.phone))}</dl></div>`;
+  h += `<div class="btns"><button type="button" class="btn ghost" data-go="form" data-p='{"k":"profile"}'>Заполнить пустые поля</button></div>`;
+  h += `<p class="note">Совет: сделайте снимок экрана этой карточки и поставьте его в «Медкарту» приложения «Здоровье» на iPhone — её видно даже на заблокированном экране.</p>`;
+  return { title: 'Экстренная карточка', html: h };
+};
+
+V.history = () => {
+  const t = todayISO();
+  const planned = D.events.filter(e => e.status === 'planned').sort((a, b) => a.date.localeCompare(b.date));
+  const past = D.events.filter(e => e.status !== 'planned').sort((a, b) => (b.date + (b.time || '')).localeCompare(a.date + (a.time || '')));
+  const evRow = e => row({ left: `<div class="date-col">${fds(e.date)}${e.time ? '<br>' + e.time : ''}</div>`, t: esc(e.title), s: esc([KIND[e.kind] || '', docName(byId('doctors', e.doctor_id)), byId('clinics', e.clinic_id)?.short].filter(Boolean).join(' · ')), go: 'event', p: { id: e.id } });
+  let h = '';
+  if (planned.length) h += sec('Запланировано', `<button type="button" data-go="form" data-p='{"k":"appt"}'>+ Запись</button>`) + list(planned.map(evRow));
+  const months = {};
+  for (const e of past) (months[e.date.slice(0, 7)] ||= []).push(e);
+  for (const [m, arr] of Object.entries(months)) h += sec(`${MN[+m.slice(5) - 1]} ${m.slice(0, 4)}`) + list(arr.map(evRow));
+  if (!planned.length) h = `<div class="btns"><button type="button" class="btn soft" data-go="form" data-p='{"k":"appt"}'>+ Запись к врачу</button><button type="button" class="btn ghost" data-go="form" data-p='{"k":"event"}'>+ Прошедшее событие</button></div>` + h;
+  return { title: 'История', html: h || empty('Событий пока нет') };
+};
+
+V.event = ({ id }) => {
+  const e = byId('events', id); if (!e) return gone();
+  const doc = byId('doctors', e.doctor_id), cl = byId('clinics', e.clinic_id);
+  let h = `<p class="eyebrow">${KIND[e.kind] || 'Событие'} · ${fd(e.date)}${e.time ? ' · ' + e.time : ''}${e.status === 'planned' ? ' · запланировано' : ''}</p><div class="big-title">${esc(e.title)}</div>`;
+  if (e.tags?.length) h += `<div class="tags">${e.tags.map(t => `<span class="pill">#${esc(t)}</span>`).join('')}</div>`;
+  h += `<div style="margin-top:12px"></div>` + kv([['Врач', doc ? `<a href="#" ${nav('doctor', { id: doc.id })}>${esc(docName(doc))}</a>` : null], ['Клиника', cl ? `<a href="#" ${nav('clinic', { id: cl.id })}>${esc(cl.short || cl.name)}</a>` : null],
+    ['Жалобы', esc(e.complaints)], ['Заключение', esc(e.conclusion || e.description)], ['В оригинале', e.conclusion_original ? `<span class="muted">${esc(e.conclusion_original)}</span>` : null],
+    ['Рекомендации', esc(e.recommendations)], ['Больничный', e.sick_leave ? esc(typeof e.sick_leave === 'string' ? e.sick_leave : Object.values(e.sick_leave).join(', ')) : null],
+    ['Стоимость', e.cost_uzs ? money(e.cost_uzs) + (e.cost_note ? ` <span class="muted small">${esc(e.cost_note)}</span>` : '') : null], ['Примечание', esc(e.notes)]]);
+  const labs = D.labs.filter(l => l.event_id === e.id), meds = D.medications.filter(m => m.event_id === e.id);
+  const docs = D.documents.filter(d => d.event_id === e.id || (e.documents || []).includes(d.id));
+  if (labs.length) h += sec('Анализы') + list([row({ t: `${labs.length} ${plural(labs.length, 'показатель', 'показателя', 'показателей')}`, s: labs.filter(l => isAbn(l.flag)).length ? `вне нормы: ${labs.filter(l => isAbn(l.flag)).map(l => esc(l.name)).join(', ')}` : 'все в норме', go: 'labset', p: { k: e.id } })]);
+  if (meds.length) h += sec('Назначения') + list(meds.map(m => row({ t: esc(m.name), s: esc([m.dose, m.schedule?.text].filter(Boolean).join(' · ')), go: 'med', p: { id: m.id } })));
+  if (docs.length) h += sec('Документы') + list(docs.map(d => row({ t: esc(d.title), s: esc(d.category), go: 'doc', p: { id: d.id } })));
+  if (e.related_case) h += sec('Связано') + list([row({ t: esc(byId('cases', e.related_case)?.title || 'Дело'), go: 'cases' })]);
+  h += `<div class="btns">`;
+  if (e.status === 'planned') h += `<button type="button" class="btn soft" data-act="calEvent" data-id="${e.id}">Напоминание в Календарь</button><button type="button" class="btn ghost" data-act="eventDone" data-id="${e.id}">Приём состоялся</button>`;
+  h += `<button type="button" class="btn ghost" data-go="form" data-p='${esc(JSON.stringify({ k: e.status === 'planned' ? 'appt' : 'event', id: e.id }))}'>Изменить</button>`;
+  if (e._local) h += `<button type="button" class="btn danger" data-act="confirm" data-then="del" data-k="events" data-id="${e.id}">Удалить</button>`;
+  h += `</div>`;
+  return { title: KIND[e.kind] || 'Событие', html: h };
+};
+
+V.doctors = () => {
+  const arr = D.doctors.slice().sort((a, b) => (a.specialty || '').localeCompare(b.specialty || '', 'ru'));
+  return { title: 'Врачи', html: `<div class="btns" style="margin-top:4px"><button type="button" class="btn soft" data-go="form" data-p='{"k":"doctor"}'>+ Врач</button></div><div style="margin-top:12px"></div>` + list(arr.map(d => row({ t: esc(d.name || d.specialty), s: esc([d.specialty, byId('clinics', d.clinic_id)?.short].filter(Boolean).join(' · ')), go: 'doctor', p: { id: d.id } }))) };
+};
+
+function contactRows(o) {
+  const rows = [];
+  const tel = v => v.replace(/[^\d+]/g, '');
+  for (const ph of [...(o.phones || []), o.phone].filter(Boolean)) rows.push(row({ t: esc(ph), s: 'Позвонить', href: /\d{7,}/.test(tel(ph)) ? 'tel:' + tel(ph) : null }));
+  if (o.telegram) rows.push(row({ t: esc(o.telegram), s: 'Telegram', href: o.telegram.startsWith('@') ? 'https://t.me/' + o.telegram.slice(1) : 'https://t.me/' + tel(o.telegram) }));
+  if (o.whatsapp) rows.push(row({ t: esc(o.whatsapp), s: 'WhatsApp', href: 'https://wa.me/' + tel(o.whatsapp).replace('+', '') }));
+  if (o.instagram) rows.push(row({ t: '@' + esc(o.instagram), s: 'Instagram', href: 'https://instagram.com/' + o.instagram }));
+  if (o.email) rows.push(row({ t: esc(o.email), s: 'Почта', href: 'mailto:' + o.email }));
+  return rows;
+}
+
+V.doctor = ({ id }) => {
+  const d = byId('doctors', id); if (!d) return gone();
+  const cl = byId('clinics', d.clinic_id);
+  const evs = D.events.filter(e => e.doctor_id === d.id).sort((a, b) => b.date.localeCompare(a.date));
+  const meds = D.medications.filter(m => m.doctor_id === d.id);
+  let h = `<p class="eyebrow">${esc(d.specialty)}</p><div class="big-title">${esc(d.name || 'Имя не указано')}</div>`;
+  if (d.name_note) h += `<p class="muted small">${esc(d.name_note)}</p>`;
+  h += kv([['Клиника', cl ? `<a href="#" ${nav('clinic', { id: cl.id })}>${esc(cl.short || cl.name)}</a>` : null], ['Стоимость приёма', d.price_uzs ? money(d.price_uzs) : null], ['Примечание', esc(d.notes)]]);
+  const c = contactRows(d); if (c.length) h += sec('Связаться') + list(c);
+  if (evs.length) h += sec('Приёмы') + list(evs.map(e => row({ left: `<div class="date-col">${fds(e.date)}<br>${e.date.slice(0, 4)}</div>`, t: esc(e.title), go: 'event', p: { id: e.id } })));
+  if (meds.length) h += sec('Назначал') + list(meds.map(m => row({ t: esc(m.name), s: `${fd(m.start)}${m.end ? '–' + fd(m.end) : ''}`, go: 'med', p: { id: m.id } })));
+  h += `<div class="btns"><button type="button" class="btn soft" data-go="prepFor" data-p='${esc(JSON.stringify({ s: d.specialty }))}'>Подготовиться к приёму</button><button type="button" class="btn ghost" data-go="form" data-p='${esc(JSON.stringify({ k: 'doctor', id: d.id }))}'>Изменить</button></div>`;
+  return { title: 'Врач', html: h };
+};
+
+V.clinics = () => ({ title: 'Клиники', html: `<div class="btns" style="margin-top:4px"><button type="button" class="btn soft" data-go="form" data-p='{"k":"clinic"}'>+ Клиника</button></div><div style="margin-top:12px"></div>` + list(D.clinics.map(c => row({ t: esc(c.short || c.name), s: esc(c.address || ''), go: 'clinic', p: { id: c.id } }))) });
+
+V.clinic = ({ id }) => {
+  const c = byId('clinics', id); if (!c) return gone();
+  const docs = D.doctors.filter(d => d.clinic_id === c.id), evs = D.events.filter(e => e.clinic_id === c.id).sort((a, b) => b.date.localeCompare(a.date));
+  let h = `<div class="big-title">${esc(c.short || c.name)}</div>${c.short ? `<p class="muted">${esc(c.name)}</p>` : ''}`;
+  h += kv([['Адрес', esc(c.address)], ['Телефон МРТ', esc(c.mri_phone)], ['Экстренный', esc(c.emergency_phone)], ['Короткий номер', esc(c.short_number)], ['Примечание', esc(c.notes)]]);
+  if (c.address) h += `<div class="btns"><a class="btn soft" href="https://yandex.uz/maps/?text=${encodeURIComponent(c.address)}" target="_blank" rel="noopener">Маршрут в Яндекс Картах</a></div>`;
+  const ct = contactRows(c); if (ct.length) h += sec('Связаться') + list(ct);
+  if (docs.length) h += sec('Врачи') + list(docs.map(d => row({ t: esc(d.name || d.specialty), s: esc(d.specialty), go: 'doctor', p: { id: d.id } })));
+  if (evs.length) h += sec('Визиты') + list(evs.map(e => row({ left: `<div class="date-col">${fds(e.date)}<br>${e.date.slice(0, 4)}</div>`, t: esc(e.title), go: 'event', p: { id: e.id } })));
+  return { title: 'Клиника', html: h };
+};
+
+V.prep = () => {
+  const specs = new Set(['Эндокринолог', 'Терапевт', 'Маммолог', 'Гинеколог']);
+  D.tasks.forEach(t => t.specialty && specs.add(t.specialty));
+  D.doctors.forEach(d => d.specialty && specs.add(d.specialty));
+  const open = s => D.tasks.filter(t => t.status === 'open' && (specMatch(s, t.specialty) || specMatch(s, t.title))).length;
+  const arr = [...specs].sort((a, b) => open(b) - open(a) || a.localeCompare(b, 'ru'));
+  let h = `<p class="lead" style="margin:4px 4px 0">Выберите, к кому идёте. Соберу прошлые приёмы, отклонения в анализах, лекарства и вопросы.</p>`;
+  h += sec('Специальность') + list(arr.map(s => row({ t: esc(s), r: open(s) ? `<span class="pill warn">${open(s)} ${plural(open(s), 'вопрос', 'вопроса', 'вопросов')}</span>` : '', go: 'prepFor', p: { s } })));
+  return { title: 'Подготовка к врачу', html: h };
+};
+
+V.prepFor = ({ s }) => {
+  const t = todayISO();
+  const qs = D.tasks.filter(x => x.type === 'question' && x.status === 'open' && specMatch(s, x.specialty));
+  const tasks = D.tasks.filter(x => x.type !== 'question' && x.status === 'open' && (specMatch(s, x.title) || specMatch(s, x.specialty)));
+  const visits = D.events.filter(e => e.status !== 'planned' && specMatch(s, byId('doctors', e.doctor_id)?.specialty || '')).sort((a, b) => b.date.localeCompare(a.date));
+  const exams = D.events.filter(e => ['us', 'mri', 'xray', 'ct'].includes(e.kind)).sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6);
+  const abn = latestAbnormal(), meds = activeMeds(t);
+  let h = `<p class="eyebrow">Подготовка</p><div class="big-title">${esc(s)}</div>`;
+  h += sec('Вопросы врачу') + (qs.length ? list(qs.map(q => row({ t: esc(q.title), r: `<button type="button" class="mark" data-act="taskDone" data-id="${q.id}">Ответ получен</button>` }))) : empty('Вопросов пока нет'));
+  h += `<form class="f" id="qForm" style="margin-top:10px;grid-template-columns:1fr auto;align-items:end"><div class="field"><label for="qText">Новый вопрос</label><input id="qText" name="q" placeholder="Например: когда пересдать анализ?" required></div><button class="btn" type="submit">Добавить</button></form>`;
+  if (tasks.length) h += sec('Зачем идём') + list(tasks.map(x => row({ t: esc(x.title), s: esc(x.reason) })));
+  h += sec('Отклонения в последних анализах') + (abn.length ? list(abn.map(l => row({ t: esc(l.name), s: `${fd(l.date)} · норма ${esc(refText(l)) || '—'}`, r: `<span class="lab-val flag ${l.flag}">${FLAG_MARK[l.flag]} ${esc(valText(l))} <span class="small muted">${esc(l.unit || '')}</span></span>`, go: 'indicator', p: { k: indKey(l) } }))) : empty('Отклонений нет'));
+  h += sec('Принимает сейчас') + (meds.length ? list(meds.map(m => row({ t: esc(m.name), s: esc([m.dose, m.schedule?.text, m.end ? 'до ' + fd(m.end) : ''].filter(Boolean).join(' · ')), go: 'med', p: { id: m.id } }))) : empty('Лекарств нет'));
+  if (visits.length) h += sec('Прошлые приёмы') + list(visits.map(e => row({ left: `<div class="date-col">${fds(e.date)}<br>${e.date.slice(0, 4)}</div>`, t: esc(e.title), s: esc((e.conclusion || '').slice(0, 140)), go: 'event', p: { id: e.id } })));
+  if (exams.length) h += sec('Последние обследования') + list(exams.map(e => row({ left: `<div class="date-col">${fds(e.date)}<br>${e.date.slice(0, 4)}</div>`, t: esc(e.title), s: esc((e.conclusion || '').slice(0, 140)), go: 'event', p: { id: e.id } })));
+  h += `<div class="btns"><button type="button" class="btn soft" data-act="copyPrep" data-s="${esc(s)}">Скопировать текстом</button></div>` + DISCLAIMER;
+  return {
+    title: 'Подготовка', html: h, after() {
+      $('#qForm').addEventListener('submit', ev => { ev.preventDefault(); const v = $('#qText').value.trim(); if (v) addItem('tasks', { type: 'question', title: v, specialty: s, status: 'open' }, 'Вопрос добавлен'); });
+    }
+  };
+};
+
+function prepText(s) {
+  const t = todayISO(), p = D.profile, L = [];
+  L.push(`${p.full_name || p.display_name}, ${p.birth_date ? fd(p.birth_date) + ' г. р.' : ''}`, `К врачу: ${s}. Дата: ${fd(t)}`, '');
+  const tasks = D.tasks.filter(x => x.type !== 'question' && x.status === 'open' && (specMatch(s, x.title) || specMatch(s, x.specialty)));
+  if (tasks.length) { L.push('Повод:'); tasks.forEach(x => L.push(`— ${x.reason || x.title}`)); L.push(''); }
+  const abn = latestAbnormal(); if (abn.length) { L.push('Отклонения в анализах:'); abn.forEach(l => L.push(`— ${l.name}: ${valText(l)} ${l.unit || ''} (норма ${refText(l) || '—'}), ${fd(l.date)}`)); L.push(''); }
+  const meds = activeMeds(t); if (meds.length) { L.push('Принимает:'); meds.forEach(m => L.push(`— ${m.name}${m.dose ? ', ' + m.dose : ''}${m.schedule?.text ? ', ' + m.schedule.text : ''}`)); L.push(''); }
+  const qs = D.tasks.filter(x => x.type === 'question' && x.status === 'open' && specMatch(s, x.specialty)); if (qs.length) { L.push('Вопросы:'); qs.forEach((q, i) => L.push(`${i + 1}. ${q.title}`)); }
+  return L.join('\n');
+}
+
+V.tasks = () => {
+  const open = D.tasks.filter(x => x.status === 'open'), done = D.tasks.filter(x => x.status !== 'open');
+  const todo = open.filter(x => x.type !== 'question').sort((a, b) => (a.due || '9').localeCompare(b.due || '9'));
+  const qs = open.filter(x => x.type === 'question'), bySpec = {};
+  for (const q of qs) (bySpec[q.specialty || 'Без специальности'] ||= []).push(q);
+  const trow = x => `<div class="row"><div class="row-main"><div class="row-t">${esc(x.title)}</div>${x.reason || x.due ? `<div class="row-s">${esc([x.due ? `срок ${fd(x.due)}${x.due_latest ? ' – ' + fd(x.due_latest) : ''}` : '', x.reason].filter(Boolean).join(' · '))}</div>` : ''}</div><div class="row-r"><button type="button" class="mark" data-act="taskDone" data-id="${x.id}">Готово</button></div></div>`;
+  let h = sec('Сделать', `<button type="button" data-go="form" data-p='{"k":"task"}'>+ Дело</button>`) + (todo.length ? `<div class="list">${todo.map(trow).join('')}</div>` : empty('Всё сделано'));
+  if (todo.some(x => x.due)) h += `<div class="btns"><button type="button" class="btn soft sm" data-act="calTasks">Сроки в Календарь</button></div>`;
+  h += sec('Вопросы врачам', `<button type="button" data-go="form" data-p='{"k":"question"}'>+ Вопрос</button>`);
+  h += Object.keys(bySpec).length ? Object.entries(bySpec).map(([s, arr]) => `<p class="small muted" style="margin:12px 4px 6px">${esc(s)}</p><div class="list">${arr.map(trow).join('')}</div>`).join('') : empty('Вопросов нет');
+  if (done.length) h += sec('Сделано') + list(done.map(x => row({ t: `<span class="muted">${esc(x.title)}</span>`, r: `<button type="button" class="mark" data-act="taskReopen" data-id="${x.id}">Вернуть</button>` })));
+  return { title: 'Дела и вопросы', html: h };
+};
+
+V.money = () => {
+  const ex = D.expenses.slice().sort((a, b) => b.date.localeCompare(a.date));
+  const total = ex.reduce((s, x) => s + (x.amount_uzs || 0), 0);
+  const cats = {}, months = {};
+  for (const x of ex) { cats[x.category || 'Другое'] = (cats[x.category || 'Другое'] || 0) + (x.amount_uzs || 0); (months[x.date.slice(0, 7)] ||= []).push(x); }
+  const max = Math.max(1, ...Object.values(cats));
+  let h = `<p class="eyebrow">Всего</p><div class="money-total">${money(total)}</div>`;
+  h += `<div class="btns"><button type="button" class="btn soft" data-go="form" data-p='{"k":"expense"}'>+ Расход</button></div>`;
+  h += sec('По категориям') + `<div class="list">${Object.entries(cats).sort((a, b) => b[1] - a[1]).map(([c, v]) => `<div class="cat-bar"><span>${esc(c)}</span><span class="num small">${money(v)}</span><div class="bar"><i style="width:${v / max * 100}%"></i></div></div>`).join('')}</div>`;
+  for (const [m, arr] of Object.entries(months)) {
+    h += sec(`${MN[+m.slice(5) - 1]} ${m.slice(0, 4)}`, `<span class="num" style="text-transform:none;letter-spacing:0">${money(arr.reduce((s, x) => s + (x.amount_uzs || 0), 0))}</span>`);
+    h += list(arr.map(x => row({ left: `<div class="date-col">${fds(x.date)}</div>`, t: esc(x.title), s: esc([x.category, x.note].filter(Boolean).join(' · ')), r: `<span class="num">${money(x.amount_uzs)}</span>`, act: x._local ? 'askDelExp' : null, data: { id: x.id } })));
+  }
+  return { title: 'Расходы', html: h };
+};
+
+const CASE_LABELS = { accident: 'Происшествие', date: 'Дата', time: 'Время', place: 'Место', role: 'Роль', vehicle_passenger: 'Машина, в которой ехала', vehicle_other: 'Вторая машина', model: 'Модель', plate: 'Номер', driver: 'Водитель', ride_service: 'Сервис', carrier: 'Перевозчик', guilty_driver: 'Виновник', police: 'ГАИ и следствие', investigator: 'Инспектор', contact_name: 'Контакт', expertise_order: 'Назначение экспертизы', decision: 'Решение', expertise: 'Судмедэкспертиза', number: 'Номер', dates: 'Даты', expert: 'Эксперт', severity: 'Тяжесть', conclusion: 'Заключение', insurance: 'Страхование', channel: 'Канал', insurer: 'Страховая', contact: 'Контакт', status: 'Статус', requested_documents: 'Запросили документы', notes: 'Примечание', covers: 'Покрывает', name: 'Название', email: 'Почта', phone: 'Телефон', admin_telegram: 'Telegram администратора', driver_phone_given: 'Телефон водителя', sick_leave: 'Больничный', until: 'До', source: 'Выдал', income_monthly_uzs: 'Доход в месяц', open_steps: 'Что сделать' };
+function caseVal(k, v) {
+  if (v == null || v === '') return null;
+  if (Array.isArray(v)) return v.every(x => typeof x !== 'object') ? v.map(esc).join('<br>') : null;
+  if (typeof v === 'object') return null;
+  if (k.endsWith('_uzs')) return money(v);
+  if (typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v)) return fd(v);
+  return esc(v);
+}
+function caseBlock(o) {
+  const pairs = [], subs = [];
+  for (const [k, v] of Object.entries(o)) {
+    if (k === 'id' || k === 'title' || k.endsWith('_id')) continue;
+    if (v && typeof v === 'object' && !Array.isArray(v)) subs.push([k, v]);
+    else if (Array.isArray(v) && v.some(x => typeof x === 'object')) subs.push([k, v]);
+    else { const val = caseVal(k, v); if (val) pairs.push([CASE_LABELS[k] || esc(k), val]); }
+  }
+  let h = kv(pairs);
+  for (const [k, v] of subs) {
+    if (Array.isArray(v)) v.forEach((x, i) => { h += `<p class="small muted" style="margin:14px 4px 6px">${CASE_LABELS[k] || esc(k)} ${v.length > 1 ? i + 1 : ''}</p>` + caseBlock(x); });
+    else h += `<p class="small muted" style="margin:14px 4px 6px">${CASE_LABELS[k] || esc(k)}</p>` + caseBlock(v);
+  }
+  return h;
+}
+V.cases = () => {
+  let h = '';
+  for (const c of D.cases) {
+    h += `<p class="eyebrow">${esc(c.status || '')}</p><div class="big-title">${esc(c.title)}</div>`;
+    if (c.open_steps?.length) h += sec('Что сделать дальше') + `<div class="list">${c.open_steps.map(s => `<div class="row"><div class="row-main">${esc(s)}</div></div>`).join('')}</div>`;
+    const { open_steps, ...rest } = c;
+    for (const [k, v] of Object.entries(rest)) {
+      if (v && typeof v === 'object') {
+        h += sec(CASE_LABELS[k] || esc(k));
+        h += Array.isArray(v) ? v.map((x, i) => (i ? '<div style="height:10px"></div>' : '') + (typeof x === 'object' ? caseBlock(x) : kv([['', esc(x)]]))).join('') : caseBlock(v);
+      }
+    }
+    const scalars = Object.entries(rest).filter(([k, v]) => v != null && typeof v !== 'object' && !['id', 'title', 'status'].includes(k));
+    if (scalars.length) h += sec('Прочее') + kv(scalars.map(([k, v]) => [CASE_LABELS[k] || esc(k), caseVal(k, v)]));
+    const docs = D.documents.filter(d => JSON.stringify(c).includes(d.id));
+    const evs = D.events.filter(e => e.related_case === c.id);
+    if (docs.length || evs.length) h += sec('Документы и события') + list([...docs.map(d => row({ t: esc(d.title), s: esc(d.category), go: 'doc', p: { id: d.id } })), ...evs.map(e => row({ t: esc(e.title), s: fd(e.date), go: 'event', p: { id: e.id } }))]);
+  }
+  return { title: 'Дело', html: h || empty('Дел нет') };
+};
+
+V.search = () => {
+  let h = `<input class="search" id="gq" type="search" placeholder="Показатель, врач, лекарство, #тег" autocomplete="off" autofocus><div id="gres"></div>`;
+  return {
+    title: 'Поиск', html: h, after() {
+      const q = $('#gq'), res = $('#gres');
+      const run = () => {
+        const s = q.value.trim().toLowerCase().replace(/^#/, '');
+        if (s.length < 2) { res.innerHTML = `<p class="note">Ищу по анализам, заключениям, врачам, лекарствам, документам и делам.</p>`; return; }
+        const has = (...xs) => xs.some(x => x && String(Array.isArray(x) ? x.join(' ') : x).toLowerCase().includes(s));
+        const groups = [];
+        const seen = {};
+        for (const l of D.labs) if (has(l.name, l.code, l.panel)) { const k = indKey(l); if (!seen[k] || l.date > seen[k].date) seen[k] = l; }
+        const labs = Object.values(seen);
+        if (labs.length) groups.push(['Показатели', labs.map(l => row({ t: esc(l.name), s: fd(l.date), r: `<span class="lab-val ${isAbn(l.flag) ? 'flag ' + l.flag : ''}">${FLAG_MARK[l.flag] || ''} ${esc(valText(l))}</span>`, go: 'indicator', p: { k: indKey(l) } }))]);
+        const evs = D.events.filter(e => has(e.title, e.complaints, e.conclusion, e.recommendations, e.description, e.tags, docName(byId('doctors', e.doctor_id)), byId('clinics', e.clinic_id)?.short));
+        if (evs.length) groups.push(['События', evs.sort((a, b) => b.date.localeCompare(a.date)).map(e => row({ left: `<div class="date-col">${fds(e.date)}<br>${e.date.slice(0, 4)}</div>`, t: esc(e.title), s: KIND[e.kind], go: 'event', p: { id: e.id } }))]);
+        const meds = D.medications.filter(m => has(m.name, m.reason, m.notes, m.form));
+        if (meds.length) groups.push(['Лекарства', meds.map(m => row({ t: esc(m.name), s: esc(m.reason), go: 'med', p: { id: m.id } }))]);
+        const drs = D.doctors.filter(d => has(d.name, d.specialty, d.notes));
+        if (drs.length) groups.push(['Врачи', drs.map(d => row({ t: esc(d.name || d.specialty), s: esc(d.specialty), go: 'doctor', p: { id: d.id } }))]);
+        const cls = D.clinics.filter(c => has(c.name, c.short, c.address));
+        if (cls.length) groups.push(['Клиники', cls.map(c => row({ t: esc(c.short || c.name), s: esc(c.address), go: 'clinic', p: { id: c.id } }))]);
+        const dcs = D.documents.filter(d => has(d.title, d.category, d.note, d.tags));
+        if (dcs.length) groups.push(['Документы', dcs.map(d => row({ t: esc(d.title), s: `${esc(d.category)} · ${fd(d.date)}`, go: 'doc', p: { id: d.id } }))]);
+        const tks = D.tasks.filter(x => has(x.title, x.reason, x.specialty));
+        if (tks.length) groups.push(['Дела и вопросы', tks.map(x => row({ t: esc(x.title), s: x.status === 'open' ? 'открыто' : 'сделано', go: 'tasks' }))]);
+        res.innerHTML = groups.length ? groups.map(([t, rows]) => sec(t) + list(rows)).join('') : `<div style="margin-top:12px">${empty('Ничего не нашлось')}</div>`;
+      };
+      q.addEventListener('input', run); run(); setTimeout(() => q.focus(), 50);
+    }
+  };
+};
+
+V.data = () => {
+  const m = D.meta;
+  const localCount = LIST_KEYS.reduce((s, k) => s + LOCAL.add[k].length, 0) + Object.keys(LOCAL.intakes).length + Object.keys(LOCAL.patch).length;
+  let h = sec('Данные от вас') + kv([['Версия', m.version ? `<span class="num">${esc(m.version)}</span>` : '—'], ['Обновлено', m.updated ? esc(m.updated) : '—'], ['Проверено', lastCheck ? lastCheck.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : 'ещё нет']]);
+  h += `<div class="btns"><button type="button" class="btn soft" data-act="refresh">Проверить обновления</button></div>`;
+  h += sec('Записи, сделанные на телефоне') + kv([['Всего изменений', String(localCount)], ['Хранятся', 'только в этом телефоне']]);
+  h += `<div class="btns"><button type="button" class="btn" data-act="exportLocal">Отправить копию</button></div><p class="note">Файл с вашими отметками и добавленными документами. Перешлите его в Telegram, чтобы эти записи попали в общую медкарту.</p>`;
+  h += sec('Календарь iPhone') + `<div class="btns" style="margin-top:0"><button type="button" class="btn soft" data-act="calAll">Все напоминания в Календарь</button></div><p class="note">Лекарства по времени, конец курсов, записи к врачам и сроки дел. Если добавить повторно, события могут задвоиться.</p>`;
+  h += sec('Безопасность') + `<div class="btns" style="margin-top:0"><button type="button" class="btn ghost" data-act="confirm" data-then="lockNow">Выйти и забыть пароль</button></div><p class="note">После выхода для входа понадобится пароль. Ваши записи на телефоне сохранятся.</p>`;
+  return { title: 'Данные и копия', html: h };
+};
+
+function gone() { return { title: 'Не найдено', html: empty('Запись не найдена. Возможно, её удалили.') }; }
+
+/* =========================================================
+   Формы добавления и правки
+   ========================================================= */
+const docOpts = () => [['', '—'], ...D.doctors.map(d => [d.id, `${d.name || d.specialty}${d.name ? ' · ' + d.specialty : ''}`])];
+const clinicOpts = () => [['', '—'], ...D.clinics.map(c => [c.id, c.short || c.name])];
+const eventOpts = () => [['', '—'], ...D.events.slice().sort((a, b) => b.date.localeCompare(a.date)).map(e => [e.id, `${fds(e.date)} · ${e.title}`])];
+const uniq = arr => [...new Set(arr.filter(Boolean))].sort((a, b) => a.localeCompare(b, 'ru'));
+
+const FORMS = {
+  lab: {
+    title: 'Анализ', fields: (p, keep = {}) => [
+      { n: 'date', l: 'Дата сдачи', t: 'date', req: 1, val: keep.date || todayISO() },
+      { n: 'lab', l: 'Лаборатория', list: uniq([...D.clinics.map(c => c.short), ...D.labs.map(l => l.lab)]), val: keep.lab },
+      { n: 'panel', l: 'Раздел', list: uniq(D.labs.map(l => l.panel)), val: keep.panel, ph: 'Например: Гормоны' },
+      { n: 'name', l: 'Показатель', req: 1, list: uniq(D.labs.map(l => l.name)), ph: 'Например: Витамин D (25-OH)' },
+      { n: 'value', l: 'Результат', req: 1, ph: '26,02 или «отрицательно»' },
+      { n: 'unit', l: 'Единицы', list: uniq(D.labs.map(l => l.unit)) },
+      { n: 'ref', l: 'Норма по бланку', ph: '30–100, до 200 или текстом', hint: 'Пишите как на бланке. Программа отметит отклонение только по этим границам.' },
+    ],
+    extraSubmit: 'Сохранить и добавить ещё',
+    save(v, more) {
+      const value = parseNum(v.value);
+      const [lo, hi, rt] = parseRange(v.ref || '');
+      const known = D.labs.find(l => l.name.toLowerCase() === v.name.toLowerCase());
+      const item = { date: v.date, lab: v.lab || null, panel: v.panel || known?.panel || null, name: v.name, code: known?.code || null,
+        value, value_text: value == null ? v.value : null, unit: v.unit || null, ref_low: lo, ref_high: hi, ref_text: rt, flag: flagOf(value, lo, hi) };
+      addItem('labs', item, more ? `${v.name} сохранён. Следующий показатель` : 'Анализ сохранён');
+      return more ? { stay: { date: v.date, lab: v.lab, panel: v.panel } } : { go: ['labset', { k: labSetId(item) }] };
+    }
+  },
+  med: {
+    title: 'Лекарство', fields: p => {
+      const m = p.id ? byId('medications', p.id) : {};
+      const days = m.end && m.start ? daysBetween(m.start, m.end) + 1 : '';
+      return [
+        { n: 'name', l: 'Название', req: 1, val: m.name },
+        { n: 'dose', l: 'Доза', val: m.dose, ph: '1 таблетка, 150 мг' },
+        { n: 'form', l: 'Форма', val: m.form, list: ['таблетки', 'капсулы', 'саше', 'гель', 'мазь', 'капли', 'спрей', 'уколы', 'пластырь'] },
+        { n: 'times', l: 'Время приёма', req: 1, val: (m.schedule?.times || []).join(', '), ph: '09:00, 19:00', hint: 'Через запятую. По этому времени будут напоминания.' },
+        { n: 'text', l: 'Как принимать', val: m.schedule?.text, ph: '2 раза в день во время еды' },
+        { n: 'start', l: 'Начало', t: 'date', req: 1, val: m.start || todayISO() },
+        { n: 'days', l: 'Сколько дней', t: 'number', val: days, hint: 'Или оставьте пустым и укажите дату окончания.' },
+        { n: 'end', l: 'Дата окончания', t: 'date', val: m.end },
+        { n: 'doctor_id', l: 'Кто назначил', t: 'select', opts: docOpts(), val: m.doctor_id },
+        { n: 'reason', l: 'От чего', val: m.reason },
+        { n: 'notes', l: 'Примечание', t: 'textarea', val: m.notes },
+      ];
+    },
+    save(v, _, p) {
+      const times = parseTimes(v.times); if (!times) throw 'Время приёма в виде 09:00, 19:00';
+      const end = v.days ? addDays(v.start, Math.max(1, +v.days) - 1) : (v.end || null);
+      if (end && end < v.start) throw 'Окончание раньше начала';
+      const f = { name: v.name, dose: v.dose || null, form: v.form || null, schedule: { times, text: v.text || null }, start: v.start, end, doctor_id: v.doctor_id || null, reason: v.reason || null, notes: v.notes || null };
+      if (p.id) { const old = byId('medications', p.id); if (old.status === 'unknown_duration' && end) f.status = 'active'; patchItem('medications', p.id, f, 'Сохранено'); return { back: 1 }; }
+      f.status = 'active'; f.id = newId('med'); addItem('medications', f, 'Лекарство добавлено. Добавьте напоминания в Календарь');
+      return { go: ['med', { id: f.id }], replace: 1 };
+    }
+  },
+  appt: {
+    title: 'Запись к врачу', fields: p => {
+      const e = p.id ? byId('events', p.id) : {};
+      return [
+        { n: 'title', l: 'К кому или куда', req: 1, val: e.title, list: ['Эндокринолог', 'Терапевт', 'Маммолог', 'Гинеколог', 'УЗИ', 'Сдать анализы'] },
+        { n: 'date', l: 'Дата', t: 'date', req: 1, val: e.date },
+        { n: 'time', l: 'Время', t: 'time', val: e.time },
+        { n: 'kind', l: 'Тип', t: 'select', opts: Object.entries(KIND), val: e.kind || 'doctor' },
+        { n: 'doctor_id', l: 'Врач', t: 'select', opts: docOpts(), val: e.doctor_id },
+        { n: 'clinic_id', l: 'Клиника', t: 'select', opts: clinicOpts(), val: e.clinic_id },
+        { n: 'notes', l: 'Что взять, подготовка', t: 'textarea', val: e.notes, hint: 'Инструкции по подготовке — как сказали в клинике.' },
+      ];
+    },
+    save(v, _, p) {
+      const f = { title: v.title, date: v.date, time: v.time || null, kind: v.kind, doctor_id: v.doctor_id || null, clinic_id: v.clinic_id || null, notes: v.notes || null, status: 'planned' };
+      if (p.id) { patchItem('events', p.id, f, 'Сохранено'); return { back: 1 }; }
+      f.id = newId('evt'); addItem('events', f, 'Запись сохранена');
+      return { go: ['event', { id: f.id }], replace: 1 };
+    }
+  },
+  event: {
+    title: 'Приём или обследование', fields: p => {
+      const e = p.id ? byId('events', p.id) : {};
+      return [
+        { n: 'kind', l: 'Тип', t: 'select', opts: Object.entries(KIND), val: e.kind || 'doctor' },
+        { n: 'title', l: 'Название', req: 1, val: e.title, ph: 'Эндокринолог — клиника' },
+        { n: 'date', l: 'Дата', t: 'date', req: 1, val: e.date || todayISO() },
+        { n: 'doctor_id', l: 'Врач', t: 'select', opts: docOpts(), val: e.doctor_id },
+        { n: 'clinic_id', l: 'Клиника', t: 'select', opts: clinicOpts(), val: e.clinic_id },
+        { n: 'complaints', l: 'Жалобы', t: 'textarea', val: e.complaints },
+        { n: 'conclusion', l: 'Заключение', t: 'textarea', val: e.conclusion },
+        { n: 'recommendations', l: 'Рекомендации', t: 'textarea', val: e.recommendations },
+        { n: 'cost', l: 'Стоимость, сум', val: e.cost_uzs || '', ph: '350 000', hint: 'Попадёт в расходы.' },
+      ];
+    },
+    save(v, _, p) {
+      const cost = v.cost ? parseMoney(v.cost) : null;
+      if (v.cost && cost == null) throw 'Стоимость числом, например 350000';
+      const f = { kind: v.kind, title: v.title, date: v.date, doctor_id: v.doctor_id || null, clinic_id: v.clinic_id || null, complaints: v.complaints || null, conclusion: v.conclusion || null, recommendations: v.recommendations || null, cost_uzs: cost, status: 'done' };
+      if (p.id) { patchItem('events', p.id, f, 'Сохранено'); return { back: 1 }; }
+      f.id = newId('evt');
+      if (cost) LOCAL.add.expenses.push({ id: newId('exp'), date: v.date, category: { doctor: 'Врачи', lab: 'Анализы', pharmacy: 'Лекарства' }[v.kind] || 'Обследования', title: v.title, amount_uzs: cost, event_id: f.id });
+      addItem('events', f, 'Сохранено');
+      return { go: ['event', { id: f.id }], replace: 1 };
+    }
+  },
+  doctor: {
+    title: 'Врач', fields: p => {
+      const d = p.id ? byId('doctors', p.id) : {};
+      return [
+        { n: 'name', l: 'ФИО', val: d.name }, { n: 'specialty', l: 'Специальность', req: 1, val: d.specialty, list: uniq(D.doctors.map(x => x.specialty)) },
+        { n: 'clinic_id', l: 'Клиника', t: 'select', opts: clinicOpts(), val: d.clinic_id }, { n: 'phone', l: 'Телефон', t: 'tel', val: d.phone },
+        { n: 'telegram', l: 'Telegram', val: d.telegram }, { n: 'price', l: 'Стоимость приёма, сум', val: d.price_uzs || '' }, { n: 'notes', l: 'Примечание', t: 'textarea', val: d.notes },
+      ];
+    },
+    save(v, _, p) {
+      const f = { name: v.name || null, specialty: v.specialty, clinic_id: v.clinic_id || null, phone: v.phone || null, telegram: v.telegram || null, price_uzs: v.price ? parseMoney(v.price) : null, notes: v.notes || null };
+      if (p.id) patchItem('doctors', p.id, f, 'Сохранено'); else addItem('doctors', f, 'Врач добавлен');
+      return { back: 1 };
+    }
+  },
+  clinic: {
+    title: 'Клиника', fields: () => [{ n: 'name', l: 'Название', req: 1 }, { n: 'short', l: 'Коротко' }, { n: 'address', l: 'Адрес' }, { n: 'phone', l: 'Телефон', t: 'tel' }, { n: 'notes', l: 'Примечание', t: 'textarea' }],
+    save(v) { addItem('clinics', { name: v.name, short: v.short || null, address: v.address || null, phones: v.phone ? [v.phone] : [], notes: v.notes || null }, 'Клиника добавлена'); return { back: 1 }; }
+  },
+  task: {
+    title: 'Дело', fields: () => [
+      { n: 'title', l: 'Что сделать', req: 1, ph: 'Записаться к эндокринологу' },
+      { n: 'type', l: 'Тип', t: 'select', opts: Object.entries(TASK_TYPES).filter(([k]) => k !== 'question'), val: 'appointment' },
+      { n: 'due', l: 'Срок', t: 'date', hint: 'Если есть срок, его можно добавить в Календарь с напоминанием за неделю.' },
+      { n: 'reason', l: 'Зачем', t: 'textarea' }],
+    save(v) { addItem('tasks', { title: v.title, type: v.type, due: v.due || null, reason: v.reason || null, status: 'open' }, 'Дело добавлено'); return { back: 1 }; }
+  },
+  question: {
+    title: 'Вопрос врачу', fields: () => [
+      { n: 'specialty', l: 'Кому', req: 1, list: uniq([...D.tasks.map(t => t.specialty), ...D.doctors.map(d => d.specialty), 'Эндокринолог', 'Терапевт', 'Маммолог', 'Гинеколог']) },
+      { n: 'title', l: 'Вопрос', t: 'textarea', req: 1 }],
+    save(v) { addItem('tasks', { type: 'question', title: v.title, specialty: v.specialty, status: 'open' }, 'Вопрос добавлен'); return { back: 1 }; }
+  },
+  expense: {
+    title: 'Расход', fields: () => [
+      { n: 'date', l: 'Дата', t: 'date', req: 1, val: todayISO() }, { n: 'category', l: 'Категория', t: 'select', opts: EXP_CATS.map(c => [c, c]) },
+      { n: 'title', l: 'За что', req: 1 }, { n: 'amount', l: 'Сумма, сум', req: 1, ph: '250 000' }, { n: 'note', l: 'Примечание' }],
+    save(v) { const a = parseMoney(v.amount); if (a == null) throw 'Сумма числом, например 250000'; addItem('expenses', { date: v.date, category: v.category, title: v.title, amount_uzs: a, note: v.note || null }, 'Расход добавлен'); return { back: 1 }; }
+  },
+  doc: {
+    title: 'Документ', fields: () => [
+      { n: 'files', l: 'Фото или PDF', t: 'file', req: 1, hint: 'Можно сфотографировать сразу или выбрать несколько файлов.' },
+      { n: 'category', l: 'Что это', t: 'select', opts: DOC_CATS.map(c => [c, c]) },
+      { n: 'date', l: 'Дата документа', t: 'date', req: 1, val: todayISO() },
+      { n: 'title', l: 'Название', ph: 'Заключение эндокринолога' },
+      { n: 'event_id', l: 'К какому событию', t: 'select', opts: eventOpts() },
+      { n: 'doctor_id', l: 'Врач', t: 'select', opts: docOpts() },
+      { n: 'note', l: 'Примечание' }],
+    async save(v, _, p, form) {
+      const files = [...form.querySelector('[name="files"]').files];
+      if (!files.length) throw 'Выберите файл';
+      const id = newId('doc'), keys = [];
+      for (const f of files) { const k = `local/${id}/${f.name}`; await idb.put('files', k, new Blob([await f.arrayBuffer()], { type: f.type || mimeOf(f.name) })); keys.push(k); }
+      await addItem('documents', { id, title: v.title || `${v.category}, ${fd(v.date)}`, date: v.date, category: v.category, event_id: v.event_id || null, doctor_id: v.doctor_id || null, note: v.note || null, files: keys }, 'Документ сохранён');
+      return { go: ['doc', { id }], replace: 1 };
+    }
+  },
+  profile: {
+    title: 'Медкарта', fields: () => {
+      const p = D.profile;
+      return [
+        { n: 'blood_group', l: 'Группа крови и резус', val: p.blood_group, list: ['0(I) Rh+', '0(I) Rh−', 'A(II) Rh+', 'A(II) Rh−', 'B(III) Rh+', 'B(III) Rh−', 'AB(IV) Rh+', 'AB(IV) Rh−'] },
+        { n: 'allergies', l: 'Аллергии', val: p.allergies, ph: 'Нет известных или список' },
+        { n: 'contraindications', l: 'Противопоказания', val: p.contraindications },
+        { n: 'emergency_contact', l: 'Экстренный контакт', val: p.emergency_contact, ph: 'Имя, кем приходится, телефон' },
+        { n: 'weight_kg', l: 'Вес, кг', t: 'number', val: p.weight_kg }, { n: 'height_cm', l: 'Рост, см', t: 'number', val: p.height_cm },
+        { n: 'phone', l: 'Телефон', t: 'tel', val: p.phone }];
+    },
+    save(v) {
+      const f = { blood_group: v.blood_group || null, allergies: v.allergies || null, contraindications: v.contraindications || null, emergency_contact: v.emergency_contact || null, weight_kg: v.weight_kg ? +v.weight_kg : null, height_cm: v.height_cm ? +v.height_cm : null, phone: v.phone || null };
+      if (f.weight_kg && f.height_cm) f.bmi = +(f.weight_kg / (f.height_cm / 100) ** 2).toFixed(2);
+      Object.assign(LOCAL.profile, f); saveLocal('Сохранено'); return { back: 1 };
+    }
+  },
+};
+
+function parseTimes(t) {
+  const out = []; for (const part of String(t).split(/[,;]|\s+и\s+|\s+/)) {
+    if (!part.trim()) continue; const m = part.trim().match(/^(\d{1,2})[:.]?(\d{2})$/); if (!m || +m[1] > 23 || +m[2] > 59) return null;
+    out.push(`${pad(+m[1])}:${m[2]}`);
+  } return out.length ? [...new Set(out)].sort() : null;
+}
+function parseMoney(t) { let s = String(t).toLowerCase().replace(/сум/g, '').trim(), k = 1; if (/млн$/.test(s)) { k = 1e6; s = s.replace(/млн$/, ''); } else if (/тыс$/.test(s)) { k = 1e3; s = s.replace(/тыс$/, ''); } const v = parseNum(s.trim()); return v == null ? null : Math.round(v * k); }
+function parseRange(t) {
+  const s = t.trim().replace(/,/g, '.'); if (!s) return [null, null, null];
+  let m = s.match(/^(-?\d+(?:\.\d+)?)\s*[-–—]\s*(-?\d+(?:\.\d+)?)$/); if (m) return [+m[1], +m[2], null];
+  m = s.match(/^(?:до|<|≤|<=)\s*(-?\d+(?:\.\d+)?)$/); if (m) return [null, +m[1], null];
+  m = s.match(/^(?:от|>|≥|>=)\s*(-?\d+(?:\.\d+)?)$/); if (m) return [+m[1], null, null];
+  return [null, null, t.trim()];
+}
+
+V.form = (p) => {
+  const F = FORMS[p.k]; if (!F) return gone();
+  const fields = F.fields(p, p.keep || {});
+  const field = f => {
+    const id = 'f_' + f.n, req = f.req ? ' required' : '', val = f.val == null ? '' : f.val;
+    let input;
+    if (f.t === 'select') input = `<select id="${id}" name="${f.n}"${req}>${f.opts.map(([v, l]) => `<option value="${esc(v)}"${String(v) === String(val) ? ' selected' : ''}>${esc(l)}</option>`).join('')}</select>`;
+    else if (f.t === 'textarea') input = `<textarea id="${id}" name="${f.n}"${req} placeholder="${esc(f.ph || '')}">${esc(val)}</textarea>`;
+    else if (f.t === 'file') input = `<input id="${id}" name="${f.n}" type="file" accept="image/*,application/pdf" multiple${req}>`;
+    else input = `<input id="${id}" name="${f.n}" type="${f.t || 'text'}"${f.t === 'number' ? ' inputmode="decimal" step="any"' : ''} value="${esc(val)}"${req} placeholder="${esc(f.ph || '')}"${f.list ? ` list="${id}_l"` : ''} autocomplete="off">${f.list ? `<datalist id="${id}_l">${f.list.map(x => `<option value="${esc(x)}">`).join('')}</datalist>` : ''}`;
+    return `<div class="field"><label for="${id}">${f.l}${f.req ? '' : ' <span style="font-weight:400">— необязательно</span>'}</label>${input}${f.hint ? `<div class="hint">${f.hint}</div>` : ''}</div>`;
+  };
+  const h = `<form class="f" id="theForm" novalidate>${fields.map(field).join('')}<div class="err" id="formErr" hidden></div>
+    <div class="btns"><button class="btn" type="submit" value="">Сохранить</button>${F.extraSubmit ? `<button class="btn ghost" type="submit" value="more">${F.extraSubmit}</button>` : ''}</div></form>`;
+  return {
+    title: (p.id ? 'Изменить: ' : 'Новое: ') + F.title.toLowerCase(), html: h, after() {
+      const form = $('#theForm');
+      form.addEventListener('submit', async ev => {
+        ev.preventDefault();
+        const err = $('#formErr'); err.hidden = true;
+        const missing = fields.filter(f => f.req && f.t !== 'file' && !String(form.elements[f.n].value).trim());
+        if (missing.length) { err.textContent = 'Заполните: ' + missing.map(f => f.l.toLowerCase()).join(', '); err.hidden = false; form.elements[missing[0].n].focus(); return; }
+        const v = Object.fromEntries(fields.filter(f => f.t !== 'file').map(f => [f.n, String(form.elements[f.n].value).trim()]));
+        const btns = form.querySelectorAll('button[type=submit]'); btns.forEach(b => b.disabled = true);
+        try {
+          const r = await F.save(v, ev.submitter?.value === 'more', p, form) || {};
+          if (r.stay) { stack[stack.length - 1] = { v: 'form', p: { ...p, keep: r.stay } }; render(); scrollTo(0, 0); }
+          else if (r.go) { if (r.replace) stack.pop(); else stack.pop(); stack.push({ v: r.go[0], p: r.go[1] }); render(); scrollTo(0, 0); }
+          else if (r.back) { stack.pop(); render(); }
+        } catch (e) { err.textContent = typeof e === 'string' ? e : 'Не удалось сохранить: ' + (e.message || e); err.hidden = false; btns.forEach(b => b.disabled = false); }
+      });
+    }
+  };
+};
+
+/* =========================================================
+   Навигация и действия
+   ========================================================= */
+let stack = [{ v: 'today' }];
+function render() {
+  if (!D) return;
+  const top = stack[stack.length - 1];
+  const r = (V[top.v] || gone)(top.p || {});
+  $('#title').textContent = r.title;
+  document.title = stack.length > 1 ? `${r.title} · Медкарта` : 'Медкарта';
+  $('#back').hidden = stack.length < 2;
+  $('#main').innerHTML = r.html;
+  document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-current', t.dataset.tab === stack[0].v ? 'page' : 'false'));
+  if (r.after) r.after();
+}
+function go(v, p) { stack.push({ v, p }); render(); scrollTo(0, 0); try { history.pushState({ n: stack.length }, ''); } catch (e) { } }
+function back() { if (stack.length > 1) { stack.pop(); render(); } }
+window.addEventListener('popstate', () => { if (stack.length > 1) { stack.pop(); render(); } });
+$('#back').addEventListener('click', () => { if (history.state && history.state.n) history.back(); else back(); });
+document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => { stack = [{ v: t.dataset.tab }]; render(); scrollTo(0, 0); }));
+
+const A = {
+  intake({ k, s }) { if (LOCAL.intakes[k] === s || (!LOCAL.intakes[k] && D.intakes[k] === s)) delete LOCAL.intakes[k]; else LOCAL.intakes[k] = s; saveLocal(s === 'taken' && LOCAL.intakes[k] ? 'Отмечено: принято' : null); },
+  hideInstall() { try { localStorage.setItem('mk-hide-install', '1'); } catch (e) { } render(); },
+  confirm(ds, b) {
+    if (!b.dataset.armed) { b.dataset.armed = '1'; b.dataset.orig = b.textContent; b.textContent = 'Точно? Нажмите ещё раз'; setTimeout(() => { if (b.isConnected && b.dataset.armed) { delete b.dataset.armed; b.textContent = b.dataset.orig; } }, 4000); return; }
+    A[ds.then](ds, b);
+  },
+  del({ k, id }) { stack.pop(); deleteItem(k, id, 'Удалено'); },
+  async delDoc({ id }) { const d = byId('documents', id); for (const f of d.files || []) await idb.del('files', f).catch(() => { }); stack.pop(); deleteItem('documents', id, 'Документ удалён'); },
+  delLabSet({ k }) { LOCAL.add.labs = LOCAL.add.labs.filter(l => labSetId(l) !== k); stack.pop(); saveLocal('Анализ удалён'); },
+  askDelExp({ id }, b) { if (!b.dataset.armed) { b.dataset.armed = '1'; b.querySelector('.row-s').textContent = 'Нажмите ещё раз, чтобы удалить'; setTimeout(() => { if (b.isConnected) render(); }, 3500); return; } deleteItem('expenses', id, 'Расход удалён'); },
+  finishMed({ id }) { patchItem('medications', id, { status: 'completed', end: todayISO() }, 'Курс завершён'); },
+  eventDone({ id }) { patchItem('events', id, { status: 'done' }, 'Отмечено. Добавьте заключение через «Изменить»'); },
+  taskDone({ id }) { patchItem('tasks', id, { status: 'done', done_at: todayISO() }, 'Готово'); },
+  taskReopen({ id }) { patchItem('tasks', id, { status: 'open' }, 'Возвращено в список'); },
+  calMed({ id }) { openCalendar(icsForMed(byId('medications', id)), 'напоминания'); },
+  calEvent({ id }) { openCalendar(icsForEvent(byId('events', id)), 'запись'); },
+  calTasks() { openCalendar(D.tasks.flatMap(icsForTask), 'сроки'); },
+  calAll() { const t = todayISO(); openCalendar([...D.medications.filter(m => !MED_DONE.has(m.status) && (!m.end || m.end >= t)).flatMap(icsForMed), ...D.events.filter(e => e.status === 'planned').flatMap(icsForEvent), ...D.tasks.flatMap(icsForTask)], 'все напоминания'); },
+  async shareFile({ f }) { const b = await getFile(f); if (b) shareFile(f.split('/').pop(), b); },
+  async copyPrep({ s }) { const text = prepText(s); try { await navigator.clipboard.writeText(text); toast('Скопировано. Можно вставить в сообщение врачу'); } catch (e) { shareFile(`Подготовка — ${s}.txt`, new Blob([text], { type: 'text/plain' })); } },
+  async refresh() { toast('Проверяю…'); const r = await syncServer(true); toast(r === 'new' ? 'Данные обновлены' : r === 'same' ? 'У вас последняя версия' : 'Нет связи. Работаю с сохранённой копией'); render(); },
+  async exportLocal() {
+    const files = {};
+    for (const k of (await idb.keys('files')).filter(k => String(k).startsWith('local/'))) { const b = await idb.get('files', k); files[k] = b64e(await b.arrayBuffer()); }
+    const out = { format: 'medkarta-phone', exported: new Date().toISOString(), base_version: D.meta.version || null, local: LOCAL, files };
+    await shareFile(`medkarta-telefon-${todayISO()}.json`, new Blob([JSON.stringify(out)], { type: 'application/json' }), 'Файл сохранён в «Загрузки»');
+  },
+  async lockNow() { await idb.del('kv', 'key').catch(() => { }); KEY = null; showLock(); },
+};
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-go],[data-act]');
+  if (!b || b.closest('#lock')) return;
+  if (b.tagName === 'A' && b.getAttribute('href') !== '#' && !b.dataset.go) return;
+  e.preventDefault();
+  if (b.dataset.go) go(b.dataset.go, b.dataset.p ? JSON.parse(b.dataset.p) : {});
+  else if (A[b.dataset.act]) A[b.dataset.act](b.dataset, b, e);
+});
+
+/* =========================================================
+   Запуск: пароль, загрузка, обновления
+   ========================================================= */
+let lastCheck = null;
+function showLock(msg) {
+  $('#shell').hidden = true; $('#lock').hidden = false;
+  const err = $('#lockErr'); err.hidden = !msg; err.textContent = msg || '';
+  setTimeout(() => $('#pass').focus(), 50);
+}
+function showApp() { $('#lock').hidden = true; $('#shell').hidden = false; render(); }
+
+async function syncServer(force) {
+  let env;
+  try { env = await fetchEnvelope(); } catch (e) { return 'offline'; }
+  lastCheck = new Date();
+  if (SALT && env.salt !== SALT) { await idb.del('kv', 'key').catch(() => { }); KEY = null; showLock('Пароль изменился. Введите новый.'); return 'relock'; }
+  if (SERVER && SERVER.meta?.version === env.version && !force) return 'same';
+  if (SERVER && SERVER.meta?.version === env.version) return 'same';
+  try {
+    const data = await decryptBundle(env, KEY);
+    const isNew = !SERVER || SERVER.meta?.version !== data.meta?.version;
+    SERVER = data; await idb.put('kv', 'server', SERVER).catch(() => { });
+    build(); return isNew ? 'new' : 'same';
+  } catch (e) { return 'offline'; }
+}
+
+$('#lockForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const pass = $('#pass').value; if (!pass) return;
+  const btn = $('#lockBtn'); btn.disabled = true; btn.textContent = 'Проверяю…'; $('#lockErr').hidden = true;
+  try {
+    const env = await fetchEnvelope();
+    const key = await deriveKey(pass, env.salt, env.iter);
+    let data;
+    try { data = await decryptBundle(env, key); } catch (_) { throw new Error('bad'); }
+    KEY = key; SALT = env.salt; SERVER = data; lastCheck = new Date();
+    await idb.put('kv', 'server', SERVER).catch(() => { });
+    await idb.put('kv', 'salt', SALT).catch(() => { });
+    try { await idb.put('kv', 'key', key); } catch (_) { /* ключ не сохранился — спросим пароль в следующий раз */ }
+    $('#pass').value = '';
+    build(); showApp();
+    if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => { });
+  } catch (err) {
+    showLock(err.message === 'bad' ? 'Неверный пароль' : 'Нет связи с интернетом. Для первого входа нужен интернет.');
+  } finally { btn.disabled = false; btn.textContent = 'Открыть'; }
+});
+
+(async function start() {
+  if (!window.crypto?.subtle) { showLock('Откройте программу по ссылке https:// в Safari.'); return; }
+  try {
+    LOCAL = (await idb.get('kv', 'local')) || emptyLocal();
+    for (const k of LIST_KEYS) LOCAL.add[k] ||= [];
+    SERVER = await idb.get('kv', 'server');
+    KEY = await idb.get('kv', 'key');
+    SALT = await idb.get('kv', 'salt');
+  } catch (e) { LOCAL = LOCAL || emptyLocal(); }
+  if (!KEY || !SERVER) { showLock(); return; }
+  build(); showApp();
+  const r = await syncServer(); if (r === 'new') { render(); toast('Данные обновлены'); }
+  document.addEventListener('visibilitychange', async () => {
+    if (document.visibilityState !== 'visible' || !KEY) return;
+    if (lastCheck && Date.now() - lastCheck < 5 * 60e3) return;
+    const r = await syncServer(); if (r === 'new') { render(); toast('Данные обновлены'); }
+  });
+})();
+
+if ('serviceWorker' in navigator && location.protocol === 'https:' || location.hostname === 'localhost') {
+  navigator.serviceWorker?.register('sw.js').catch(() => { });
+}
+</script>
+</body>
+</html>
