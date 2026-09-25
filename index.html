@@ -173,6 +173,13 @@ a.row { color: inherit; text-decoration: none; }
 .lab-val sup { font-size: .7em; }
 .lab-val { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 15px; text-align: right; white-space: nowrap; }
 .lab-ref { font-size: 13px; color: var(--muted); }
+.trend { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.trend.good { color: var(--good-strong); font-weight: 500; }
+.trend.warn { color: var(--warn); font-weight: 500; }
+.arr { font-weight: 800; font-size: 1.15em; }
+.arr.up { color: var(--good); }
+.arr.down { color: var(--hi); }
+.arr.flat { color: var(--muted); }
 .gauge { grid-column: 1 / -1; position: relative; height: 6px; background: var(--surface-2); border-radius: 99px; margin-top: 6px; }
 .gauge .band { position: absolute; top: 0; bottom: 0; background: var(--accent-soft); border-radius: 99px; }
 .gauge .dot { position: absolute; top: 50%; width: 11px; height: 11px; margin: -5.5px 0 0 -5.5px; border-radius: 50%; background: var(--accent); border: 2px solid var(--surface); }
@@ -333,7 +340,7 @@ form.f { display: grid; gap: 14px; }
 
 <script>
 'use strict';
-const APP_VERSION = '25.09.2026 22:00';
+const APP_VERSION = '25.09.2026 22:30';
 /* =========================================================
    Справочники и форматирование
    ========================================================= */
@@ -503,6 +510,31 @@ function refText(l) {
 const valText = l => l.value != null ? num(l.value) : (l.value_text || '—');
 // 10^4,0 → 10 со степенью; длинный текст переносится
 const valHtml = l => esc(valText(l)).replace(/10\^(-?[\d,.]+)/g, '10<sup>$1</sup>');
+
+// Динамика: сравнение с прошлым результатом того же показателя (только числа)
+function labIndex() {
+  if (labIndex.d !== D) {
+    labIndex.d = D; labIndex.m = {};
+    for (const l of D.labs) if (l.value != null) (labIndex.m[indKey(l)] ||= []).push(l);
+    for (const a of Object.values(labIndex.m)) a.sort((x, y) => x.date.localeCompare(y.date));
+  }
+  return labIndex.m;
+}
+function prevOf(l) {
+  if (l.value == null) return null;
+  let p = null;
+  for (const x of labIndex()[indKey(l)] || []) if (x.date < l.date) p = x;
+  return p;
+}
+function trend(l) {
+  const p = prevOf(l); if (!p) return '';
+  const diff = l.value - p.value, was = isAbn(p.flag), now = isAbn(l.flag);
+  const back = was && l.flag === 'normal', out = !was && p.flag === 'normal' && now;
+  const arrow = Math.abs(diff) < 1e-9 ? '→' : diff > 0 ? '↑' : '↓';
+  const dir = arrow === '↑' ? 'up' : arrow === '↓' ? 'down' : 'flat';
+  return `<span class="trend${back ? ' good' : out ? ' warn' : ''}"><b class="arr ${dir}">${arrow}</b> было ${num(p.value)} · ${p.date.slice(5, 7)}.${p.date.slice(2, 4)}${back ? ', теперь в норме' : out ? ', вышел за норму' : ''}</span>`;
+}
+const joinS = (...xs) => xs.filter(Boolean).join(' · ');
 const isLong = l => l.value == null && (l.value_text || '').length > 16;
 function flagOf(v, lo, hi) { if (v == null || (lo == null && hi == null)) return null; if (lo != null && v < lo) return 'low'; if (hi != null && v > hi) return 'high'; return 'normal'; }
 function gauge(l) {
@@ -659,7 +691,7 @@ V.today = () => {
   }
   if (abn.length) {
     h += sec('Вне нормы в последних анализах');
-    h += list(abn.map(l => row({ t: esc(l.name), s: `${fd(l.date)} ${refText(l) ? ' · норма ' + esc(refText(l)) : ''}`, r: `<span class="lab-val flag ${l.flag}">${FLAG_MARK[l.flag]} ${valHtml(l)}</span>`, go: 'indicator', p: { k: indKey(l) } })));
+    h += list(abn.map(l => row({ t: esc(l.name), s: joinS(fd(l.date), refText(l) ? 'норма ' + esc(refText(l)) : '', trend(l)), r: `<span class="lab-val flag ${l.flag}">${FLAG_MARK[l.flag]} ${valHtml(l)}</span>`, go: 'indicator', p: { k: indKey(l) } })));
     h += DISCLAIMER;
   }
   return { title: 'Сегодня', html: h };
@@ -747,7 +779,7 @@ V.labs = () => {
           if (((l.name || '') + ' ' + (l.code || '') + ' ' + (l.panel || '')).toLowerCase().includes(s) && (!seen[k] || l.date > seen[k].date)) seen[k] = l;
         }
         const found = Object.values(seen);
-        res.innerHTML = found.length ? sec('Показатели') + list(found.map(l => row({ t: esc(l.name), s: `${esc(l.panel || '')} · последний ${fd(l.date)}`, r: `<span class="lab-val ${isAbn(l.flag) ? 'flag ' + l.flag : ''}">${FLAG_MARK[l.flag] || ''} ${valHtml(l)}</span>`, go: 'indicator', p: { k: indKey(l) } })))
+        res.innerHTML = found.length ? sec('Показатели') + list(found.map(l => row({ t: esc(l.name), s: joinS(esc(l.panel || ''), `последний ${fd(l.date)}`, trend(l)), r: `<span class="lab-val ${isAbn(l.flag) ? 'flag ' + l.flag : ''}">${FLAG_MARK[l.flag] || ''} ${valHtml(l)}</span>`, go: 'indicator', p: { k: indKey(l) } })))
           : `<div style="margin-top:12px">${empty('Такого показателя нет')}</div>`;
       });
     }
@@ -767,7 +799,7 @@ V.labset = ({ k }) => {
     h += `<div class="list">${arr.map(l => {
       const mark = FLAG_MARK[l.flag] ? `<span class="flag ${l.flag}" title="${FLAG_WORD[l.flag]}">${FLAG_MARK[l.flag]}</span> ` : '';
       const inner = `<div class="lab-row${isLong(l) ? ' long' : ''}"><div class="row-t">${esc(l.name)}</div><div class="lab-val">${mark}${valHtml(l)}${l.unit ? ` <span class="muted small">${esc(l.unit)}</span>` : ''}</div>
-        <div class="lab-ref">${[refText(l) ? 'норма ' + esc(refText(l)) : '', esc(l.comment || '')].filter(Boolean).join(' · ')}</div><div></div>${gauge(l)}</div>`;
+        <div class="lab-ref">${joinS(refText(l) ? 'норма ' + esc(refText(l)) : '', esc(l.comment || ''), trend(l))}</div><div></div>${gauge(l)}</div>`;
       return `<button type="button" class="row" style="display:block" ${nav('indicator', { k: indKey(l) })}>${inner}</button>`;
     }).join('')}</div>`;
   }
@@ -782,13 +814,13 @@ V.indicator = ({ k }) => {
   const last = ls[ls.length - 1];
   let h = `<p class="eyebrow">${esc(last.panel || '')}</p><div class="big-title">${esc(last.name)}</div>`;
   h += `<p><span class="lab-val flag ${last.flag || ''}" style="font-size:22px">${FLAG_MARK[last.flag] || ''} ${valHtml(last)}</span> <span class="muted">${esc(last.unit || '')}</span></p>`;
-  h += `<p class="muted small">Последний результат ${fd(last.date)}${refText(last) ? ` · норма ${esc(refText(last))}` : ''}${FLAG_WORD[last.flag] ? ` · ${FLAG_WORD[last.flag]}` : ''}</p>`;
+  h += `<p class="muted small">Последний результат ${fd(last.date)}${refText(last) ? ` · норма ${esc(refText(last))}` : ''}${FLAG_WORD[last.flag] ? ` · ${FLAG_WORD[last.flag]}` : ''}</p>${trend(last) ? `<p class="small" style="margin-top:-4px">${trend(last)}</p>` : ''}`;
   if (last.ref_text && last.ref_low != null) h += `<p class="muted small">По бланку: ${esc(last.ref_text)}</p>`;
   const pts = ls.filter(l => l.value != null).map(l => ({ d: l.date, v: l.value, f: l.flag }));
   if (pts.length) h += sec('Динамика') + chart(pts, last.ref_low, last.ref_high, last.unit);
   if (pts.length === 1) h += `<p class="note">Пока одно значение. После следующего анализа здесь появится линия.</p>`;
   h += sec('Все результаты');
-  h += list(ls.slice().reverse().map(l => row({ left: `<div class="date-col">${fds(l.date)}<br>${l.date.slice(0, 4)}</div>`, t: `<span class="lab-val flag ${l.flag || ''}">${FLAG_MARK[l.flag] || ''} ${valHtml(l)}</span> <span class="muted small">${esc(l.unit || '')}</span>`, s: `${refText(l) ? 'норма ' + esc(refText(l)) : ''}${l.lab ? ' · ' + esc(l.lab) : ''}`, go: 'labset', p: { k: labSetId(l) } })));
+  h += list(ls.slice().reverse().map(l => row({ left: `<div class="date-col">${fds(l.date)}<br>${l.date.slice(0, 4)}</div>`, t: `<span class="lab-val flag ${l.flag || ''}">${FLAG_MARK[l.flag] || ''} ${valHtml(l)}</span> <span class="muted small">${esc(l.unit || '')}</span>`, s: joinS(refText(l) ? 'норма ' + esc(refText(l)) : '', l.lab ? esc(l.lab) : '', trend(l)), go: 'labset', p: { k: labSetId(l) } })));
   h += DISCLAIMER;
   return { title: 'Показатель', html: h };
 };
@@ -1059,7 +1091,7 @@ V.prepFor = ({ s }) => {
   h += sec('Вопросы врачу') + (qs.length ? list(qs.map(q => row({ t: esc(q.title), r: `<button type="button" class="mark" data-act="taskDone" data-id="${q.id}">Ответ получен</button>` }))) : empty('Вопросов пока нет'));
   h += `<form class="f" id="qForm" style="margin-top:10px;grid-template-columns:1fr auto;align-items:end"><div class="field"><label for="qText">Новый вопрос</label><input id="qText" name="q" placeholder="Например: когда пересдать анализ?" required></div><button class="btn" type="submit">Добавить</button></form>`;
   if (tasks.length) h += sec('Зачем идём') + list(tasks.map(x => row({ t: esc(x.title), s: esc(x.reason) })));
-  h += sec('Отклонения в последних анализах') + (abn.length ? list(abn.map(l => row({ t: esc(l.name), s: `${fd(l.date)} ${refText(l) ? ' · норма ' + esc(refText(l)) : ''}`, r: `<span class="lab-val flag ${l.flag}">${FLAG_MARK[l.flag]} ${valHtml(l)} <span class="small muted">${esc(l.unit || '')}</span></span>`, go: 'indicator', p: { k: indKey(l) } }))) : empty('Отклонений нет'));
+  h += sec('Отклонения в последних анализах') + (abn.length ? list(abn.map(l => row({ t: esc(l.name), s: joinS(fd(l.date), refText(l) ? 'норма ' + esc(refText(l)) : '', trend(l)), r: `<span class="lab-val flag ${l.flag}">${FLAG_MARK[l.flag]} ${valHtml(l)} <span class="small muted">${esc(l.unit || '')}</span></span>`, go: 'indicator', p: { k: indKey(l) } }))) : empty('Отклонений нет'));
   h += sec('Принимает сейчас') + (meds.length ? list(meds.map(m => row({ t: esc(m.name), s: esc([m.dose, m.schedule?.text, m.end ? 'до ' + fd(m.end) : ''].filter(Boolean).join(' · ')), go: 'med', p: { id: m.id } }))) : empty('Лекарств нет'));
   if (visits.length) h += sec('Прошлые приёмы') + list(visits.map(e => row({ left: `<div class="date-col">${fds(e.date)}<br>${e.date.slice(0, 4)}</div>`, t: esc(e.title), s: esc((e.conclusion || '').slice(0, 140)), go: 'event', p: { id: e.id } })));
   if (exams.length) h += sec('Последние обследования') + list(exams.map(e => row({ left: `<div class="date-col">${fds(e.date)}<br>${e.date.slice(0, 4)}</div>`, t: esc(e.title), s: esc((e.conclusion || '').slice(0, 140)), go: 'event', p: { id: e.id } })));
@@ -1170,7 +1202,7 @@ V.search = () => {
         const seen = {};
         for (const l of D.labs) if (has(l.name, l.code, l.panel)) { const k = indKey(l); if (!seen[k] || l.date > seen[k].date) seen[k] = l; }
         const labs = Object.values(seen);
-        if (labs.length) groups.push(['Показатели', labs.map(l => row({ t: esc(l.name), s: fd(l.date), r: `<span class="lab-val ${isAbn(l.flag) ? 'flag ' + l.flag : ''}">${FLAG_MARK[l.flag] || ''} ${valHtml(l)}</span>`, go: 'indicator', p: { k: indKey(l) } }))]);
+        if (labs.length) groups.push(['Показатели', labs.map(l => row({ t: esc(l.name), s: joinS(fd(l.date), trend(l)), r: `<span class="lab-val ${isAbn(l.flag) ? 'flag ' + l.flag : ''}">${FLAG_MARK[l.flag] || ''} ${valHtml(l)}</span>`, go: 'indicator', p: { k: indKey(l) } }))]);
         const evs = D.events.filter(e => has(e.title, e.complaints, e.conclusion, e.recommendations, e.description, e.tags, docName(byId('doctors', e.doctor_id)), byId('clinics', e.clinic_id)?.short));
         if (evs.length) groups.push(['События', evs.sort((a, b) => b.date.localeCompare(a.date)).map(e => row({ left: `<div class="date-col">${fds(e.date)}<br>${e.date.slice(0, 4)}</div>`, t: esc(e.title), s: KIND[e.kind], go: 'event', p: { id: e.id } }))]);
         const meds = D.medications.filter(m => has(m.name, m.reason, m.notes, m.form));
