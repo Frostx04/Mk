@@ -24,6 +24,7 @@
   --line: #D8DFDA; --accent: #246B55; --accent-ink: #FFFFFF; --accent-soft: #DCEBE4;
   --hi: #B03A2E; --hi-soft: #F7E2DE; --lo: #2A5DA8; --lo-soft: #DFE8F6; --warn: #8F5C10; --warn-soft: #F4E8D2;
   --ok: #2F7A4F;
+  --good: #23864F; --good-strong: #1B6E40; --good-bg: #E3F3E8; --good-ink: #133824; --good-ink-2: #3E6650; --good-line: #CBE6D4; --good-track: #C6E4D0;
   --sans: "Golos Text", -apple-system, "Segoe UI", Roboto, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --r: 14px;
@@ -36,6 +37,7 @@
     --line: #2B3530; --accent: #6CC3A0; --accent-ink: #0D1A14; --accent-soft: #1D3229;
     --hi: #F08A7C; --hi-soft: #3A221E; --lo: #8DB2EC; --lo-soft: #1E2A3C; --warn: #E0B060; --warn-soft: #352A17;
     --ok: #73C995;
+    --good: #6FD39A; --good-strong: #8BE0AE; --good-bg: #15291D; --good-ink: #DDF3E5; --good-ink-2: #9CC7AE; --good-line: #22402E; --good-track: #23412F;
   }
 }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -46,7 +48,8 @@ body {
 }
 [hidden] { display: none !important; }
 button, input, select, textarea { font: inherit; color: inherit; }
-button { cursor: pointer; }
+button { cursor: pointer; touch-action: manipulation; }
+html, body { overscroll-behavior-y: none; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 img { max-width: 100%; }
 a { color: var(--accent); }
@@ -205,6 +208,41 @@ a.row { color: inherit; text-decoration: none; }
 .cat-bar { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; padding: 10px 16px; border-top: 1px solid var(--line); }
 .cat-bar:first-child { border-top: 0; }
 .cat-bar .bar { grid-column: 1 / -1; margin: 0; height: 6px; }
+
+
+/* ---------- врачи и клиники ---------- */
+.ava { --s: 44px; width: var(--s); height: var(--s); border-radius: 50%; flex-shrink: 0; display: grid; place-items: center;
+  font-weight: 600; font-size: calc(var(--s) * .36); letter-spacing: .02em; background: var(--accent-soft) center 22% / cover no-repeat; color: var(--accent); }
+.ava.t1 { background-color: var(--lo-soft); color: var(--lo); }
+.ava.t2 { background-color: var(--warn-soft); color: var(--warn); }
+.ava.has-photo { color: transparent; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 8%, transparent); }
+.thumb { width: 56px; height: 56px; border-radius: 12px; flex-shrink: 0; display: grid; place-items: center; background: var(--surface-2) center / cover no-repeat; color: var(--muted); }
+.thumb svg { width: 26px; height: 26px; }
+.thumb.has-photo svg { display: none; }
+.person { display: flex; align-items: center; gap: 16px; margin: 10px 0 6px; }
+.facts { margin: 10px 4px 12px; font-size: 15px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.row.visit { align-items: flex-start; }
+.hero-photo { aspect-ratio: 16 / 9; max-width: 100%; border-radius: var(--r); background: var(--surface-2) center / cover no-repeat; margin: 6px 0 14px; }
+.place { display: flex; align-items: center; gap: 12px; background: var(--surface); border-radius: var(--r); padding: 12px 12px 12px 16px; margin: 8px 0 10px; }
+.place > div { flex: 1; min-width: 0; }
+.today-date { margin: 0 0 2px; color: var(--muted); font-size: 15px; }
+.cheer { margin: 2px 0 6px; font-size: 18px; font-weight: 500; color: var(--good-strong); text-wrap: balance; }
+
+/* ---------- общая картина ---------- */
+.picture { margin-top: 18px; background: var(--good-bg); border-radius: 18px; padding: 18px 16px 6px; color: var(--good-ink); }
+.picture-head h2 { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -.01em; }
+.picture-head p { margin: 4px 0 0; font-size: 15px; color: var(--good-ink-2); }
+.meter { height: 8px; border-radius: 99px; background: var(--good-track); margin: 12px 0 6px; overflow: hidden; }
+.meter i { display: block; height: 100%; border-radius: 99px; background: var(--good); }
+.goods { display: grid; margin-top: 4px; }
+.good { display: grid; grid-template-columns: 22px 1fr; gap: 10px; align-items: start; text-align: left; border: 0; background: none; padding: 11px 0; border-top: 1px solid var(--good-line); color: inherit; }
+.good:first-child { border-top: 0; }
+.good-ic { color: var(--good); padding-top: 1px; }
+.good-ic svg { width: 20px; height: 20px; display: block; }
+.good-t { display: block; font-size: 15.5px; line-height: 1.4; }
+.good-d { display: block; font-size: 13px; color: var(--good-ink-2); margin-top: 2px; font-variant-numeric: tabular-nums; }
+.picture-more { width: 100%; border: 0; border-top: 1px solid var(--good-line); background: none; color: var(--good-strong); font-weight: 600; padding: 12px 0 10px; text-align: left; font-size: 15px; }
 
 /* ---------- формы ---------- */
 form.f { display: grid; gap: 14px; }
@@ -369,7 +407,7 @@ const expKey = x => 'x_' + hash(`${x.date}|${x.title}|${x.amount_uzs}`);
 
 function build() {
   const s = SERVER || {}, del = new Set(LOCAL.deleted);
-  D = { profile: { ...(s.profile || {}), ...LOCAL.profile }, meta: s.meta || {}, file_map: s.file_map || {}, intakes: { ...(s.intakes || {}), ...LOCAL.intakes } };
+  D = { profile: { ...(s.profile || {}), ...LOCAL.profile }, meta: s.meta || {}, file_map: s.file_map || {}, summary: s.summary || null, intakes: { ...(s.intakes || {}), ...LOCAL.intakes } };
   for (const k of LIST_KEYS) {
     const ids = new Set(), out = [];
     for (const x of s[k] || []) {
@@ -575,9 +613,10 @@ V.today = () => {
   const abn = latestAbnormal();
   const hour = dt.getHours(), hi = hour < 5 ? 'доброй ночи' : hour < 12 ? 'доброе утро' : hour < 18 ? 'добрый день' : 'добрый вечер';
 
-  let h = `<p class="eyebrow">${WD[dt.getDay()]}, ${fdLong(t)}</p><div class="hello">${esc(D.profile.display_name || 'Здравствуйте')}, ${hi}</div>`;
+  let h = `<div class="hello">${hi[0].toUpperCase() + hi.slice(1)}${D.profile.display_name ? ', ' + esc(D.profile.display_name) : ''}</div><p class="cheer">Не унывай, всё будет хорошо</p><p class="today-date">${WD[dt.getDay()][0].toUpperCase() + WD[dt.getDay()].slice(1)}, ${fdLong(t)}</p>`;
   h += `<p class="lead">${doses.length ? (left ? `Осталось ${left} ${plural(left, 'приём', 'приёма', 'приёмов')} лекарств` : 'Все лекарства на сегодня отмечены') : 'Лекарств по расписанию сегодня нет'}${openTasks.length ? ` · ${openTasks.length} ${plural(openTasks.length, 'дело', 'дела', 'дел')}` : ''}</p>`;
   h += installBanner();
+  h += summaryCard(true);
 
   if (doses.length) {
     h += sec('Лекарства сегодня');
@@ -863,11 +902,6 @@ V.event = ({ id }) => {
   return { title: KIND[e.kind] || 'Событие', html: h };
 };
 
-V.doctors = () => {
-  const arr = D.doctors.slice().sort((a, b) => (a.specialty || '').localeCompare(b.specialty || '', 'ru'));
-  return { title: 'Врачи', html: `<div class="btns" style="margin-top:4px"><button type="button" class="btn soft" data-go="form" data-p='{"k":"doctor"}'>+ Врач</button></div><div style="margin-top:12px"></div>` + list(arr.map(d => row({ t: esc(d.name || d.specialty), s: esc([d.specialty, byId('clinics', d.clinic_id)?.short].filter(Boolean).join(' · ')), go: 'doctor', p: { id: d.id } }))) };
-};
-
 function contactRows(o) {
   const rows = [];
   const tel = v => v.replace(/[^\d+]/g, '');
@@ -879,33 +913,104 @@ function contactRows(o) {
   return rows;
 }
 
+/* ---------- лица и места ---------- */
+const DIAG = /узи|рентген|мрт|лаборат|цитолог|эксперт/i;
+const initials = s => (s || '?').replace(/[«»"().,]/g, '').split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+function ava(d, size = 44) {
+  const tint = ['', ' t1', ' t2'][parseInt(hash(d.specialty || d.id), 36) % 3];
+  return `<span class="ava${tint}" style="--s:${size}px"${d.photo ? ` data-photo="${esc(d.photo)}"` : ''} aria-hidden="true">${esc(initials(d.name || d.specialty))}</span>`;
+}
+const PIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V9l8-5 8 5v11"/><path d="M9.5 20v-5h5v5M12 8.5v4M10 10.5h4"/></svg>';
+const thumb = c => `<span class="thumb"${c.photo ? ` data-photo="${esc(c.photo)}"` : ''} aria-hidden="true">${PIN}</span>`;
+const photoUrls = {};
+async function hydratePhotos() {
+  for (const el of document.querySelectorAll('#main [data-photo]')) {
+    const name = el.dataset.photo;
+    try {
+      if (!photoUrls[name]) { const b = await getFile(name); if (!b) continue; photoUrls[name] = URL.createObjectURL(b); }
+      el.style.backgroundImage = `url("${photoUrls[name]}")`; el.classList.add('has-photo');
+    } catch (e) { }
+  }
+}
+const visitsOf = d => D.events.filter(e => e.doctor_id === d.id && e.status !== 'planned').sort((a, b) => b.date.localeCompare(a.date));
+
+V.doctors = () => {
+  const withLast = D.doctors.map(d => ({ d, v: visitsOf(d) })).sort((a, b) => (b.v[0]?.date || '').localeCompare(a.v[0]?.date || '') || (a.d.name || '').localeCompare(b.d.name || '', 'ru'));
+  const docRow = ({ d, v }) => row({ left: ava(d), t: esc(d.name || d.specialty), s: esc([d.specialty, byId('clinics', d.clinic_id)?.short].filter(Boolean).join(' · ')),
+    r: v.length ? `<span class="num small">${fds(v[0].date)}</span>` : '', go: 'doctor', p: { id: d.id } });
+  const care = withLast.filter(x => !DIAG.test(x.d.specialty || '')), diag = withLast.filter(x => DIAG.test(x.d.specialty || ''));
+  let h = `<p class="lead" style="margin:4px 4px 0">${D.doctors.length} ${plural(D.doctors.length, 'врач', 'врача', 'врачей')}, к которым обращалась ${esc(D.profile.display_name || '')}. Сверху — у кого была последней.</p>`;
+  if (care.length) h += sec('Приёмы и консультации') + list(care.map(docRow));
+  if (diag.length) h += sec('Обследования и анализы') + list(diag.map(docRow));
+  h += `<div class="btns"><button type="button" class="btn ghost" data-go="form" data-p='{"k":"doctor"}'>+ Добавить врача</button></div>`;
+  return { title: 'Врачи', html: h };
+};
+
 V.doctor = ({ id }) => {
   const d = byId('doctors', id); if (!d) return gone();
-  const cl = byId('clinics', d.clinic_id);
-  const evs = D.events.filter(e => e.doctor_id === d.id).sort((a, b) => b.date.localeCompare(a.date));
-  const meds = D.medications.filter(m => m.doctor_id === d.id);
-  let h = `<p class="eyebrow">${esc(d.specialty)}</p><div class="big-title">${esc(d.name || 'Имя не указано')}</div>`;
-  if (d.name_note) h += `<p class="muted small">${esc(d.name_note)}</p>`;
-  h += kv([['Клиника', cl ? `<a href="#" ${nav('clinic', { id: cl.id })}>${esc(cl.short || cl.name)}</a>` : null], ['Стоимость приёма', d.price_uzs ? money(d.price_uzs) : null], ['Примечание', esc(d.notes)]]);
+  const cl = byId('clinics', d.clinic_id), evs = visitsOf(d), meds = D.medications.filter(m => m.doctor_id === d.id);
+  const planned = D.events.filter(e => e.doctor_id === d.id && e.status === 'planned');
+  const facts = [evs.length ? `${evs.length} ${plural(evs.length, 'визит', 'визита', 'визитов')}` : 'визитов пока нет', evs[0] ? `последний ${fd(evs[0].date)}` : '', meds.length ? `${meds.length} ${plural(meds.length, 'назначение', 'назначения', 'назначений')}` : ''].filter(Boolean).join(' · ');
+  let h = `<div class="person">${ava(d, 84)}<div><div class="big-title" style="margin:0">${esc(d.name || 'Имя не указано')}</div>
+    <p class="muted" style="margin:2px 0 0">${esc(d.specialty)}${cl ? ` · <a href="#" ${nav('clinic', { id: cl.id })}>${esc(cl.short || cl.name)}</a>` : ''}</p></div></div>`;
+  h += `<p class="facts">${facts}</p>`;
+  if (d.name_note || d.notes || d.price_uzs) h += `<p class="muted small" style="margin:0 4px">${[d.price_uzs ? `Приём ${money(d.price_uzs)}` : '', esc(d.name_note), esc(d.notes)].filter(Boolean).join(' · ')}</p>`;
   const c = contactRows(d); if (c.length) h += sec('Связаться') + list(c);
-  if (evs.length) h += sec('Приёмы') + list(evs.map(e => row({ left: `<div class="date-col">${fds(e.date)}<br>${e.date.slice(0, 4)}</div>`, t: esc(e.title), go: 'event', p: { id: e.id } })));
-  if (meds.length) h += sec('Назначал') + list(meds.map(m => row({ t: esc(m.name), s: `${fd(m.start)}${m.end ? '–' + fd(m.end) : ''}`, go: 'med', p: { id: m.id } })));
+  if (planned.length) h += sec('Запланировано') + list(planned.map(e => row({ left: `<div class="date-col">${fds(e.date)}<br>${e.time || ''}</div>`, t: esc(e.title), go: 'event', p: { id: e.id } })));
+  if (evs.length) h += sec('Что было на приёмах') + `<div class="list">${evs.map(e => `<button type="button" class="row visit" ${nav('event', { id: e.id })}><div class="date-col">${fds(e.date)}<br>${e.date.slice(0, 4)}</div><div class="row-main"><div class="row-t">${esc(e.title)}</div>${e.conclusion ? `<div class="row-s clamp">${esc(e.conclusion)}</div>` : ''}</div>${CHEV}</button>`).join('')}</div>`;
+  if (meds.length) h += sec('Назначения') + list(meds.map(m => row({ t: esc(m.name), s: esc([m.dose, `${fd(m.start)}${m.end ? ' – ' + fd(m.end) : ''}`].filter(Boolean).join(' · ')), r: !MED_DONE.has(m.status) && (!m.end || m.end >= todayISO()) ? '<span class="pill ok">сейчас</span>' : '', go: 'med', p: { id: m.id } })));
   h += `<div class="btns"><button type="button" class="btn soft" data-go="prepFor" data-p='${esc(JSON.stringify({ s: d.specialty }))}'>Подготовиться к приёму</button><button type="button" class="btn ghost" data-go="form" data-p='${esc(JSON.stringify({ k: 'doctor', id: d.id }))}'>Изменить</button></div>`;
   return { title: 'Врач', html: h };
 };
 
-V.clinics = () => ({ title: 'Клиники', html: `<div class="btns" style="margin-top:4px"><button type="button" class="btn soft" data-go="form" data-p='{"k":"clinic"}'>+ Клиника</button></div><div style="margin-top:12px"></div>` + list(D.clinics.map(c => row({ t: esc(c.short || c.name), s: esc(c.address || ''), go: 'clinic', p: { id: c.id } }))) });
+V.clinics = () => {
+  const arr = D.clinics.map(c => { const ev = D.events.filter(e => e.clinic_id === c.id); return { c, n: ev.length, last: ev.map(e => e.date).sort().pop() || '' }; })
+    .sort((a, b) => b.last.localeCompare(a.last));
+  let h = `<div class="list" style="margin-top:6px">${arr.map(({ c, n, last }) => row({ left: thumb(c), t: esc(c.short || c.name), s: esc([c.address, n ? `${n} ${plural(n, 'визит', 'визита', 'визитов')}` : ''].filter(Boolean).join(' · ')), r: last ? `<span class="num small">${fds(last)}</span>` : '', go: 'clinic', p: { id: c.id } })).join('')}</div>`;
+  h += `<div class="btns"><button type="button" class="btn ghost" data-go="form" data-p='{"k":"clinic"}'>+ Добавить клинику</button></div>`;
+  return { title: 'Клиники', html: h };
+};
 
 V.clinic = ({ id }) => {
   const c = byId('clinics', id); if (!c) return gone();
   const docs = D.doctors.filter(d => d.clinic_id === c.id), evs = D.events.filter(e => e.clinic_id === c.id).sort((a, b) => b.date.localeCompare(a.date));
-  let h = `<div class="big-title">${esc(c.short || c.name)}</div>${c.short ? `<p class="muted">${esc(c.name)}</p>` : ''}`;
-  h += kv([['Адрес', esc(c.address)], ['Телефон МРТ', esc(c.mri_phone)], ['Экстренный', esc(c.emergency_phone)], ['Короткий номер', esc(c.short_number)], ['Примечание', esc(c.notes)]]);
-  if (c.address) h += `<div class="btns"><a class="btn soft" href="https://yandex.uz/maps/?text=${encodeURIComponent(c.address)}" target="_blank" rel="noopener">Маршрут в Яндекс Картах</a></div>`;
+  let h = c.photo ? `<div class="hero-photo" data-photo="${esc(c.photo)}" role="img" aria-label="${esc(c.short || c.name)}"></div>` : '';
+  h += `<div class="big-title">${esc(c.short || c.name)}</div>${c.short ? `<p class="muted" style="margin:0 0 8px">${esc(c.name)}</p>` : ''}`;
+  if (c.address) h += `<div class="place"><div><div class="row-t">${esc(c.address)}</div>${c.notes ? `<div class="row-s">${esc(c.notes)}</div>` : ''}</div><a class="btn soft sm" href="https://yandex.uz/maps/?text=${encodeURIComponent(c.address)}" target="_blank" rel="noopener">Маршрут</a></div>`;
+  else if (c.notes) h += `<p class="muted">${esc(c.notes)}</p>`;
+  h += kv([['Телефон МРТ', esc(c.mri_phone)], ['Экстренный', esc(c.emergency_phone)], ['Короткий номер', esc(c.short_number)]]);
   const ct = contactRows(c); if (ct.length) h += sec('Связаться') + list(ct);
-  if (docs.length) h += sec('Врачи') + list(docs.map(d => row({ t: esc(d.name || d.specialty), s: esc(d.specialty), go: 'doctor', p: { id: d.id } })));
+  if (docs.length) h += sec('Врачи') + list(docs.map(d => row({ left: ava(d, 40), t: esc(d.name || d.specialty), s: esc(d.specialty), go: 'doctor', p: { id: d.id } })));
   if (evs.length) h += sec('Визиты') + list(evs.map(e => row({ left: `<div class="date-col">${fds(e.date)}<br>${e.date.slice(0, 4)}</div>`, t: esc(e.title), go: 'event', p: { id: e.id } })));
   return { title: 'Клиника', html: h };
+};
+
+/* ---------- общая картина ---------- */
+const CHECK = '<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="10" fill="currentColor"/><path d="m6 10.2 2.6 2.6L14.2 7" fill="none" stroke="var(--good-bg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function labStats() {
+  const last = {};
+  for (const l of D.labs) { if (!['normal', 'high', 'low', 'abnormal'].includes(l.flag)) continue; const k = indKey(l); if (!last[k] || l.date > last[k].date) last[k] = l; }
+  const all = Object.values(last); return { total: all.length, ok: all.filter(l => l.flag === 'normal').length };
+}
+const sumLink = l => !l ? '' : l.v === 'labset' ? nav('labset', { k: l.k }) : l.v === 'prepFor' ? nav('prepFor', { s: l.s }) : nav(l.v, { id: l.id });
+const goodItem = g => `<button type="button" class="good" ${sumLink(g.link)}><span class="good-ic">${CHECK}</span><span><span class="good-t">${esc(g.text)}</span>${g.date ? `<span class="good-d">${fd(g.date)}</span>` : ''}</span></button>`;
+function summaryCard(short) {
+  const s = D.summary; if (!s) return '';
+  const st = labStats(), t = todayISO();
+  const course = activeMeds(t).filter(m => m.end).map(m => ({ m, st: courseStats(m, t) }))[0];
+  const good = short ? s.good.slice(0, 3) : s.good;
+  let h = `<section class="picture"><div class="picture-head"><h2>Общая картина</h2><p>${st.ok} из ${st.total} показателей в последних анализах — в норме${course ? `. Курс «${esc(course.m.name)}» идёт по плану: день ${course.st.day} из ${course.st.total}` : ''}.</p>
+    <div class="meter" role="img" aria-label="${st.ok} из ${st.total} в норме"><i style="width:${Math.round(st.ok / Math.max(1, st.total) * 100)}%"></i></div></div>
+    <div class="goods">${good.map(goodItem).join('')}</div>`;
+  if (short) h += `<button type="button" class="picture-more" data-go="summary">Всё хорошее и что обсудить с врачами</button>`;
+  return h + `</section>`;
+}
+V.summary = () => {
+  const s = D.summary; if (!s) return gone();
+  let h = summaryCard(false);
+  if (s.discuss?.length) h += sec('Обсудить с врачом') + list(s.discuss.map(x => row({ t: esc(x.who), s: esc(x.text), go: 'prepFor', p: { s: x.link?.s || x.who } })));
+  h += `<p class="note">Составлено по заключениям врачей и бланкам лабораторий${s.updated ? `, обновлено ${fd(s.updated)}` : ''}.</p>` + DISCLAIMER;
+  return { title: 'Общая картина', html: h };
 };
 
 V.prep = () => {
@@ -1319,6 +1424,7 @@ function render() {
   $('#main').innerHTML = r.html;
   document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-current', t.dataset.tab === stack[0].v ? 'page' : 'false'));
   if (r.after) r.after();
+  hydratePhotos();
 }
 function go(v, p) { stack.push({ v, p }); render(); scrollTo(0, 0); try { history.pushState({ n: stack.length }, ''); } catch (e) { } }
 function back() { if (stack.length > 1) { stack.pop(); render(); } }
