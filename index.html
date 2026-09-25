@@ -333,7 +333,7 @@ form.f { display: grid; gap: 14px; }
 
 <script>
 'use strict';
-const APP_VERSION = '25.09.2026 20:50';
+const APP_VERSION = '25.09.2026 22:00';
 /* =========================================================
    Справочники и форматирование
    ========================================================= */
@@ -481,6 +481,7 @@ async function getFile(name) {
 /* =========================================================
    Вычисления
    ========================================================= */
+const RECENT_DAYS = 183;
 const MED_DONE = new Set(['completed', 'stopped', 'unknown_duration']);
 const activeMeds = t => D.medications.filter(m => !MED_DONE.has(m.status) && m.start <= t && (!m.end || m.end >= t));
 const indKey = l => l.code || `${l.panel || ''}:${l.name}`;
@@ -488,7 +489,9 @@ const isAbn = f => f === 'high' || f === 'low' || f === 'abnormal';
 function latestAbnormal() {
   const last = {};
   for (const l of D.labs) { const k = indKey(l); if (!last[k] || l.date > last[k].date) last[k] = l; }
-  return Object.values(last).filter(l => isAbn(l.flag)).sort((a, b) => b.date.localeCompare(a.date));
+  // «Последние» — за полгода; старые результаты видны в истории показателя
+  const since = addDays(todayISO(), -RECENT_DAYS);
+  return Object.values(last).filter(l => isAbn(l.flag) && l.date >= since).sort((a, b) => b.date.localeCompare(a.date));
 }
 const labSetId = l => l.event_id || `d:${l.date}|${l.lab || ''}`;
 function refText(l) {
@@ -591,6 +594,7 @@ function chart(points, lo, hi, unit) {
   const t0 = Math.ceil(mn / step) * step, ticks = [];
   for (let v = t0; v <= mx + 1e-9; v += step) ticks.push(+v.toFixed(6));
   const d0 = dayNum(points[0].d), d1 = dayNum(points[points.length - 1].d);
+  const multiYear = points[0].d.slice(0, 4) !== points[points.length - 1].d.slice(0, 4);
   const x = d => d0 === d1 ? L + (W - L - R) / 2 : L + (dayNum(d) - d0) / (d1 - d0) * (W - L - R);
   const y = v => T + (mx - v) / (mx - mn) * (H - T - B);
   let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Динамика показателя">`;
@@ -604,7 +608,7 @@ function chart(points, lo, hi, unit) {
   points.forEach((p, i) => {
     const c = p.f === 'high' ? 'var(--hi)' : p.f === 'low' ? 'var(--lo)' : 'var(--accent)';
     s += `<circle cx="${x(p.d)}" cy="${y(p.v)}" r="4.5" fill="${c}" stroke="var(--surface)" stroke-width="2"/>`;
-    if (labelIdx.includes(i)) s += `<text x="${x(p.d)}" y="${H - 10}" text-anchor="middle">${fds(p.d)}</text>`;
+    if (labelIdx.includes(i)) s += `<text x="${x(p.d)}" y="${H - 10}" text-anchor="middle">${multiYear ? p.d.slice(5, 7) + '.' + p.d.slice(2, 4) : fds(p.d)}</text>`;
   });
   return `<div class="chart">${s}</svg></div><p class="note">Зелёная полоса — норма по бланку лаборатории${unit ? `, ${esc(unit)}` : ''}.</p>`;
 }
@@ -933,7 +937,7 @@ function contactRows(o) {
 }
 
 /* ---------- лица и места ---------- */
-const DIAG = /узи|рентген|мрт|лаборат|цитолог|эксперт/i;
+const DIAG = /узи|рентген|мрт|лаборат|цитолог|эксперт|эндоскоп/i;
 const initials = s => (s || '?').replace(/[«»"().,]/g, '').split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase();
 function ava(d, size = 44) {
   const tint = ['', ' t1', ' t2'][parseInt(hash(d.specialty || d.id), 36) % 3];
@@ -1009,9 +1013,10 @@ const CHECK = '<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="1
 function labStats() {
   const last = {};
   for (const l of D.labs) { if (!['normal', 'high', 'low', 'abnormal'].includes(l.flag)) continue; const k = indKey(l); if (!last[k] || l.date > last[k].date) last[k] = l; }
-  const all = Object.values(last); return { total: all.length, ok: all.filter(l => l.flag === 'normal').length };
+  const since = addDays(todayISO(), -RECENT_DAYS);
+  const all = Object.values(last).filter(l => l.date >= since); return { total: all.length, ok: all.filter(l => l.flag === 'normal').length };
 }
-const sumLink = l => !l ? '' : l.v === 'labset' ? nav('labset', { k: l.k }) : l.v === 'prepFor' ? nav('prepFor', { s: l.s }) : nav(l.v, { id: l.id });
+const sumLink = l => !l ? '' : l.v === 'labset' || l.v === 'indicator' ? nav(l.v, { k: l.k }) : l.v === 'prepFor' ? nav('prepFor', { s: l.s }) : nav(l.v, { id: l.id });
 const goodItem = g => `<button type="button" class="good" ${sumLink(g.link)}><span class="good-ic">${CHECK}</span><span><span class="good-t">${esc(g.text)}</span>${g.date ? `<span class="good-d">${fd(g.date)}</span>` : ''}</span></button>`;
 function summaryCard(short) {
   const s = D.summary; if (!s) return '';
