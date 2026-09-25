@@ -710,7 +710,7 @@ V.labset = ({ k }) => {
     h += `<div class="list">${arr.map(l => {
       const mark = FLAG_MARK[l.flag] ? `<span class="flag ${l.flag}" title="${FLAG_WORD[l.flag]}">${FLAG_MARK[l.flag]}</span> ` : '';
       const inner = `<div class="lab-row${isLong(l) ? ' long' : ''}"><div class="row-t">${esc(l.name)}</div><div class="lab-val">${mark}${valHtml(l)}${l.unit ? ` <span class="muted small">${esc(l.unit)}</span>` : ''}</div>
-        <div class="lab-ref">${refText(l) ? 'норма ' + esc(refText(l)) : ''}</div><div></div>${gauge(l)}</div>`;
+        <div class="lab-ref">${[refText(l) ? 'норма ' + esc(refText(l)) : '', esc(l.comment || '')].filter(Boolean).join(' · ')}</div><div></div>${gauge(l)}</div>`;
       return `<button type="button" class="row" style="display:block" ${nav('indicator', { k: indKey(l) })}>${inner}</button>`;
     }).join('')}</div>`;
   }
