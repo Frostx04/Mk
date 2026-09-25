@@ -103,8 +103,8 @@ a.row { color: inherit; text-decoration: none; }
 .row-t { font-weight: 500; overflow-wrap: anywhere; }
 .row-s { font-size: 14px; color: var(--muted); overflow-wrap: anywhere; }
 .row-r { text-align: right; flex-shrink: 0; font-size: 14px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
-.row-r { max-width: 52%; }
-.row-r .lab-val { white-space: normal; overflow-wrap: anywhere; line-height: 1.3; }
+.row-r { max-width: 52%; flex-shrink: 1; }
+.row-r .lab-val { display: inline-block; max-width: 42vw; white-space: normal; overflow-wrap: break-word; line-height: 1.3; }
 .row-main { min-width: 38%; }
 .chev { width: 8px; height: 13px; flex-shrink: 0; color: var(--line); }
 .date-col { width: 48px; flex-shrink: 0; font-family: var(--mono); font-size: 13px; color: var(--muted); line-height: 1.25; }
@@ -215,13 +215,15 @@ a.row { color: inherit; text-decoration: none; }
 
 /* ---------- врачи и клиники ---------- */
 .ava { --s: 44px; width: var(--s); height: var(--s); border-radius: 50%; flex-shrink: 0; display: grid; place-items: center;
-  font-weight: 600; font-size: calc(var(--s) * .36); letter-spacing: .02em; background: var(--accent-soft) center 22% / cover no-repeat; color: var(--accent); }
+  font-weight: 600; font-size: calc(var(--s) * .36); letter-spacing: .02em; background: var(--accent-soft) center / cover no-repeat; color: var(--accent); }
 .ava.t1 { background-color: var(--lo-soft); color: var(--lo); }
 .ava.t2 { background-color: var(--warn-soft); color: var(--warn); }
 .ava.has-photo { color: transparent; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 8%, transparent); }
 .thumb { width: 56px; height: 56px; border-radius: 12px; flex-shrink: 0; display: grid; place-items: center; background: var(--surface-2) center / cover no-repeat; color: var(--muted); }
 .thumb svg { width: 26px; height: 26px; }
 .thumb.has-photo svg { display: none; }
+.thumb.contain, .hero-photo.contain { background-size: contain; background-color: #fff; }
+.hero-photo.contain { aspect-ratio: 5 / 2; }
 .person { display: flex; align-items: center; gap: 16px; margin: 10px 0 6px; }
 .facts { margin: 10px 4px 12px; font-size: 15px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
@@ -331,6 +333,7 @@ form.f { display: grid; gap: 14px; }
 
 <script>
 'use strict';
+const APP_VERSION = '25.09.2026 20:50';
 /* =========================================================
    Справочники и форматирование
    ========================================================= */
@@ -937,7 +940,7 @@ function ava(d, size = 44) {
   return `<span class="ava${tint}" style="--s:${size}px"${d.photo ? ` data-photo="${esc(d.photo)}"` : ''} aria-hidden="true">${esc(initials(d.name || d.specialty))}</span>`;
 }
 const PIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V9l8-5 8 5v11"/><path d="M9.5 20v-5h5v5M12 8.5v4M10 10.5h4"/></svg>';
-const thumb = c => `<span class="thumb"${c.photo ? ` data-photo="${esc(c.photo)}"` : ''} aria-hidden="true">${PIN}</span>`;
+const thumb = c => `<span class="thumb${c.photo_contain ? ' contain' : ''}"${c.photo ? ` data-photo="${esc(c.photo)}"` : ''} aria-hidden="true">${PIN}</span>`;
 const photoUrls = {};
 async function hydratePhotos() {
   for (const el of document.querySelectorAll('#main [data-photo]')) {
@@ -990,7 +993,7 @@ V.clinics = () => {
 V.clinic = ({ id }) => {
   const c = byId('clinics', id); if (!c) return gone();
   const docs = D.doctors.filter(d => d.clinic_id === c.id), evs = D.events.filter(e => e.clinic_id === c.id).sort((a, b) => b.date.localeCompare(a.date));
-  let h = c.photo ? `<div class="hero-photo" data-photo="${esc(c.photo)}" role="img" aria-label="${esc(c.short || c.name)}"></div>` : '';
+  let h = c.photo ? `<div class="hero-photo${c.photo_contain ? ' contain' : ''}" data-photo="${esc(c.photo)}" role="img" aria-label="${esc(c.short || c.name)}"></div>` : '';
   h += `<div class="big-title">${esc(c.short || c.name)}</div>${c.short ? `<p class="muted" style="margin:0 0 8px">${esc(c.name)}</p>` : ''}`;
   if (c.address) h += `<div class="place"><div><div class="row-t">${esc(c.address)}</div>${c.notes ? `<div class="row-s">${esc(c.notes)}</div>` : ''}</div><a class="btn soft sm" href="https://yandex.uz/maps/?text=${encodeURIComponent(c.address)}" target="_blank" rel="noopener">Маршрут</a></div>`;
   else if (c.notes) h += `<p class="muted">${esc(c.notes)}</p>`;
@@ -1185,7 +1188,7 @@ V.search = () => {
 V.data = () => {
   const m = D.meta;
   const localCount = LIST_KEYS.reduce((s, k) => s + LOCAL.add[k].length, 0) + Object.keys(LOCAL.intakes).length + Object.keys(LOCAL.patch).length;
-  let h = sec('Данные от вас') + kv([['Версия', m.version ? `<span class="num">${esc(m.version)}</span>` : '—'], ['Обновлено', m.updated ? esc(m.updated) : '—'], ['Проверено', lastCheck ? lastCheck.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : 'ещё нет']]);
+  let h = sec('Данные от вас') + kv([['Программа', `<span class="num">${APP_VERSION}</span>`], ['Версия', m.version ? `<span class="num">${esc(m.version)}</span>` : '—'], ['Обновлено', m.updated ? esc(m.updated) : '—'], ['Проверено', lastCheck ? lastCheck.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : 'ещё нет']]);
   h += `<div class="btns"><button type="button" class="btn soft" data-act="refresh">Проверить обновления</button></div>`;
   h += sec('Записи, сделанные на телефоне') + kv([['Всего изменений', String(localCount)], ['Хранятся', 'только в этом телефоне']]);
   h += `<div class="btns"><button type="button" class="btn" data-act="exportLocal">Отправить копию</button></div><p class="note">Файл с вашими отметками и добавленными документами. Перешлите его в Telegram, чтобы эти записи попали в общую медкарту.</p>`;

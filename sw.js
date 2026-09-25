@@ -1,5 +1,5 @@
 // Офлайн-работа: программа и зашифрованные файлы кешируются в телефоне.
-const CACHE = 'medkarta-v1';
+const CACHE = 'medkarta-v2';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
@@ -44,7 +44,8 @@ self.addEventListener('fetch', e => {
   }
 
   // Программа: сначала сеть (чтобы сразу видеть обновления), без сети — из кеша
-  e.respondWith(fetch(req).then(r => {
+  // no-cache: всегда спросить сервер, не брать старую копию из кеша браузера
+  e.respondWith(fetch(req.url, { cache: 'no-cache' }).then(r => {
     if (r.ok) caches.open(CACHE).then(c => c.put(req, r.clone()));
     return r;
   }).catch(() => caches.match(req).then(hit => hit || caches.match('./index.html'))));
