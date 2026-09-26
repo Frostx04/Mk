@@ -16,7 +16,7 @@
 <link rel="icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Nunito:wght@400;500;600;700;800&family=Caveat:wght@700&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
 :root {
   color-scheme: light;
@@ -298,6 +298,7 @@ form.f { display: grid; gap: 14px; }
 .lock h1 { margin: 0; font-size: 28px; line-height: 1.15; }
 
 .toast { position: fixed; left: 16px; right: 16px; bottom: calc(var(--tabbar) + env(safe-area-inset-bottom, 0px) + 12px); z-index: 10; display: flex; justify-content: center; pointer-events: none; }
+.toast .tp { width: 16px; height: 16px; vertical-align: -2px; margin-right: 6px; color: var(--accent-soft); }
 .toast div { background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 12px; font-size: 15px; max-width: 480px; box-shadow: 0 6px 24px rgba(0,0,0,.18); }
 .banner { background: var(--accent-soft); color: var(--ink); border-radius: var(--r); padding: 12px 14px; font-size: 14px; display: flex; gap: 12px; align-items: start; margin-bottom: 12px; }
 .banner button { border: 0; background: none; color: var(--accent); font-weight: 600; padding: 0; }
@@ -363,6 +364,102 @@ h2.sec .cal-nav button:not([aria-label]) { font-size: 14px; }
   #cRep, #cRep * { visibility: visible; color: #000; }
   #cRep { position: absolute; left: 0; top: 0; width: 100%; font-size: 12pt; }
 }
+/* ---------- оформление «Котики» ---------- */
+:root { --cat-fur: #F2A65A; --cat-stripe: #D9803A; --cat-belly: #FFEBD6; --cat-ear: #F4A7B9; --cat-ink: #3A2530; --hand: "Caveat", "Nunito", sans-serif; }
+:root[data-skin="cats"] {
+  --bg: #FFF5F0; --surface: #FFFDFB; --surface-2: #FBEAE3; --ink: #3A2530; --muted: #7D5E69;
+  --line: #F1DDD5; --accent: #BF4A76; --accent-ink: #FFFFFF; --accent-soft: #FBE1EA;
+  --good: #2E8A5A; --good-strong: #247149; --good-bg: #E8F5EC; --good-ink: #183D29; --good-ink-2: #44705A; --good-line: #CFE8D8; --good-track: #CBE7D5;
+  --per: #C93E62; --per-soft: #FCE2E8; --fert: #2F8F6B; --fert-soft: #E0F2E8; --ovu: #C98A0B;
+  --sans: "Nunito", "Golos Text", -apple-system, sans-serif;
+  --r: 20px;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-skin="cats"]:not([data-theme="light"]) {
+    --bg: #1E1519; --surface: #2A1E24; --surface-2: #36272E; --ink: #F7EAEF; --muted: #C4A8B3;
+    --line: #45323B; --accent: #F28DB0; --accent-ink: #2B0D19; --accent-soft: #4A2536;
+    --good: #7AD7A2; --good-strong: #98E3B7; --good-bg: #1B2B22; --good-ink: #E1F4E8; --good-ink-2: #A8CDB7; --good-line: #2A4234; --good-track: #2B4535;
+    --per: #F48CA4; --per-soft: #45222D; --fert: #74D6AA; --fert-soft: #1C3229; --cat-ink: #2A1A21; --cat-belly: #FBE3CC;
+  }
+}
+:root[data-skin="cats"][data-theme="dark"] {
+  --bg: #1E1519; --surface: #2A1E24; --surface-2: #36272E; --ink: #F7EAEF; --muted: #C4A8B3;
+  --line: #45323B; --accent: #F28DB0; --accent-ink: #2B0D19; --accent-soft: #4A2536;
+  --good: #7AD7A2; --good-strong: #98E3B7; --good-bg: #1B2B22; --good-ink: #E1F4E8; --good-ink-2: #A8CDB7; --good-line: #2A4234; --good-track: #2B4535;
+  --per: #F48CA4; --per-soft: #45222D; --fert: #74D6AA; --fert-soft: #1C3229; --cat-ink: #2A1A21; --cat-belly: #FBE3CC;
+}
+[data-skin="cats"] body {
+  background-color: var(--bg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' fill='%23BF4A76' fill-opacity='.045'%3E%3Cg transform='translate(18 20) rotate(-18)'%3E%3Cellipse cx='12' cy='15.6' rx='4.4' ry='3.6'/%3E%3Cellipse cx='6.6' cy='10.6' rx='1.7' ry='2.2'/%3E%3Cellipse cx='17.4' cy='10.6' rx='1.7' ry='2.2'/%3E%3Cellipse cx='9.7' cy='6.8' rx='1.7' ry='2.3'/%3E%3Cellipse cx='14.3' cy='6.8' rx='1.7' ry='2.3'/%3E%3C/g%3E%3Cg transform='translate(76 74) rotate(14)'%3E%3Cellipse cx='12' cy='15.6' rx='4.4' ry='3.6'/%3E%3Cellipse cx='6.6' cy='10.6' rx='1.7' ry='2.2'/%3E%3Cellipse cx='17.4' cy='10.6' rx='1.7' ry='2.2'/%3E%3Cellipse cx='9.7' cy='6.8' rx='1.7' ry='2.3'/%3E%3Cellipse cx='14.3' cy='6.8' rx='1.7' ry='2.3'/%3E%3C/g%3E%3C/svg%3E");
+}
+[data-skin="cats"] .hello, [data-skin="cats"] .big-title, [data-skin="cats"] .top h1, [data-skin="cats"] .lock h1, [data-skin="cats"] .picture-head h2 { font-weight: 800; letter-spacing: -.015em; }
+[data-skin="cats"] .hello { font-size: 30px; }
+[data-skin="cats"] .btn { border-radius: 999px; }
+[data-skin="cats"] .btn.sm { border-radius: 999px; }
+[data-skin="cats"] .mark { border-radius: 999px; }
+[data-skin="cats"] .search { border-radius: 999px; }
+[data-skin="cats"] .field input, [data-skin="cats"] .field select, [data-skin="cats"] .field textarea { border-radius: 14px; }
+[data-skin="cats"] .list, [data-skin="cats"] .card, [data-skin="cats"] .kv, [data-skin="cats"] .course, [data-skin="cats"] .chart, [data-skin="cats"] .empty, [data-skin="cats"] .cal, [data-skin="cats"] .cy-head { box-shadow: 0 1px 2px rgba(120, 50, 70, .05), 0 6px 18px -10px rgba(120, 50, 70, .18); }
+[data-skin="cats"] .tabbar { background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: saturate(1.3) blur(14px); -webkit-backdrop-filter: saturate(1.3) blur(14px); }
+[data-skin="cats"] .tab[aria-current="page"] svg { transform: translateY(-1px); }
+[data-skin="cats"] ::-webkit-scrollbar { width: 8px; } [data-skin="cats"] ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 8px; }
+input[type="range"], input[type="checkbox"] { accent-color: var(--accent); }
+
+/* иконки */
+.i { width: 20px; height: 20px; flex-shrink: 0; }
+.ico .i { width: 20px; height: 20px; }
+.pill .i { width: 14px; height: 14px; margin-left: -2px; }
+.qa .i { width: 24px; height: 24px; color: var(--accent); }
+.qa.per .i { color: var(--per); }
+h2.sec .i { width: 16px; height: 16px; vertical-align: -3px; margin-right: 4px; }
+.chip .i { width: 16px; height: 16px; vertical-align: -3px; }
+
+/* котики */
+.cat { display: block; overflow: visible; }
+.c-z { font: 700 18px var(--hand); fill: var(--muted); }
+.cat-mood { width: 22px; height: 22px; vertical-align: -6px; flex-shrink: 0; }
+.cat-mood.lg { width: 34px; height: 34px; }
+.chip .cat-mood { margin: -4px 2px -4px -4px; }
+.hello-row { display: grid; grid-template-columns: 1fr auto; gap: 4px; align-items: end; }
+.hello-cat { width: 88px; height: 82px; margin: 0 -4px -6px 0; border: 0; background: none; padding: 0; position: relative; }
+.hello-cat .cat { width: 100%; height: 100%; }
+.purr { position: absolute; right: 70px; top: -6px; font: 700 20px var(--hand); color: var(--accent); white-space: nowrap; pointer-events: none; opacity: 0; }
+[data-skin="cats"] .cheer { font: 700 25px/1.15 var(--hand); color: var(--accent); margin: 6px 0 8px; }
+.cat-says { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: center; margin: 12px 2px 0; }
+.cat-says .cat-mood { width: 38px; height: 38px; }
+.cat-says p { margin: 0; font: 700 21px/1.15 var(--hand); color: var(--accent); text-wrap: balance; }
+.empty .cat { width: 132px; height: 82px; margin: 0 auto 8px; }
+.lock-cat { height: 70px; margin-bottom: -16px; position: relative; z-index: 1; }
+.lock-cat .cat { width: 128px; height: 70px; }
+[data-skin="cats"] .lock-mark { display: none; }
+[data-skin="cats"] .lock-box > div:nth-child(3) { position: relative; }
+.onb-cat { width: 150px; height: 140px; margin: 8px auto 4px; }
+.cy-wrap { position: relative; }
+.cy-wrap .peek { position: absolute; right: 18px; top: -41px; width: 86px; height: 46px; z-index: 1; }
+[data-skin="cats"] .cy-wrap { margin-top: 38px; }
+.dots { display: flex; gap: 2px; justify-content: center; min-height: 9px; }
+.dots i { width: 5px; height: 5px; border-radius: 50%; display: block; }
+.d-sym { background: var(--warn); } .d-mood { background: var(--accent); } .d-sex { background: var(--per); } .d-dis { background: var(--lo); } .d-med { background: var(--good); } .d-note { background: var(--muted); }
+.legend .dots { display: inline-flex; min-height: 0; }
+.i.in { width: 14px; height: 14px; vertical-align: -2px; margin-right: 3px; color: var(--accent); }
+.i.star-l { width: 13px; height: 13px; color: var(--ovu); fill: var(--ovu); }
+.lock-cat:empty { display: none; }
+.cal-g .star-i { position: absolute; top: 3px; right: 4px; width: 10px; height: 10px; color: var(--ovu); fill: var(--ovu); }
+.done-cat { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: center; background: var(--good-bg); color: var(--good-ink); border-radius: var(--r); padding: 10px 14px; margin-top: 10px; }
+.done-cat .cat { width: 54px; height: 50px; }
+.done-cat p { margin: 0; font: 700 21px/1.15 var(--hand); color: var(--good-strong); }
+@media (prefers-reduced-motion: no-preference) {
+  [data-skin="cats"] .c-eyes { transform-box: fill-box; transform-origin: center; animation: blink 6s infinite; }
+  @keyframes blink { 0%, 95%, 100% { transform: scaleY(1); } 97% { transform: scaleY(.1); } }
+  .c-tail { transform-origin: 83px 100px; animation: tail 3.2s ease-in-out infinite; }
+  @keyframes tail { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-9deg); } }
+  .hello-cat.purring .purr { animation: purr 1.4s cubic-bezier(.16, 1, .3, 1); }
+  @keyframes purr { 0% { opacity: 0; transform: translateY(6px); } 25% { opacity: 1; transform: none; } 75% { opacity: 1; } 100% { opacity: 0; transform: translateY(-8px); } }
+  .hello-cat.purring .cat { animation: squish .5s cubic-bezier(.16, 1, .3, 1); transform-origin: bottom center; }
+  @keyframes squish { 0% { transform: scale(1); } 35% { transform: scale(1.06, .94); } 100% { transform: scale(1); } }
+  .lock-cat .cat { animation: rise .7s cubic-bezier(.16, 1, .3, 1) both; }
+  @keyframes rise { from { transform: translateY(18px); opacity: 0; } }
+}
 @media (prefers-reduced-motion: no-preference) {
   main { animation: in .18s ease-out; }
   @keyframes in { from { opacity: .4; transform: translateY(4px); } to { opacity: 1; transform: none; } }
@@ -373,6 +470,7 @@ h2.sec .cal-nav button:not([aria-label]) { font-size: 14px; }
 
 <section class="lock" id="lock" hidden>
   <form class="lock-box" id="lockForm" autocomplete="off">
+    <div class="lock-cat" id="lockCat" aria-hidden="true"></div>
     <div class="lock-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M12 8v6M9 11h6M8 18h8"/></svg></div>
     <div>
       <h1>Медкарта</h1>
@@ -415,7 +513,7 @@ h2.sec .cal-nav button:not([aria-label]) { font-size: 14px; }
 
 <script>
 'use strict';
-const APP_VERSION = '26.09.2026 20:00';
+const APP_VERSION = '26.09.2026 22:00';
 /* =========================================================
    Справочники и форматирование
    ========================================================= */
@@ -465,8 +563,8 @@ function row({ t, s, r, go, p, act, data, left, href }) {
 const list = rows => rows.length ? `<div class="list">${rows.join('')}</div>` : '';
 const kv = pairs => { const r = pairs.filter(p => p[1] != null && p[1] !== ''); return r.length ? `<dl class="kv">${r.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>` : ''; };
 const sec = (title, extra = '') => `<h2 class="sec"><span>${title}</span>${extra}</h2>`;
-const empty = t => `<div class="empty">${t}</div>`;
-function toast(t) { const el = $('#toast'); el.firstElementChild.textContent = t; el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 2600); }
+const empty = t => `<div class="empty">${catsOn() ? catSleep() : ''}${t}</div>`;
+function toast(t) { const el = $('#toast'); el.firstElementChild.innerHTML = (catsOn() ? icon('paw', 'tp') : '') + esc(t); el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 2600); }
 
 /* =========================================================
    Хранилище в телефоне (IndexedDB)
@@ -739,8 +837,10 @@ V.today = () => {
   const abn = latestAbnormal();
   const hour = dt.getHours(), hi = hour < 5 ? 'доброй ночи' : hour < 12 ? 'доброе утро' : hour < 18 ? 'добрый день' : 'добрый вечер';
 
-  let h = `<div class="hello">${hi[0].toUpperCase() + hi.slice(1)}${D.profile.display_name ? ', ' + esc(D.profile.display_name) : ''}</div><p class="cheer">Не унывай, всё будет хорошо</p><p class="today-date">${WD[dt.getDay()][0].toUpperCase() + WD[dt.getDay()].slice(1)}, ${fdLong(t)}</p>`;
+  const helloTxt = `<div class="hello">${hi[0].toUpperCase() + hi.slice(1)}${D.profile.display_name ? ', ' + esc(D.profile.display_name) : ''}</div>`;
+  let h = `${catsOn() ? `<div class="hello-row">${helloTxt}<button type="button" class="hello-cat" data-act="purr" aria-label="Погладить котика">${catSit()}<span class="purr">мрр…</span></button></div>` : helloTxt}<p class="cheer">Не унывай, всё будет хорошо</p><p class="today-date">${WD[dt.getDay()][0].toUpperCase() + WD[dt.getDay()].slice(1)}, ${fdLong(t)}</p>`;
   h += `<p class="lead">${doses.length ? (left ? `Осталось ${left} ${plural(left, 'приём', 'приёма', 'приёмов')} лекарств` : 'Все лекарства на сегодня отмечены') : 'Лекарств по расписанию сегодня нет'}${openTasks.length ? ` · ${openTasks.length} ${plural(openTasks.length, 'дело', 'дела', 'дел')}` : ''}</p>`;
+  if (doses.length && !left) h += catsOn() ? `<div class="done-cat">${catSit()}<p>Все лекарства на сегодня приняты — котик гордится тобой</p></div>` : '';
   h += installBanner();
   h += summaryCard(true);
   h += cycleMini();
@@ -1310,7 +1410,7 @@ V.data = () => {
   h += sec('Записи, сделанные на телефоне') + kv([['Всего изменений', String(localCount)], ['Хранятся', 'только в этом телефоне']]);
   h += `<div class="btns"><button type="button" class="btn" data-act="exportLocal">Отправить копию</button></div><p class="note">Файл с вашими отметками, записями цикла и добавленными документами. Перешлите его в Telegram, чтобы эти записи попали в общую медкарту.</p>`;
   h += sec('Календарь iPhone') + `<div class="btns" style="margin-top:0"><button type="button" class="btn soft" data-act="calAll">Все напоминания в Календарь</button></div><p class="note">Лекарства по времени, конец курсов, записи к врачам и сроки дел. Если добавить повторно, события могут задвоиться.</p>`;
-  h += sec('Оформление') + `<div class="chips">${[['auto', 'Как на телефоне'], ['light', 'Светлая'], ['dark', 'Тёмная']].map(([k, l]) => `<button type="button" class="chip" data-act="theme" data-t="${k}" aria-pressed="${th === k}">${l}</button>`).join('')}</div>`;
+  h += sec('Оформление') + `<div class="chips" style="margin-bottom:8px">${[['cats', 'Котики'], ['classic', 'Строгое']].map(([k, l]) => `<button type="button" class="chip" data-act="skin" data-s="${k}" aria-pressed="${SKIN() === k}">${k === 'cats' ? catMood('good') + ' ' : ''}${l}</button>`).join('')}</div><div class="chips">${[['auto', 'Как на телефоне'], ['light', 'Светлая'], ['dark', 'Тёмная']].map(([k, l]) => `<button type="button" class="chip" data-act="theme" data-t="${k}" aria-pressed="${th === k}">${l}</button>`).join('')}</div>`;
   h += sec('Безопасность') + `<div class="btns" style="margin-top:0"><button type="button" class="btn ghost" data-act="confirm" data-then="lockNow">Выйти и забыть пароль</button></div><p class="note">После выхода для входа понадобится пароль. Ваши записи на телефоне сохранятся.</p>`;
   return { title: 'Данные и копия', html: h };
 };
@@ -1615,11 +1715,114 @@ document.addEventListener('click', e => {
 });
 
 /* =========================================================
+   Оформление «Котики»: иконки, котики и тема
+   ========================================================= */
+const SKIN = () => { try { return localStorage.getItem('mk-skin') || 'cats'; } catch (e) { return 'cats'; } };
+const catsOn = () => document.documentElement.dataset.skin === 'cats';
+// Единый набор иконок: контур 1.8, скругления, 24×24
+const ICONS = {
+  drop: '<path d="M12 3.5c3.2 3.8 6 7.2 6 10.6a6 6 0 0 1-12 0c0-3.4 2.8-6.8 6-10.6z"/>',
+  flow: '<path d="M12 3.5c3.2 3.8 6 7.2 6 10.6a6 6 0 0 1-12 0c0-3.4 2.8-6.8 6-10.6z"/><path d="M8 14.5h8M9.5 17.5h5"/>',
+  pulse: '<path d="M3 12h4l2.5-6 4 12 2.5-6H21"/>',
+  cat: '<path d="M5 11V4.8l3.8 2.6h6.4L19 4.8V11"/><path d="M5 11a7 6.8 0 0 0 14 0"/><path d="M9.5 12h.01M14.5 12h.01" stroke-width="2.6"/><path d="M11 14.6h2l-1 1z"/>',
+  waves: '<path d="M3.5 9c1.7-1.6 3.3-1.6 5 0s3.3 1.6 5 0 3.3-1.6 5 0 1.7 1.6 2 1.3M3.5 15c1.7-1.6 3.3-1.6 5 0s3.3 1.6 5 0 3.3-1.6 5 0 1.7 1.6 2 1.3"/>',
+  heart: '<path d="M12 19.5s-7-4.3-7-9.7A3.9 3.9 0 0 1 12 7.4a3.9 3.9 0 0 1 7 2.4c0 5.4-7 9.7-7 9.7z"/>',
+  moon: '<path d="M19.5 14.6A7.8 7.8 0 1 1 9.4 4.5a6.2 6.2 0 0 0 10.1 10.1z"/>',
+  thermo: '<path d="M14 14.6V5.5a2 2 0 0 0-4 0v9.1a3.8 3.8 0 1 0 4 0z"/><path d="M12 10v7"/>',
+  test: '<rect x="9" y="3" width="6" height="18" rx="2"/><path d="M9 7.5h6"/><rect x="10.8" y="11" width="2.4" height="4.5" rx=".8"/>',
+  cookie: '<circle cx="12" cy="12" r="8.5"/><path d="M9 9h.01M14.5 8.5h.01M15.5 13.5h.01M9.5 14.5h.01M12 11.8h.01" stroke-width="2.4"/>',
+  flag: '<path d="M5.5 21V4M5.5 4.5h11l-2.2 4 2.2 4h-11"/>',
+  paw: '<ellipse cx="12" cy="15.6" rx="4.4" ry="3.6"/><ellipse cx="6.6" cy="10.6" rx="1.7" ry="2.2"/><ellipse cx="17.4" cy="10.6" rx="1.7" ry="2.2"/><ellipse cx="9.7" cy="6.8" rx="1.7" ry="2.3"/><ellipse cx="14.3" cy="6.8" rx="1.7" ry="2.3"/>',
+  pencil: '<path d="M4.5 19.5l1-4 10.6-10.6 3 3L8.5 18.5z"/><path d="M14 7l3 3"/>',
+  pill: '<rect x="3" y="8.5" width="18" height="7" rx="3.5" transform="rotate(-40 12 12)"/><path d="m9.3 8.8 5.4 6.4"/>',
+  chart: '<path d="M5 20v-7M10 20V6M15 20V10M20 20v-4M3 20.5h18"/>',
+  repeat: '<path d="M4.5 11.5A7.5 7.5 0 0 1 17.3 6.6L19.5 9M19.5 4v5h-5M19.5 12.5a7.5 7.5 0 0 1-12.8 4.9L4.5 15M4.5 20v-5h5"/>',
+  file: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',
+  bell: '<path d="M6 16v-5a6 6 0 0 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/>',
+  sliders: '<path d="M4 7h9M18 7h2M4 17h3M11 17h9"/><circle cx="15.5" cy="7" r="2.2"/><circle cx="9" cy="17" r="2.2"/>',
+  star: '<path d="M12 4l2.3 4.9 5.2.6-3.9 3.6 1.1 5.2L12 15.7l-4.7 2.6 1.1-5.2-3.9-3.6 5.2-.6z"/>',
+};
+const icon = (n, cls = '') => `<svg class="i ${cls}" viewBox="0 0 24 24" fill="${n === 'paw' ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n] || ''}</svg>`;
+
+// Рыжий котик. Цвета — из темы (--cat-*), поэтому он хорош и днём, и ночью
+const CAT_EYES = '<g class="c-eyes"><ellipse cx="49" cy="45" rx="3.4" ry="4.4" fill="var(--cat-ink)"/><ellipse cx="71" cy="45" rx="3.4" ry="4.4" fill="var(--cat-ink)"/><circle cx="50.3" cy="43.4" r="1.2" fill="#fff"/><circle cx="72.3" cy="43.4" r="1.2" fill="#fff"/></g>';
+const CAT_FACE_BITS = '<path d="M57.4 52.2h5.2l-2.6 3z" fill="var(--cat-ear)"/><path d="M60 55.3q-2.6 3.6-5.6 1.6M60 55.3q2.6 3.6 5.6 1.6" stroke="var(--cat-ink)" stroke-width="1.7" fill="none" stroke-linecap="round"/>'
+  + '<circle cx="42.5" cy="53.5" r="4" fill="var(--cat-ear)" opacity=".5"/><circle cx="77.5" cy="53.5" r="4" fill="var(--cat-ear)" opacity=".5"/>'
+  + '<path d="M37 51l-11-2M37 55.5l-11 1M83 51l11-2M83 55.5l11 1" stroke="var(--cat-ink)" stroke-width="1.2" stroke-linecap="round" opacity=".45"/>';
+const CAT_HEAD = '<path d="M36.5 40 34 14.5l20.5 13zM83.5 40 86 14.5l-20.5 13z" fill="var(--cat-fur)"/><path d="M40 33.5l-1.6-12.5 10 7zM80 33.5l1.6-12.5-10 7z" fill="var(--cat-ear)"/>'
+  + '<ellipse cx="60" cy="46" rx="27.5" ry="24" fill="var(--cat-fur)"/><path d="M54 25v6M60 23.5v8M66 25v6" stroke="var(--cat-stripe)" stroke-width="3" stroke-linecap="round"/>'
+  + '<ellipse cx="60" cy="56.5" rx="12.5" ry="8" fill="var(--cat-belly)"/>';
+function catSit(cls = '') {
+  return `<svg class="cat ${cls}" viewBox="0 0 120 112" aria-hidden="true">
+    <path class="c-tail" d="M83 100c15 1 23-9 20-20-1.6-5.6-7-6.6-9.2-3" fill="none" stroke="var(--cat-fur)" stroke-width="9" stroke-linecap="round"/>
+    <path d="M35 106c-6-23 1-45 25-47 24 2 31 24 25 47z" fill="var(--cat-fur)"/><path d="M40 78q4 3 0 7M80 78q-4 3 0 7" stroke="var(--cat-stripe)" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <ellipse cx="60" cy="88" rx="13" ry="15" fill="var(--cat-belly)"/><ellipse cx="50" cy="105" rx="7.5" ry="4.8" fill="var(--cat-belly)"/><ellipse cx="70" cy="105" rx="7.5" ry="4.8" fill="var(--cat-belly)"/>
+    ${CAT_HEAD}${CAT_EYES}${CAT_FACE_BITS}</svg>`;
+}
+function catPeek(cls = '') {
+  return `<svg class="cat ${cls}" viewBox="0 8 120 64" aria-hidden="true">${CAT_HEAD}${CAT_EYES}${CAT_FACE_BITS}
+    <ellipse cx="44" cy="68" rx="10" ry="6.5" fill="var(--cat-belly)"/><ellipse cx="76" cy="68" rx="10" ry="6.5" fill="var(--cat-belly)"/>
+    <path d="M41 64.5v4M47 64.5v4M73 64.5v4M79 64.5v4" stroke="var(--cat-stripe)" stroke-width="1.4" stroke-linecap="round" opacity=".7"/></svg>`;
+}
+function catSleep(cls = '') {
+  return `<svg class="cat ${cls}" viewBox="0 0 150 92" aria-hidden="true">
+    <ellipse cx="84" cy="60" rx="48" ry="26" fill="var(--cat-fur)"/>
+    <path d="M84 36q5 8 0 15M97 35q5 8 0 15M110 39q4 7 0 13" stroke="var(--cat-stripe)" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M129 64c5 17-30 24-62 19" fill="none" stroke="var(--cat-fur)" stroke-width="11" stroke-linecap="round"/><path d="M74 83.6c-5 .3-9 0-13-.8" stroke="var(--cat-stripe)" stroke-width="11" stroke-linecap="round" fill="none"/>
+    <path d="M28 44 25 23l17 11zM53 36l12-14 3 19z" fill="var(--cat-fur)"/><path d="M30.5 39l-1.6-10 7.6 5.6zM56 34l7-8.5 1.6 11z" fill="var(--cat-ear)"/>
+    <circle cx="45" cy="57" r="23" fill="var(--cat-fur)"/><ellipse cx="46" cy="65" rx="11" ry="7" fill="var(--cat-belly)"/>
+    <path d="M33.5 56q4 4 8 0M49.5 56q4 4 8 0" stroke="var(--cat-ink)" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M44 61.5h4l-2 2.3z" fill="var(--cat-ear)"/><circle cx="30" cy="63" r="3.6" fill="var(--cat-ear)" opacity=".5"/><circle cx="62" cy="63" r="3.6" fill="var(--cat-ear)" opacity=".5"/>
+    <ellipse cx="62" cy="79" rx="10" ry="5.5" fill="var(--cat-belly)"/>
+    <text x="104" y="22" class="c-z">z</text><text x="116" y="12" class="c-z" style="font-size:13px">z</text></svg>`;
+}
+// Котик-настроение: 9 мордочек
+function catMood(k, cls = '') {
+  const ink = 'var(--cat-ink)';
+  const eyes = {
+    great: `<path d="M12.5 21.5q2.2-2.6 4.4 0M23.1 21.5q2.2-2.6 4.4 0" stroke="${ink}" stroke-width="1.6" fill="none" stroke-linecap="round"/>`,
+    good: `<circle cx="14.8" cy="21" r="1.7" fill="${ink}"/><circle cx="25.2" cy="21" r="1.7" fill="${ink}"/>`,
+    neutral: `<circle cx="14.8" cy="21" r="1.6" fill="${ink}"/><circle cx="25.2" cy="21" r="1.6" fill="${ink}"/>`,
+    sad: `<circle cx="14.8" cy="22" r="1.6" fill="${ink}"/><circle cx="25.2" cy="22" r="1.6" fill="${ink}"/><path d="M12.5 18.6l4-1.2M27.5 18.6l-4-1.2" stroke="${ink}" stroke-width="1.2" stroke-linecap="round"/>`,
+    vsad: `<path d="M12.6 22.4q2.2-1.8 4.4 0M23 22.4q2.2-1.8 4.4 0" stroke="${ink}" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M14.5 24.5c-1 1.6-1 2.8 0 3.4 1-.6 1-1.8 0-3.4z" fill="#7FB2EE"/>`,
+    irrit: `<circle cx="14.8" cy="22" r="1.6" fill="${ink}"/><circle cx="25.2" cy="22" r="1.6" fill="${ink}"/><path d="M12.4 17.8l4.4 2M27.6 17.8l-4.4 2" stroke="${ink}" stroke-width="1.5" stroke-linecap="round"/>`,
+    anx: `<circle cx="14.8" cy="21" r="3" fill="#fff" stroke="${ink}" stroke-width="1"/><circle cx="25.2" cy="21" r="3" fill="#fff" stroke="${ink}" stroke-width="1"/><circle cx="14.8" cy="21.4" r="1.3" fill="${ink}"/><circle cx="25.2" cy="21.4" r="1.3" fill="${ink}"/><path d="M31 13c-1 1.7-1 3 0 3.6 1-.6 1-1.9 0-3.6z" fill="#7FB2EE"/>`,
+    tired: `<path d="M12.6 21.6h4.4M23 21.6h4.4" stroke="${ink}" stroke-width="1.6" stroke-linecap="round"/><text x="29" y="12" style="font:700 7px var(--sans);fill:${ink}">z</text>`,
+    energ: `<path d="M14.8 18.4l.8 1.8 1.9.2-1.4 1.3.4 1.9-1.7-1-1.7 1 .4-1.9-1.4-1.3 1.9-.2zM25.2 18.4l.8 1.8 1.9.2-1.4 1.3.4 1.9-1.7-1-1.7 1 .4-1.9-1.4-1.3 1.9-.2z" fill="${ink}"/>`,
+  }[k] || '';
+  const mouth = {
+    great: `<path d="M17 26.4q3 4 6 0z" fill="${ink}"/>`, energ: `<path d="M16.6 26.2q3.4 4.4 6.8 0z" fill="${ink}"/>`,
+    good: `<path d="M20 26.2q-1.6 2-3.3.9M20 26.2q1.6 2 3.3.9" stroke="${ink}" stroke-width="1.2" fill="none" stroke-linecap="round"/>`,
+    neutral: `<path d="M17.6 27.4h4.8" stroke="${ink}" stroke-width="1.2" stroke-linecap="round"/>`,
+    sad: `<path d="M17.4 28.4q2.6-2.4 5.2 0" stroke="${ink}" stroke-width="1.2" fill="none" stroke-linecap="round"/>`, vsad: `<path d="M17 28.6q3-2.8 6 0" stroke="${ink}" stroke-width="1.3" fill="none" stroke-linecap="round"/>`,
+    irrit: `<path d="M17 28q3-2 6 0" stroke="${ink}" stroke-width="1.3" fill="none" stroke-linecap="round"/>`, anx: `<ellipse cx="20" cy="27.6" rx="1.6" ry="1.9" fill="${ink}"/>`,
+    tired: `<path d="M18 27.4q2 1 4 0" stroke="${ink}" stroke-width="1.2" fill="none" stroke-linecap="round"/>`,
+  }[k] || '';
+  return `<svg class="cat-mood ${cls}" viewBox="0 0 40 40" aria-hidden="true"><path d="M7.5 17 7 5.5l9 6.2zM32.5 17 33 5.5l-9 6.2z" fill="var(--cat-fur)"/><path d="M9.2 13.5l-.3-5 4 2.8zM30.8 13.5l.3-5-4 2.8z" fill="var(--cat-ear)"/>
+    <ellipse cx="20" cy="22" rx="13.8" ry="12.2" fill="var(--cat-fur)"/><path d="M17.4 11.6v3M20 11v3.6M22.6 11.6v3" stroke="var(--cat-stripe)" stroke-width="1.5" stroke-linecap="round"/><ellipse cx="20" cy="27" rx="6.4" ry="4.4" fill="var(--cat-belly)"/>
+    ${k === 'great' || k === 'energ' || k === 'good' ? '<circle cx="10.6" cy="25.4" r="2" fill="var(--cat-ear)" opacity=".6"/><circle cx="29.4" cy="25.4" r="2" fill="var(--cat-ear)" opacity=".6"/>' : ''}
+    <path d="M18.8 24.6h2.4l-1.2 1.4z" fill="var(--cat-ear)"/>${eyes}${mouth}</svg>`;
+}
+// Реплика котика — рукописным шрифтом
+const catSays = (t, cat = catMood('good', 'sm')) => catsOn() ? `<div class="cat-says">${cat}<p>${esc(t)}</p></div>` : '';
+const CAT_PHASE_TIP = { men: 'Береги себя. Тёплый плед и чай — хорошая компания', fol: 'Хорошего дня! Котик рядом', ovu: 'Ты сегодня сияешь', lut: 'Будь к себе помягче' };
+const CAT_PHRASES = ['Мур! Всё получится', 'Котик гордится тобой', 'Мрр… ты умничка', 'Мяу! Хорошего дня'];
+
+function applyTheme() {
+  let t = null; try { t = localStorage.getItem('mk-theme'); } catch (e) { }
+  const root = document.documentElement;
+  if (t) root.dataset.theme = t; else delete root.dataset.theme;
+  root.dataset.skin = SKIN();
+  requestAnimationFrame(() => { const bg = getComputedStyle(root).getPropertyValue('--bg').trim(); document.querySelectorAll('meta[name="theme-color"]').forEach(m => { m.content = bg; m.removeAttribute('media'); }); });
+  const lc = $('#lockCat'); if (lc) lc.innerHTML = catsOn() ? catPeek('peek') : '';
+}
+applyTheme();
+/* =========================================================
    Цикл и женское здоровье — записи только в этом телефоне (LOCAL.cycle)
    ========================================================= */
-const C_SECTIONS = [['flow', 'Месячные', '🩸'], ['sym', 'Симптомы', '⚠️'], ['mood', 'Настроение', '🙂'], ['dis', 'Выделения', '💧'], ['sex', 'Секс', '❤️'],
-  ['sleep', 'Сон', '😴'], ['bbt', 'Базальная температура', '🌡️'], ['tests', 'Тесты и овуляция', '🧪'], ['food', 'Аппетит', '🍫'],
-  ['events', 'События', '📌'], ['body', 'Вес, вода, активность', '🏃'], ['note', 'Заметка', '📝']];
+const C_SECTIONS = [['flow', 'Месячные', 'drop'], ['sym', 'Симптомы', 'pulse'], ['mood', 'Настроение', 'cat'], ['dis', 'Выделения', 'waves'], ['sex', 'Секс', 'heart'],
+  ['sleep', 'Сон', 'moon'], ['bbt', 'Базальная температура', 'thermo'], ['tests', 'Тесты и овуляция', 'test'], ['food', 'Аппетит', 'cookie'],
+  ['events', 'События', 'flag'], ['body', 'Вес, вода, активность', 'paw'], ['note', 'Заметка', 'pencil']];
 const C_FLOW = ['', 'Очень слабое', 'Слабое', 'Среднее', 'Сильное', 'Очень сильное'];
 const C_FLOW_X = ['Сгустки', 'Необычный цвет', 'Необычный запах', 'Боль', 'Частая смена средств'];
 const C_PRODUCTS = ['Прокладки', 'Тампоны', 'Менструальная чаша', 'Менструальные трусы', 'Другое'];
@@ -1799,22 +2002,22 @@ function pregnancyCard() {
   if (!lmp) return `<div class="card">Укажите первый день последних месячных в настройках, чтобы считать срок.</div>`;
   const days = daysBetween(lmp, todayISO()), w = Math.floor(days / 7), dd = days % 7, due = addDays(lmp, 280);
   const tri = w < 13 ? 'первый' : w < 27 ? 'второй' : 'третий';
-  return `<div class="cy-head"><div class="cy-big">${w} ${plural(w, 'неделя', 'недели', 'недель')}${dd ? ` ${dn(dd)}` : ''}</div><p class="muted" style="margin:2px 0 0">Акушерский срок от ${fd(lmp)} · ${tri} триместр</p>
+  return `${catsOn() ? `<div class="onb-cat">${catSit()}</div>` : ''}<div class="cy-head"><div class="cy-big">${w} ${plural(w, 'неделя', 'недели', 'недель')}${dd ? ` ${dn(dd)}` : ''}</div><p class="muted" style="margin:2px 0 0">Акушерский срок от ${fd(lmp)} · ${tri} триместр</p>
     <div class="bar"><i style="width:${Math.min(100, days / 280 * 100)}%"></i></div><p class="small muted" style="margin:0">Предполагаемая дата родов ~${fd(due)}</p></div>`;
 }
 function cQuick(d = todayISO()) {
-  const btn = (s, ic, t) => cTracked(s) ? `<button type="button" class="qa" ${nav('clog', { d, s })}><span>${ic}</span>${t}</button>` : '';
+  const btn = (s, ic, t) => cTracked(s) ? `<button type="button" class="qa" ${nav('clog', { d, s })}>${icon(ic)}${t}</button>` : '';
   const m = cModel(), open = m.last && !m.last.end && daysBetween(m.last.start, m.t) < 15;
   let h = `<div class="qa-grid">`;
-  if (cTracked('flow')) h += open ? `<button type="button" class="qa per" data-act="cEnd"><span>🩸</span>Закончились</button>` : `<button type="button" class="qa per" data-act="cStart"><span>🩸</span>Начались</button>`;
-  h += btn('flow', '💧', 'Интенсивность') + btn('sym', '⚠️', 'Симптомы') + btn('mood', '🙂', 'Настроение') + btn('dis', '🫧', 'Выделения') + btn('sex', '❤️', 'Секс')
-    + btn('bbt', '🌡️', 'Температура') + btn('note', '📝', 'Заметка') + `<button type="button" class="qa" data-act="tab" data-v="meds"><span>💊</span>Лекарства</button>`;
+  if (cTracked('flow')) h += open ? `<button type="button" class="qa per" data-act="cEnd">${icon('drop')}Закончились</button>` : `<button type="button" class="qa per" data-act="cStart">${icon('drop')}Начались</button>`;
+  h += btn('flow', 'flow', 'Интенсивность') + btn('sym', 'pulse', 'Симптомы') + btn('mood', 'cat', 'Настроение') + btn('dis', 'waves', 'Выделения') + btn('sex', 'heart', 'Секс')
+    + btn('bbt', 'thermo', 'Температура') + btn('note', 'pencil', 'Заметка') + `<button type="button" class="qa" data-act="tab" data-v="meds">${icon('pill')}Лекарства</button>`;
   return h + `</div>`;
 }
 V.cycle = () => {
   const set = CY().set;
   if (!set.onboarded) {
-    let h = `<div class="big-title">Цикл и самочувствие</div><p class="lead">Календарь месячных, симптомы, настроение, выделения, температура, тесты и графики — всё в одном месте. Записи хранятся только в этом телефоне.</p>`;
+    let h = `${catsOn() ? `<div class="onb-cat">${catSit()}</div>` : ''}<div class="big-title">Цикл и самочувствие</div><p class="lead">Календарь месячных, симптомы, настроение, выделения, температура, тесты и графики — всё в одном месте. Записи хранятся только в этом телефоне.</p>`;
     h += `<div class="btns"><button type="button" class="btn wide" data-go="csetup">Начать: 1 минута</button></div>`;
     h += `<p class="note">Спросим дату последних месячных, обычную длину цикла и что вы хотите отмечать. Лишнее можно скрыть.</p>`;
     return { title: 'Цикл', html: h };
@@ -1825,11 +2028,12 @@ V.cycle = () => {
   else if (!m.last) h += `<div class="card">Отметьте начало месячных — и программа начнёт считать цикл.</div>`;
   else {
     const info = cInfo(t);
-    h += `<div class="cy-head">${cRing(m)}<div class="cy-facts">
+    h += `<div class="cy-wrap">${catsOn() ? catPeek('peek') : ''}<div class="cy-head">${cRing(m)}<div class="cy-facts">
       <div><b>${m.late ? 'Задержка' : fdLong(m.nextStart)}</b><span>${m.late ? dn(m.late) : 'следующие месячные, ~через ' + dn(daysBetween(t, m.nextStart))}</span></div>
       ${info.chance ? `<div><b>${info.chance[0].toUpperCase() + info.chance.slice(1)}</b><span>вероятность зачатия сегодня</span></div>` : ''}
       <div><b>${info.phase ? C_PHASE[info.phase] : '—'}</b><span>${m.cur.ov.src === 'calc' ? 'овуляция ~' : 'овуляция '}${fdLong(m.cur.ov.d)}${m.cur.ov.src !== 'calc' ? ' (' + { confirmed: 'отмечена', test: 'по тесту', bbt: 'по температуре' }[m.cur.ov.src] + ')' : ''}</span></div>
-    </div></div>`;
+    </div></div></div>`;
+    h += catSays(m.late ? 'Не переживай. Отметь, как ты себя чувствуешь' : CAT_PHASE_TIP[info.phase] || CAT_PHRASES[dayNum(t) % CAT_PHRASES.length], catMood(m.late ? 'neutral' : info.phase === 'men' ? 'tired' : info.phase === 'ovu' ? 'energ' : 'good'));
     if (set.mode === 'plan' && info.fertile) h += `<div class="banner" style="margin-top:10px"><div>Сейчас фертильное окно. Самые вероятные дни — за 2 дня до овуляции и в день овуляции.</div></div>`;
     if (m.late >= 5 && set.mode !== 'pregnant') h += `<div class="banner warnb" style="margin-top:10px"><div>Задержка ${dn(m.late)}. Можно сделать тест на беременность и отметить результат. Если задержка повторяется — обсудите с гинекологом.</div></div>`;
     if (C_HORMONAL.has(set.contraception)) h += `<p class="note">При гормональной контрацепции кровотечение — реакция отмены, а не естественный цикл. Фертильное окно не показываем.</p>`;
@@ -1838,27 +2042,27 @@ V.cycle = () => {
   h += cCalendar();
   h += sec('Разделы');
   h += list([
-    row({ left: '<span class="ico">📊</span>', t: 'Моё тело', s: 'Графики, закономерности, аналитика', go: 'cstats' }),
-    row({ left: '<span class="ico">🔁</span>', t: 'Мои циклы', s: `${m.cycles.length} ${plural(m.cycles.length, 'завершённый цикл', 'завершённых цикла', 'завершённых циклов')}`, go: 'ccycles' }),
-    row({ left: '<span class="ico">📄</span>', t: 'Отчёт для врача и экспорт', s: 'PDF, CSV для Excel, текст', go: 'creport' }),
-    row({ left: '<span class="ico">🔔</span>', t: 'Напоминания', s: 'В Календарь iPhone', go: 'crem' }),
-    row({ left: '<span class="ico">⚙️</span>', t: 'Настройки цикла', s: C_MODES.find(x => x[0] === set.mode)?.[1], go: 'csetup' }),
+    row({ left: `<span class="ico">${icon('chart')}</span>`, t: 'Моё тело', s: 'Графики, закономерности, аналитика', go: 'cstats' }),
+    row({ left: `<span class="ico">${icon('repeat')}</span>`, t: 'Мои циклы', s: `${m.cycles.length} ${plural(m.cycles.length, 'завершённый цикл', 'завершённых цикла', 'завершённых циклов')}`, go: 'ccycles' }),
+    row({ left: `<span class="ico">${icon('file')}</span>`, t: 'Отчёт для врача и экспорт', s: 'PDF, CSV для Excel, текст', go: 'creport' }),
+    row({ left: `<span class="ico">${icon('bell')}</span>`, t: 'Напоминания', s: 'В Календарь iPhone', go: 'crem' }),
+    row({ left: `<span class="ico">${icon('sliders')}</span>`, t: 'Настройки цикла', s: C_MODES.find(x => x[0] === set.mode)?.[1], go: 'csetup' }),
   ]);
   if (set.mode !== 'pregnant') h += `<p class="note">${C_FORECAST}</p>`;
   return { title: 'Цикл', html: h };
 };
 function cDayChips(d) {
-  const day = cDay(d), s = C_SECTIONS.map(([k, l, ic]) => { const v = cSecSum(k, day); return v ? `<span class="pill">${ic} ${esc(v.length > 40 ? v.slice(0, 38) + '…' : v)}</span>` : ''; }).filter(Boolean);
+  const day = cDay(d), s = C_SECTIONS.map(([k, l, ic]) => { const v = cSecSum(k, day); return v ? `<span class="pill">${icon(ic)} ${esc(v.length > 40 ? v.slice(0, 38) + '…' : v)}</span>` : ''; }).filter(Boolean);
   return s.length ? `<div class="tags" style="margin:0 0 10px">${s.join('')}</div>` : `<p class="muted small" style="margin:0 4px 10px">Пока ничего не отмечено. Нажмите, что хотите записать.</p>`;
 }
 function cMarks(d) {
   const day = cDay(d), out = [];
-  if (day.sex?.acts?.includes('Секс')) out.push('❤️');
-  if (day.mood?.length) out.push(C_MOODS.find(x => x[0] === day.mood[0])?.[1] || '🙂');
-  if (day.sym && Object.keys(day.sym).length) out.push('⚠️');
-  if (day.dis) out.push('💧');
-  if (cIntakeDays().has(d)) out.push('💊');
-  if (day.note) out.push('📝');
+  if (day.sym && Object.keys(day.sym).length) out.push('sym');
+  if (day.mood?.length || day.sc) out.push('mood');
+  if (day.sex?.acts?.includes('Секс')) out.push('sex');
+  if (day.dis) out.push('dis');
+  if (cIntakeDays().has(d)) out.push('med');
+  if (day.note) out.push('note');
   return out;
 }
 function cIntakeDays() {
@@ -1881,9 +2085,10 @@ function cCalendar() {
     if (d === t) cls.push('today');
     if (d > t) cls.push('fut');
     const mk = cMarks(d);
-    h += `<button type="button" class="${cls.join(' ')}" ${nav('cday', { d })} aria-label="${fdLong(d)}${o.cday ? ', день цикла ' + o.cday : ''}"><b>${n}${o.isOv && !o.inPeriod ? '<i class="star">★</i>' : ''}</b><small>${mk.slice(0, 3).join('')}</small></button>`;
+    h += `<button type="button" class="${cls.join(' ')}" ${nav('cday', { d })} aria-label="${fdLong(d)}${o.cday ? ', день цикла ' + o.cday : ''}"><b>${n}</b>${o.isOv && !o.inPeriod ? icon('star', 'star-i') : ''}<span class="dots">${mk.slice(0, 4).map(k => `<i class="d-${k}"></i>`).join('')}</span></button>`;
   }
-  h += `</div></div><div class="legend"><span><i class="lg per"></i>месячные</span><span><i class="lg pred"></i>прогноз</span><span><i class="lg fert"></i>фертильное окно</span><span>★ овуляция</span></div>`;
+  h += `</div></div><div class="legend"><span><i class="lg per"></i>месячные</span><span><i class="lg pred"></i>прогноз</span><span><i class="lg fert"></i>фертильное окно</span><span>${icon('star', 'star-l')}овуляция</span></div>
+    <div class="legend"><span><span class="dots"><i class="d-sym"></i></span>симптомы</span><span><span class="dots"><i class="d-mood"></i></span>настроение</span><span><span class="dots"><i class="d-sex"></i></span>секс</span><span><span class="dots"><i class="d-dis"></i></span>выделения</span><span><span class="dots"><i class="d-med"></i></span>лекарства</span><span><span class="dots"><i class="d-note"></i></span>заметка</span></div>`;
   return h;
 }
 
@@ -1893,7 +2098,7 @@ function cSecSum(k, day) {
   switch (k) {
     case 'flow': return day.flow ? [C_FLOW[day.flow], j(day.flow_x), j(day.products)].filter(Boolean).join(' · ') : '';
     case 'sym': return day.sym ? Object.entries(day.sym).map(([n, l]) => `${n}${l > 1 ? ` (${C_LVL[l]})` : ''}`).join(', ') + (day.sym_note ? ` · ${day.sym_note}` : '') : '';
-    case 'mood': return [(day.mood || []).map(k => { const x = C_MOODS.find(y => y[0] === k); return x ? x[1] + ' ' + x[2] : ''; }).join(', '), day.sc ? C_SCALES.filter(([k]) => day.sc[k] != null).map(([k, l]) => `${l} ${day.sc[k]}/10`).join(', ') : ''].filter(Boolean).join(' · ');
+    case 'mood': return [(day.mood || []).map(k => C_MOODS.find(y => y[0] === k)?.[2] || '').join(', '), day.sc ? C_SCALES.filter(([k]) => day.sc[k] != null).map(([k, l]) => `${l} ${day.sc[k]}/10`).join(', ') : ''].filter(Boolean).join(' · ');
     case 'dis': return day.dis ? [day.dis.amount, day.dis.color, day.dis.cons, day.dis.smell ? 'запах: ' + day.dis.smell.toLowerCase() : '', j(day.dis.x)].filter(Boolean).join(', ') : '';
     case 'sex': return day.sex ? [j(day.sex.acts), day.sex.prot, day.sex.method, day.sex.ejac, j(day.sex.x), day.sex.sat ? `удовлетворённость ${day.sex.sat}/5` : ''].filter(Boolean).join(', ') : '';
     case 'sleep': { const s = day.sleep; if (!s) return ''; const hrs = sleepHours(s); return [s.bed && s.wake ? `${s.bed}–${s.wake}` : '', hrs ? r1(hrs) + ' ч' : '', s.q ? 'сон ' + C_SLEEP_Q[s.q - 1].toLowerCase() : '', s.wakes ? `пробуждений ${s.wakes}` : '', s.insomnia ? 'бессонница' : '', s.nap ? `дневной сон ${s.nap} мин` : ''].filter(Boolean).join(', '); }
@@ -1911,7 +2116,7 @@ V.cday = ({ d }) => {
   let h = `<div class="big-title">${fdLong(d)} ${d.slice(0, 4)}</div><p class="meta">${WD[new Date(d + 'T12:00').getDay()]}</p>`;
   const facts = [o.cday ? `День цикла: ${o.cday}` : '', o.phase ? C_PHASE[o.phase] : '', o.inPeriod ? 'месячные' : o.predPeriod ? 'прогноз месячных' : '', o.isOv ? (o.predicted || o.ovSrc === 'calc' ? 'предполагаемая овуляция' : 'овуляция') : o.fertile ? 'фертильное окно' : ''].filter(Boolean);
   if (facts.length) h += `<p class="facts">${facts.join(' · ')}</p>`;
-  const rows = C_SECTIONS.filter(([k]) => cTracked(k) || cSecSum(k, day)).map(([k, l, ic]) => { const v = cSecSum(k, day); return row({ left: `<span class="ico">${ic}</span>`, t: l, s: v ? esc(v) : '<span class="muted">не отмечено</span>', go: 'clog', p: { d, s: k } }); });
+  const rows = C_SECTIONS.filter(([k]) => cTracked(k) || cSecSum(k, day)).map(([k, l, ic]) => { const v = cSecSum(k, day); return row({ left: `<span class="ico">${icon(ic)}</span>`, t: l, s: v ? esc(v) : '<span class="muted">не отмечено</span>', go: 'clog', p: { d, s: k } }); });
   h += list(rows);
   if (day.photos?.length) h += sec('Фото тестов') + `<div class="stack">${day.photos.map((f, i) => `<div class="file-view" id="cph${i}"><div class="file-missing">Загружаю…</div></div>`).join('')}</div>`;
   const meds = D.medications.filter(mm => (mm.schedule?.times || []).some(tm => D.intakes[`${mm.id}|${d}|${tm}`] === 'taken'));
@@ -1950,7 +2155,7 @@ function cSecForm(k) {
         + cField('Свой симптом', `<div style="display:flex;gap:8px"><input id="cNewSym" placeholder="Например: судороги в ногах" autocomplete="off"><button type="button" class="btn sm" data-act="cAddSym">Добавить</button></div>`)
         + cField('Длительность и подробности', cInput('sym_note', 'text', 'Например: с утра, около 3 часов'), 'Если симптом отмечен несколько дней подряд, программа посчитает, сколько он длится.');
     }
-    case 'mood': return cField('Настроение', cChips('mood', C_MOODS.map(x => x[0]), 1, C_MOODS.map(x => x[1] + ' ' + x[2])))
+    case 'mood': return cField('Настроение', `<div class="chips">${C_MOODS.map(([k, , l]) => `<button type="button" class="chip" data-act="cChip" data-f="mood" data-v="${k}" data-m="1" aria-pressed="${(day.mood || []).includes(k)}">${catMood(k)}${l}</button>`).join('')}</div>`)
       + `<div class="field"><label>Шкалы от 0 до 10 <span style="font-weight:400">— двигайте только нужные</span></label><div class="scales">${C_SCALES.map(([k, l]) => { const v = day.sc?.[k]; return `<label class="scale"><span>${l}</span><output id="o_${k}">${v ?? '—'}</output><input type="range" min="0" max="10" step="1" data-sc="${k}" value="${v ?? 5}"${v == null ? ' class="unset"' : ''}></label>`; }).join('')}</div></div>`;
     case 'dis': return Object.entries(C_DIS).map(([k2, [l, o]]) => cField(l, cChips('dis.' + k2, o))).join('') + cField('Дополнительно', cChips('dis.x', C_DIS_X, 1));
     case 'sex': return cField('Что было', cChips('sex.acts', C_SEX_ACTS, 1)) + cField('Защита', cChips('sex.prot', C_SEX_PROT)) + cField('Метод', cChips('sex.method', C_SEX_METHOD))
@@ -1975,7 +2180,7 @@ V.clog = ({ d, s }) => {
   if (!CED || CED.d !== d || CED.s !== s) CED = { d, s, day: JSON.parse(JSON.stringify(cDay(d))) };
   const secs = s ? C_SECTIONS.filter(x => x[0] === s) : C_SECTIONS.filter(([k]) => cTracked(k));
   let h = `<p class="muted" style="margin:0 4px 8px">${fdLong(d)} ${d.slice(0, 4)}${cInfo(d).cday ? ` · день цикла ${cInfo(d).cday}` : ''}</p><form class="f" id="cForm" novalidate>`;
-  h += secs.map(([k, l, ic]) => `${s ? '' : `<h2 class="sec" style="margin-top:18px"><span>${ic} ${l}</span></h2>`}<div class="card stack">${cSecForm(k)}</div>`).join('');
+  h += secs.map(([k, l, ic]) => `${s ? '' : `<h2 class="sec" style="margin-top:18px"><span>${icon(ic)}${l}</span></h2>`}<div class="card stack">${cSecForm(k)}</div>`).join('');
   h += `<div class="err" id="cErr" hidden></div><div class="btns"><button class="btn wide" type="submit">Сохранить</button></div></form>`;
   return {
     title: s ? C_SECTIONS.find(x => x[0] === s)[1] : 'Отметить день', html: h, after() {
@@ -2137,7 +2342,7 @@ V.cstats = () => {
     ['Последний цикл', m.valid.length ? dn(m.valid[m.valid.length - 1].len) : '—'],
     ['Средняя длительность месячных', dn(m.avgPer)],
     ['Частые симптомы', topSym.length ? esc(topSym.join(', ')) : '—'],
-    ['Частое настроение', topMood ? C_MOODS.find(x => x[0] === topMood[0])?.slice(1, 3).join(' ') : '—'],
+    ['Частое настроение', topMood ? `${catMood(topMood[0])} ${C_MOODS.find(x => x[0] === topMood[0])?.[2]}` : '—'],
   ].map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl></div>`;
   const obs = cObservations();
   h += sec('Наблюдения') + (obs.length ? `<div class="list">${obs.map(o => `<div class="row"><div class="row-main">${esc(o)}</div></div>`).join('')}</div><p class="note">${C_OBS_NOTE}</p>` : empty('Наблюдения появятся, когда накопится 2–3 цикла записей.'));
@@ -2212,9 +2417,9 @@ V.ccycle = ({ s }) => {
   h += `<div class="btns"><button type="button" class="btn ghost sm" data-go="form" data-p='${esc(JSON.stringify({ k: 'cperiod', id: p.id }))}'>Изменить даты месячных</button><button type="button" class="btn danger sm" data-act="confirm" data-then="cDelPeriod" data-id="${p.id}">Удалить эти месячные</button></div>`;
   const rows = [];
   for (let d = p.start; d <= end; d = addDays(d, 1)) {
-    const day = cDay(d), parts = C_SECTIONS.map(([k, , ic]) => { const v = cSecSum(k, day); return v ? `${ic} ${v}` : ''; }).filter(Boolean);
+    const day = cDay(d), parts = C_SECTIONS.map(([k, , ic]) => { const v = cSecSum(k, day); return v ? `${icon(ic, 'in')}${esc(v)}` : ''; }).filter(Boolean);
     const o = cInfo(d);
-    rows.push(row({ left: `<div class="date-col">д${daysBetween(p.start, d) + 1}<br>${fds(d)}</div>`, t: parts.length ? esc(parts.join(' · ')) : '<span class="muted">—</span>', s: o.phase ? C_PHASE[o.phase] : '', go: 'cday', p: { d } }));
+    rows.push(row({ left: `<div class="date-col">д${daysBetween(p.start, d) + 1}<br>${fds(d)}</div>`, t: parts.length ? `<span class="small">${parts.join(' · ')}</span>` : '<span class="muted">—</span>', s: o.phase ? C_PHASE[o.phase] : '', go: 'cday', p: { d } }));
   }
   h += sec('По дням') + list(rows);
   return { title: 'Цикл', html: h };
@@ -2310,7 +2515,7 @@ V.csetup = () => {
   h += f('cs_lmp', 'Для беременности: первый день последних месячных', `<input id="cs_lmp" type="date" value="${set.preg_lmp || ''}">`, 'Нужно только в режиме «Я беременна». Если пусто — берём последние отмеченные месячные.');
   h += f('cs_con', 'Контрацепция', sel('cs_con', C_CONTRA, set.contraception), 'Таблетки добавьте в «Лечение» — там будут отметки и напоминания.');
   h += f('cs_lut', 'Длина второй фазы, дней', `<input id="cs_lut" type="number" inputmode="numeric" value="${set.luteal}">`, 'Обычно 14. Меняйте, только если так сказал врач или показывают ваши тесты.');
-  h += `<div class="field"><label>Что отмечать</label><div class="chips">${C_SECTIONS.filter(([k]) => k !== 'note').map(([k, l, ic]) => `<button type="button" class="chip" data-act="cTrack" data-k="${k}" aria-pressed="${set.track?.[k] !== false}">${ic} ${l}</button>`).join('')}</div><div class="hint">Невыбранное не показывается при вводе. Лишнее можно скрыть — не нужно заполнять всё каждый день.</div></div>`;
+  h += `<div class="field"><label>Что отмечать</label><div class="chips">${C_SECTIONS.filter(([k]) => k !== 'note').map(([k, l, ic]) => `<button type="button" class="chip" data-act="cTrack" data-k="${k}" aria-pressed="${set.track?.[k] !== false}">${icon(ic)} ${l}</button>`).join('')}</div><div class="hint">Невыбранное не показывается при вводе. Лишнее можно скрыть — не нужно заполнять всё каждый день.</div></div>`;
   h += `<div class="err" id="csErr" hidden></div><div class="btns"><button class="btn wide" type="submit">Сохранить</button></div></form>`;
   if (set.onboarded) h += sec('Удаление') + `<div class="btns" style="margin-top:0"><button type="button" class="btn danger" data-act="confirm" data-then="cWipe">Удалить все данные цикла</button></div><p class="note">Удалятся месячные, отметки дней и фото тестов на этом телефоне. Остальная медкарта не изменится.</p>`;
   return {
@@ -2366,7 +2571,7 @@ function cIcs(w) {
 function cycleMini() {
   if (!LOCAL.cycle?.set.onboarded) return '';
   const set = CY().set, m = cModel();
-  if (set.mode === 'pregnant') { const lmp = set.preg_lmp || m.last?.start; if (!lmp) return ''; const days = daysBetween(lmp, m.t); return sec('Беременность') + list([row({ left: '<span class="ico">🤰</span>', t: `${Math.floor(days / 7)} ${plural(Math.floor(days / 7), 'неделя', 'недели', 'недель')} ${days % 7 ? dn(days % 7) : ''}`, s: `ПДР ~${fd(addDays(lmp, 280))}`, go: 'cycle' })]); }
+  if (set.mode === 'pregnant') { const lmp = set.preg_lmp || m.last?.start; if (!lmp) return ''; const days = daysBetween(lmp, m.t); return sec('Беременность') + list([row({ left: `<span class="ico">${icon('heart')}</span>`, t: `${Math.floor(days / 7)} ${plural(Math.floor(days / 7), 'неделя', 'недели', 'недель')} ${days % 7 ? dn(days % 7) : ''}`, s: `ПДР ~${fd(addDays(lmp, 280))}`, go: 'cycle' })]); }
   if (!m.last) return '';
   const info = cInfo(m.t);
   return sec('Цикл', `<a href="#" ${nav('cday', { d: m.t })}>Отметить</a>`) + list([row({ left: `<span class="ico per">${m.cur.day}</span>`, t: `День цикла ${m.cur.day}${info.phase ? ' · ' + C_PHASE[info.phase].replace(' фаза', '').toLowerCase() : ''}`, s: m.late ? `Задержка ${dn(m.late)}` : `До месячных ~${dn(daysBetween(m.t, m.nextStart))} · ${fdLong(m.nextStart)}${info.fertile ? ' · фертильное окно' : ''}`, go: 'cycle' })]);
@@ -2418,13 +2623,10 @@ Object.assign(A, {
   cShareTxt({ w }) { shareFile(w === 'doc' ? `Отчёт о цикле ${todayISO()}.txt` : `Дневник цикла ${todayISO()}.txt`, new Blob([cReportText(w === 'doc')], { type: 'text/plain' }), 'Файл сохранён'); },
   cCsv() { shareFile(`cikl-${todayISO()}.csv`, new Blob([cCSV()], { type: 'text/csv' }), 'Файл сохранён'); },
   cCal({ w }) { openCalendar(cIcs(w), 'напоминания'); },
+  skin({ s }) { try { localStorage.setItem('mk-skin', s); } catch (e) { } applyTheme(); render(); },
+  purr(_, b) { b.classList.remove('purring'); void b.offsetWidth; b.classList.add('purring'); },
   theme({ t }) { try { if (t === 'auto') localStorage.removeItem('mk-theme'); else localStorage.setItem('mk-theme', t); } catch (e) { } applyTheme(); render(); },
 });
-function applyTheme() {
-  let t = null; try { t = localStorage.getItem('mk-theme'); } catch (e) { }
-  if (t) document.documentElement.dataset.theme = t; else delete document.documentElement.dataset.theme;
-}
-applyTheme();
 
 /* =========================================================
    Запуск: пароль, загрузка, обновления
