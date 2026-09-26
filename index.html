@@ -430,7 +430,9 @@ h2.sec .i { width: 16px; height: 16px; vertical-align: -3px; margin-right: 4px; 
 .cat-says p { margin: 0; font: 700 21px/1.15 var(--hand); color: var(--accent); text-wrap: balance; }
 .empty .cat { width: 132px; height: 82px; margin: 0 auto 8px; }
 .lock-cat { height: 70px; margin-bottom: -16px; position: relative; z-index: 1; }
+.lock-cat { display: flex; gap: 0; }
 .lock-cat .cat { width: 128px; height: 70px; }
+.lock-cat .cat + .cat { width: 96px; height: 52px; margin: 18px 0 0 -18px; }
 [data-skin="cats"] .lock-mark { display: none; }
 [data-skin="cats"] .lock-box > div:nth-child(3) { position: relative; }
 .onb-cat { width: 150px; height: 140px; margin: 8px auto 4px; }
@@ -441,6 +443,26 @@ h2.sec .i { width: 16px; height: 16px; vertical-align: -3px; margin-right: 4px; 
 .dots i { width: 5px; height: 5px; border-radius: 50%; display: block; }
 .d-sym { background: var(--warn); } .d-mood { background: var(--accent); } .d-sex { background: var(--per); } .d-dis { background: var(--lo); } .d-med { background: var(--good); } .d-note { background: var(--muted); }
 .legend .dots { display: inline-flex; min-height: 0; }
+
+/* котики: окрасы, поза «батон», ушки */
+.cat.c-gray { --cat-fur: #A9A1AC; --cat-stripe: #8B8290; --cat-belly: #F5F1F6; }
+.cat.c-cream { --cat-fur: #F1D9BC; --cat-stripe: #E0BD96; --cat-belly: #FFF8EF; }
+.cat.c-black { --cat-fur: #3B3137; --cat-stripe: #3B3137; --cat-belly: #5B4F56; --cat-eye: #F2C94C; }
+.cat.c-calico { --cat-fur: #FFF6EC; --cat-stripe: #F2A65A; --cat-belly: #FFFFFF; }
+.loaf-spot { position: relative; height: 40px; z-index: 1; pointer-events: none; }
+.loaf-spot .cat { position: absolute; right: 26px; bottom: -7px; width: 104px; height: 48px; }
+.loaf-spot.left .cat { right: auto; left: 22px; }
+.peek-spot { position: relative; height: 44px; margin-top: 8px; z-index: 1; pointer-events: none; }
+.peek-spot .cat { position: absolute; right: 20px; bottom: -4px; width: 84px; height: 45px; }
+.peek-spot + .picture { margin-top: 0; }
+.page-end { display: grid; justify-items: center; gap: 2px; margin: 34px 0 6px; }
+.page-end .cat { width: 110px; height: 68px; }
+.page-end p { margin: 0; font: 700 20px/1.2 var(--hand); color: var(--muted); text-align: center; }
+[data-skin="cats"] .tab { position: relative; }
+[data-skin="cats"] .tab[aria-current="page"]::before { content: ""; position: absolute; top: 6px; left: 50%; width: 30px; height: 10px; margin-left: -15px; background: var(--accent); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 10'%3E%3Cpath d='M2 10 3.5 0 10 6zM28 10 26.5 0 20 6z'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 10'%3E%3Cpath d='M2 10 3.5 0 10 6zM28 10 26.5 0 20 6z'/%3E%3C/svg%3E") center / contain no-repeat; }
+[data-skin="cats"] .cal-g .today::before { content: ""; position: absolute; top: -6px; left: 50%; width: 26px; height: 8px; margin-left: -13px; background: var(--ink); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 10'%3E%3Cpath d='M2 10 3.5 0 10 6zM28 10 26.5 0 20 6z'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 10'%3E%3Cpath d='M2 10 3.5 0 10 6zM28 10 26.5 0 20 6z'/%3E%3C/svg%3E") center / contain no-repeat; }
+[data-skin="cats"] .dose.is-taken .dose-time::after { content: ""; display: block; width: 18px; height: 18px; margin-top: 6px; background: var(--accent); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cellipse cx='12' cy='15.6' rx='4.4' ry='3.6'/%3E%3Cellipse cx='6.6' cy='10.6' rx='1.7' ry='2.2'/%3E%3Cellipse cx='17.4' cy='10.6' rx='1.7' ry='2.2'/%3E%3Cellipse cx='9.7' cy='6.8' rx='1.7' ry='2.3'/%3E%3Cellipse cx='14.3' cy='6.8' rx='1.7' ry='2.3'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cellipse cx='12' cy='15.6' rx='4.4' ry='3.6'/%3E%3Cellipse cx='6.6' cy='10.6' rx='1.7' ry='2.2'/%3E%3Cellipse cx='17.4' cy='10.6' rx='1.7' ry='2.2'/%3E%3Cellipse cx='9.7' cy='6.8' rx='1.7' ry='2.3'/%3E%3Cellipse cx='14.3' cy='6.8' rx='1.7' ry='2.3'/%3E%3C/svg%3E") center / contain no-repeat; }
+[data-skin="cats"] .course h3::after { content: ""; display: inline-block; width: 14px; height: 14px; margin-left: 6px; vertical-align: 1px; background: var(--accent); opacity: .5; -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cellipse cx='12' cy='15.6' rx='4.4' ry='3.6'/%3E%3Cellipse cx='6.6' cy='10.6' rx='1.7' ry='2.2'/%3E%3Cellipse cx='17.4' cy='10.6' rx='1.7' ry='2.2'/%3E%3Cellipse cx='9.7' cy='6.8' rx='1.7' ry='2.3'/%3E%3Cellipse cx='14.3' cy='6.8' rx='1.7' ry='2.3'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cellipse cx='12' cy='15.6' rx='4.4' ry='3.6'/%3E%3Cellipse cx='6.6' cy='10.6' rx='1.7' ry='2.2'/%3E%3Cellipse cx='17.4' cy='10.6' rx='1.7' ry='2.2'/%3E%3Cellipse cx='9.7' cy='6.8' rx='1.7' ry='2.3'/%3E%3Cellipse cx='14.3' cy='6.8' rx='1.7' ry='2.3'/%3E%3C/svg%3E") center / contain no-repeat; }
 .i.in { width: 14px; height: 14px; vertical-align: -2px; margin-right: 3px; color: var(--accent); }
 .i.star-l { width: 13px; height: 13px; color: var(--ovu); fill: var(--ovu); }
 .lock-cat:empty { display: none; }
@@ -513,7 +535,7 @@ h2.sec .i { width: 16px; height: 16px; vertical-align: -3px; margin-right: 4px; 
 
 <script>
 'use strict';
-const APP_VERSION = '26.09.2026 22:00';
+const APP_VERSION = '26.09.2026 23:30';
 /* =========================================================
    Справочники и форматирование
    ========================================================= */
@@ -563,7 +585,7 @@ function row({ t, s, r, go, p, act, data, left, href }) {
 const list = rows => rows.length ? `<div class="list">${rows.join('')}</div>` : '';
 const kv = pairs => { const r = pairs.filter(p => p[1] != null && p[1] !== ''); return r.length ? `<dl class="kv">${r.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>` : ''; };
 const sec = (title, extra = '') => `<h2 class="sec"><span>${title}</span>${extra}</h2>`;
-const empty = t => `<div class="empty">${catsOn() ? catSleep() : ''}${t}</div>`;
+const empty = t => `<div class="empty">${catsOn() ? catSleep(CAT_COATS[t.length % CAT_COATS.length]) : ''}${t}</div>`;
 function toast(t) { const el = $('#toast'); el.firstElementChild.innerHTML = (catsOn() ? icon('paw', 'tp') : '') + esc(t); el.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => el.hidden = true, 2600); }
 
 /* =========================================================
@@ -596,7 +618,7 @@ const idb = {
    ========================================================= */
 const LIST_KEYS = ['clinics', 'doctors', 'events', 'labs', 'medications', 'documents', 'tasks', 'expenses', 'cases'];
 let SERVER = null, LOCAL = null, D = null, KEY = null, SALT = null;
-const emptyLocal = () => ({ v: 1, intakes: {}, add: Object.fromEntries(LIST_KEYS.map(k => [k, []])), patch: {}, deleted: [], profile: {} });
+const emptyLocal = () => ({ v: 1, intakes: {}, add: Object.fromEntries(LIST_KEYS.map(k => [k, []])), patch: {}, deleted: [], profile: {}, log: [], backup_at: null });
 const expKey = x => 'x_' + hash(`${x.date}|${x.title}|${x.amount_uzs}`);
 
 function build() {
@@ -616,13 +638,21 @@ async function saveLocal(msg) {
   try { await idb.put('kv', 'local', LOCAL); } catch (e) { toast('Не удалось сохранить в памяти телефона'); }
   build(); render(); if (msg) toast(msg);
 }
-function addItem(k, obj, msg) { obj.id ||= newId(k.slice(0, 3)); LOCAL.add[k].push(obj); return saveLocal(msg); }
+// Журнал: каждая запись Дары с датой и временем — хранится в телефоне и уходит в копию
+const KIND_WORD = { labs: 'анализ', medications: 'лекарство', events: 'событие', documents: 'документ', tasks: 'дело', expenses: 'расход', doctors: 'врач', clinics: 'клиника', cases: 'дело' };
+function logAct(m) { (LOCAL.log ||= []).push({ t: new Date().toISOString(), m }); if (LOCAL.log.length > 2000) LOCAL.log.splice(0, LOCAL.log.length - 2000); }
+const itemName = x => x ? (x.title || x.name || x.specialty || '') : '';
+const unsaved = () => (LOCAL.log || []).filter(x => !LOCAL.backup_at || x.t > LOCAL.backup_at);
+function addItem(k, obj, msg) { obj.id ||= newId(k.slice(0, 3)); LOCAL.add[k].push(obj); logAct(`Добавлено: ${KIND_WORD[k] || k} «${itemName(obj)}»${obj.date ? ', ' + fd(obj.date) : ''}${k === 'labs' ? ` = ${valText(obj)} ${obj.unit || ''}`.trimEnd() : ''}`); return saveLocal(msg); }
 function patchItem(k, id, fields, msg) {
+  const cur = D && byId(k, id);
+  logAct(`${fields.status === 'done' ? 'Сделано' : fields.status === 'completed' ? 'Курс завершён' : fields.status === 'open' ? 'Возвращено в список' : 'Изменено'}: ${KIND_WORD[k] || k} «${itemName({ ...cur, ...fields })}»`);
   const loc = LOCAL.add[k].find(x => x.id === id);
   if (loc) Object.assign(loc, fields); else LOCAL.patch[id] = { ...(LOCAL.patch[id] || {}), ...fields };
   return saveLocal(msg);
 }
 function deleteItem(k, id, msg) {
+  logAct(`Удалено: ${KIND_WORD[k] || k} «${itemName(D && byId(k, id))}»`);
   const i = LOCAL.add[k].findIndex(x => x.id === id);
   if (i >= 0) LOCAL.add[k].splice(i, 1); else LOCAL.deleted.push(id);
   return saveLocal(msg);
@@ -841,7 +871,7 @@ V.today = () => {
   let h = `${catsOn() ? `<div class="hello-row">${helloTxt}<button type="button" class="hello-cat" data-act="purr" aria-label="Погладить котика">${catSit()}<span class="purr">мрр…</span></button></div>` : helloTxt}<p class="cheer">Не унывай, всё будет хорошо</p><p class="today-date">${WD[dt.getDay()][0].toUpperCase() + WD[dt.getDay()].slice(1)}, ${fdLong(t)}</p>`;
   h += `<p class="lead">${doses.length ? (left ? `Осталось ${left} ${plural(left, 'приём', 'приёма', 'приёмов')} лекарств` : 'Все лекарства на сегодня отмечены') : 'Лекарств по расписанию сегодня нет'}${openTasks.length ? ` · ${openTasks.length} ${plural(openTasks.length, 'дело', 'дела', 'дел')}` : ''}</p>`;
   if (doses.length && !left) h += catsOn() ? `<div class="done-cat">${catSit()}<p>Все лекарства на сегодня приняты — котик гордится тобой</p></div>` : '';
-  h += installBanner();
+  h += installBanner() + backupBanner();
   h += summaryCard(true);
   h += cycleMini();
 
@@ -874,6 +904,12 @@ V.today = () => {
   return { title: 'Сегодня', html: h };
 };
 
+function backupBanner() {
+  const un = unsaved(); if (!un.length) return '';
+  const since = LOCAL.backup_at || un[0].t, days = (Date.now() - Date.parse(since)) / 864e5;
+  if (days < (LOCAL.backup_at ? 7 : 3)) return '';
+  return `<div class="banner" style="margin-top:14px"><div>${un.length} ${plural(un.length, 'запись хранится', 'записи хранятся', 'записей хранятся')} только в этом телефоне${LOCAL.backup_at ? `, последняя копия ${fd(LOCAL.backup_at.slice(0, 10))}` : ''}. Отправьте копию, чтобы ничего не потерялось.</div><button type="button" data-act="exportLocal">Отправить</button></div>`;
+}
 function installBanner() {
   const standalone = navigator.standalone || matchMedia('(display-mode: standalone)').matches;
   let hidden = false; try { hidden = localStorage.getItem('mk-hide-install') === '1'; } catch (e) {}
@@ -1057,12 +1093,13 @@ V.more = () => {
     ['money', 'Расходы', money(D.expenses.reduce((s, x) => s + (x.amount_uzs || 0), 0)), '<rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/>'],
   ];
   if (D.cases.length) tiles.push(['cases', esc(D.cases[0].title.split(/[—:]/)[0].trim()), esc(D.cases[0].status || ''), '<path d="M5 16h14l-1.5-5h-11zM7 16v2M17 16v2M8 11l1.5-4h5L16 11"/>']);
-  tiles.push(['data', 'Данные и копия', 'Обновить, отправить', '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>']);
+  tiles.push(['journal', 'Журнал записей', `${(LOCAL.log || []).length} ${plural((LOCAL.log || []).length, 'действие', 'действия', 'действий')}`, '<path d="M6 4h12v16H6z"/><path d="M9 8h6M9 12h6M9 16h3"/>']);
+  tiles.push(['data', 'Данные и копия', unsaved().length ? `Не в копии: ${unsaved().length}` : 'Обновить, отправить', '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>']);
   const tile = v => tiles.find(x => x[0] === v);
   const group = vs => list(vs.map(tile).filter(Boolean).map(([v, t, s, ic, cls]) => row({ left: `<span class="ico ${cls || ''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ic}</svg></span>`, t, s, go: v })));
   let h = sec('Здоровье') + group(['summary', 'card', 'sos', 'history']);
   h += sec('Врачи и приёмы') + group(['prep', 'tasks', 'doctors', 'clinics']);
-  h += sec('Прочее') + group(['money', 'cases', 'data']);
+  h += sec('Прочее') + group(['money', 'cases', 'journal', 'data']);
   h += sec('Добавить');
   h += list([row({ t: 'Отметка цикла: месячные, симптомы, настроение…', go: 'clog', p: { d: todayISO() } })]) + '<div style="height:10px"></div>';
   h += list([['lab', 'Анализ'], ['med', 'Лекарство'], ['appt', 'Запись к врачу'], ['event', 'Прошедший приём или обследование'], ['doc', 'Документ или фото'], ['task', 'Дело или напоминание'], ['question', 'Вопрос врачу'], ['expense', 'Расход'], ['doctor', 'Врач'], ['clinic', 'Клиника']]
@@ -1407,13 +1444,61 @@ V.data = () => {
   let th = 'auto'; try { th = localStorage.getItem('mk-theme') || 'auto'; } catch (e) { }
   let h = sec('Данные от вас') + kv([['Программа', `<span class="num">${APP_VERSION}</span>`], ['Версия', m.version ? `<span class="num">${esc(m.version)}</span>` : '—'], ['Обновлено', m.updated ? esc(m.updated) : '—'], ['Проверено', lastCheck ? lastCheck.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : 'ещё нет']]);
   h += `<div class="btns"><button type="button" class="btn soft" data-act="refresh">Проверить обновления</button></div>`;
-  h += sec('Записи, сделанные на телефоне') + kv([['Всего изменений', String(localCount)], ['Хранятся', 'только в этом телефоне']]);
-  h += `<div class="btns"><button type="button" class="btn" data-act="exportLocal">Отправить копию</button></div><p class="note">Файл с вашими отметками, записями цикла и добавленными документами. Перешлите его в Telegram, чтобы эти записи попали в общую медкарту.</p>`;
+  const un = unsaved().length;
+  h += sec('Записи, сделанные на телефоне') + kv([['Всего записей', String(localCount)], ['В журнале', `${(LOCAL.log || []).length} ${plural((LOCAL.log || []).length, 'действие', 'действия', 'действий')}`], ['Последняя копия', LOCAL.backup_at ? new Date(LOCAL.backup_at).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '<span class="flag high">ещё не делали</span>'], ['Не в копии', un ? `<b>${un}</b> ${plural(un, 'запись', 'записи', 'записей')}` : 'всё в копии'], ['Хранение', '<span id="persistState">проверяю…</span>']]);
+  h += `<div class="btns"><button type="button" class="btn" data-act="exportLocal">Отправить копию</button><button type="button" class="btn ghost" data-act="pickImport">Восстановить из копии</button></div><input type="file" id="impFile" accept=".json,application/json" hidden>`;
+  h += list([row({ left: `<span class="ico">${icon('file')}</span>`, t: 'Журнал записей', s: 'Что и когда отмечено на телефоне', go: 'journal' })]);
+  h += `<p class="note">Копия — файл со всеми отметками, лекарствами, записями цикла, фото и журналом. Перешлите его в Telegram: так записи попадут в общую медкарту и не потеряются. «Восстановить» добавляет записи из файла к тем, что есть, ничего не стирая.</p>
+    <p class="note"><b>Не удаляйте медкарту с экрана «Домой» без свежей копии:</b> вместе с иконкой iPhone стирает записи, сделанные в ней.</p>`;
   h += sec('Календарь iPhone') + `<div class="btns" style="margin-top:0"><button type="button" class="btn soft" data-act="calAll">Все напоминания в Календарь</button></div><p class="note">Лекарства по времени, конец курсов, записи к врачам и сроки дел. Если добавить повторно, события могут задвоиться.</p>`;
   h += sec('Оформление') + `<div class="chips" style="margin-bottom:8px">${[['cats', 'Котики'], ['classic', 'Строгое']].map(([k, l]) => `<button type="button" class="chip" data-act="skin" data-s="${k}" aria-pressed="${SKIN() === k}">${k === 'cats' ? catMood('good') + ' ' : ''}${l}</button>`).join('')}</div><div class="chips">${[['auto', 'Как на телефоне'], ['light', 'Светлая'], ['dark', 'Тёмная']].map(([k, l]) => `<button type="button" class="chip" data-act="theme" data-t="${k}" aria-pressed="${th === k}">${l}</button>`).join('')}</div>`;
   h += sec('Безопасность') + `<div class="btns" style="margin-top:0"><button type="button" class="btn ghost" data-act="confirm" data-then="lockNow">Выйти и забыть пароль</button></div><p class="note">После выхода для входа понадобится пароль. Ваши записи на телефоне сохранятся.</p>`;
-  return { title: 'Данные и копия', html: h };
+  return {
+    title: 'Данные и копия', html: h, async after() {
+      $('#impFile').addEventListener('change', async e => { const f = e.target.files[0]; if (f) await importLocal(f); });
+      const el = $('#persistState'); let st = 'не удалось проверить';
+      try { const ok = await navigator.storage?.persisted?.(); st = ok ? 'надёжное: iPhone не очистит само' : 'обычное: откройте медкарту с экрана «Домой», тогда iPhone хранит записи надёжно'; } catch (e) { }
+      if (el?.isConnected) el.textContent = st;
+    }
+  };
 };
+
+let JOURNAL_N = 200;
+V.journal = () => {
+  const all = (LOCAL.log || []).slice().reverse(), arr = all.slice(0, JOURNAL_N), by = {};
+  for (const x of arr) { const d = new Date(x.t), k = isoOf(d); (by[k] ||= []).push({ ...x, hm: `${pad(d.getHours())}:${pad(d.getMinutes())}` }); }
+  let h = `<p class="lead" style="margin:4px 4px 0">Всё, что отмечено на этом телефоне: приём лекарств, записи цикла, добавленное и изменённое. ${LOCAL.backup_at ? `Серым — уже в копии от ${fd(LOCAL.backup_at.slice(0, 10))}.` : ''}</p>`;
+  if (!arr.length) h += `<div style="margin-top:12px">${empty('Пока ничего не отмечено')}</div>`;
+  for (const [d, xs] of Object.entries(by)) h += sec(`${fdLong(d)} ${d.slice(0, 4)}`) + list(xs.map(x => row({ left: `<div class="date-col">${x.hm}</div>`, t: LOCAL.backup_at && x.t <= LOCAL.backup_at ? `<span class="muted">${esc(x.m)}</span>` : esc(x.m) })));
+  if (all.length > arr.length) h += `<div class="btns"><button type="button" class="btn ghost" data-act="journalMore">Показать ещё</button></div>`;
+  return { title: 'Журнал записей', html: h };
+};
+// Восстановление из копии: записи из файла добавляются к имеющимся, ничего не стирается
+async function importLocal(file) {
+  let data;
+  try { data = JSON.parse(await file.text()); } catch (e) { toast('Это не файл копии медкарты'); return; }
+  if (data?.format !== 'medkarta-phone' || !data.local) { toast('Это не файл копии медкарты'); return; }
+  const src = data.local, cur = LOCAL; let n = 0;
+  for (const k of LIST_KEYS) { const have = new Set((cur.add[k] ||= []).map(x => x.id)); for (const x of src.add?.[k] || []) if (!have.has(x.id)) { cur.add[k].push(x); n++; } }
+  for (const [k, v] of Object.entries(src.intakes || {})) if (!(k in cur.intakes)) { cur.intakes[k] = v; n++; }
+  for (const [id, v] of Object.entries(src.patch || {})) { if (!cur.patch[id]) n++; cur.patch[id] = { ...v, ...(cur.patch[id] || {}) }; }
+  for (const id of src.deleted || []) if (!cur.deleted.includes(id)) cur.deleted.push(id);
+  cur.profile = { ...(src.profile || {}), ...cur.profile };
+  if (src.cycle) {
+    const c = cur.cycle, sc = src.cycle;
+    for (const [d, v] of Object.entries(sc.days || {})) if (!c.days[d]) { c.days[d] = v; n++; }
+    for (const p of sc.periods || []) if (!c.periods.some(q => Math.abs(daysBetween(q.start, p.start)) < 4)) { c.periods.push(p); n++; }
+    for (const x of sc.custom_sym || []) if (!c.custom_sym.includes(x)) c.custom_sym.push(x);
+    if (!c.set.onboarded && sc.set?.onboarded) c.set = { ...c.set, ...sc.set };
+  }
+  const seen = new Set((cur.log ||= []).map(x => x.t + x.m));
+  for (const x of src.log || []) if (!seen.has(x.t + x.m)) cur.log.push(x);
+  cur.log.sort((a, b) => a.t.localeCompare(b.t));
+  let nf = 0;
+  for (const [k, b64] of Object.entries(data.files || {})) { if (await idb.get('files', k).catch(() => null)) continue; await idb.put('files', k, new Blob([b64d(b64)], { type: mimeOf(k) })); nf++; }
+  logAct(`Восстановлено из копии от ${fd((data.exported || '').slice(0, 10))}: ${n} ${plural(n, 'запись', 'записи', 'записей')}${nf ? `, файлов ${nf}` : ''}`);
+  await saveLocal(n || nf ? `Восстановлено: ${n} ${plural(n, 'запись', 'записи', 'записей')}${nf ? `, файлов ${nf}` : ''}` : 'Всё из этой копии уже есть в телефоне');
+}
 
 function gone() { return { title: 'Не найдено', html: empty('Запись не найдена. Возможно, её удалили.') }; }
 
@@ -1592,7 +1677,7 @@ const FORMS = {
     save(v) {
       const f = { blood_group: v.blood_group || null, allergies: v.allergies || null, contraindications: v.contraindications || null, emergency_contact: v.emergency_contact || null, weight_kg: v.weight_kg ? +v.weight_kg : null, height_cm: v.height_cm ? +v.height_cm : null, phone: v.phone || null };
       if (f.weight_kg && f.height_cm) f.bmi = +(f.weight_kg / (f.height_cm / 100) ** 2).toFixed(2);
-      Object.assign(LOCAL.profile, f); saveLocal('Сохранено'); return { back: 1 };
+      Object.assign(LOCAL.profile, f); logAct('Изменена медкарта: ' + Object.entries(f).filter(([, v]) => v != null).map(([k]) => ({ blood_group: 'группа крови', allergies: 'аллергии', contraindications: 'противопоказания', emergency_contact: 'экстренный контакт', weight_kg: 'вес', height_cm: 'рост', phone: 'телефон', bmi: 'ИМТ' }[k] || k)).join(', ')); saveLocal('Сохранено'); return { back: 1 };
     }
   },
 };
@@ -1666,6 +1751,7 @@ function render() {
     if (t && t.classList.contains('big-title')) { e.className = 'meta'; if (e.textContent.trim()) t.after(e); else e.remove(); }
   });
   if (r.after) r.after();
+  decorateCats();
   hydratePhotos();
 }
 function go(v, p) { if (v === 'clog') CED = null; stack.push({ v, p }); render(); scrollTo(0, 0); try { history.pushState({ n: stack.length }, ''); } catch (e) { } }
@@ -1675,7 +1761,10 @@ $('#back').addEventListener('click', () => { if (history.state && history.state.
 document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => { stack = [{ v: t.dataset.tab }]; render(); scrollTo(0, 0); }));
 
 const A = {
-  intake({ k, s }) { if (LOCAL.intakes[k] === s || (!LOCAL.intakes[k] && D.intakes[k] === s)) delete LOCAL.intakes[k]; else LOCAL.intakes[k] = s; saveLocal(s === 'taken' && LOCAL.intakes[k] ? 'Отмечено: принято' : null); },
+  intake({ k, s }) {
+    const [mid, d, tm] = k.split('|'), off = LOCAL.intakes[k] === s || (!LOCAL.intakes[k] && D.intakes[k] === s);
+    logAct(`${byId('medications', mid)?.name || 'Лекарство'}, ${fd(d)} ${tm}: ${off ? 'отметка снята' : s === 'taken' ? 'принято' : 'пропущено'}`);
+    if (off) delete LOCAL.intakes[k]; else LOCAL.intakes[k] = s; saveLocal(s === 'taken' && LOCAL.intakes[k] ? (catsOn() ? 'Принято. Мур, умничка!' : 'Отмечено: принято') : null); },
   hideInstall() { try { localStorage.setItem('mk-hide-install', '1'); } catch (e) { } render(); },
   confirm(ds, b) {
     if (!b.dataset.armed) { b.dataset.armed = '1'; b.dataset.orig = b.textContent; b.textContent = 'Точно? Нажмите ещё раз'; setTimeout(() => { if (b.isConnected && b.dataset.armed) { delete b.dataset.armed; b.textContent = b.dataset.orig; } }, 4000); return; }
@@ -1683,7 +1772,7 @@ const A = {
   },
   del({ k, id }) { stack.pop(); deleteItem(k, id, 'Удалено'); },
   async delDoc({ id }) { const d = byId('documents', id); for (const f of d.files || []) await idb.del('files', f).catch(() => { }); stack.pop(); deleteItem('documents', id, 'Документ удалён'); },
-  delLabSet({ k }) { LOCAL.add.labs = LOCAL.add.labs.filter(l => labSetId(l) !== k); stack.pop(); saveLocal('Анализ удалён'); },
+  delLabSet({ k }) { logAct('Удалён анализ от ' + fd((LOCAL.add.labs.find(l => labSetId(l) === k) || {}).date)); LOCAL.add.labs = LOCAL.add.labs.filter(l => labSetId(l) !== k); stack.pop(); saveLocal('Анализ удалён'); },
   askDelExp({ id }, b) { if (!b.dataset.armed) { b.dataset.armed = '1'; b.querySelector('.row-s').textContent = 'Нажмите ещё раз, чтобы удалить'; setTimeout(() => { if (b.isConnected) render(); }, 3500); return; } deleteItem('expenses', id, 'Расход удалён'); },
   finishMed({ id }) { patchItem('medications', id, { status: 'completed', end: todayISO() }, 'Курс завершён'); },
   eventDone({ id }) { patchItem('events', id, { status: 'done' }, 'Отмечено. Добавьте заключение через «Изменить»'); },
@@ -1701,7 +1790,10 @@ const A = {
     for (const k of (await idb.keys('files')).filter(k => String(k).startsWith('local/'))) { const b = await idb.get('files', k); files[k] = b64e(await b.arrayBuffer()); }
     const out = { format: 'medkarta-phone', exported: new Date().toISOString(), base_version: D.meta.version || null, local: LOCAL, files };
     await shareFile(`medkarta-telefon-${todayISO()}.json`, new Blob([JSON.stringify(out)], { type: 'application/json' }), 'Файл сохранён в «Загрузки»');
+    LOCAL.backup_at = new Date().toISOString(); await idb.put('kv', 'local', LOCAL).catch(() => { }); render();
   },
+  pickImport() { $('#impFile')?.click(); },
+  journalMore() { JOURNAL_N += 200; const y = scrollY; render(); scrollTo(0, y); },
   async lockNow() { await idb.del('kv', 'key').catch(() => { }); KEY = null; showLock(); },
 };
 
@@ -1745,7 +1837,7 @@ const ICONS = {
 const icon = (n, cls = '') => `<svg class="i ${cls}" viewBox="0 0 24 24" fill="${n === 'paw' ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n] || ''}</svg>`;
 
 // Рыжий котик. Цвета — из темы (--cat-*), поэтому он хорош и днём, и ночью
-const CAT_EYES = '<g class="c-eyes"><ellipse cx="49" cy="45" rx="3.4" ry="4.4" fill="var(--cat-ink)"/><ellipse cx="71" cy="45" rx="3.4" ry="4.4" fill="var(--cat-ink)"/><circle cx="50.3" cy="43.4" r="1.2" fill="#fff"/><circle cx="72.3" cy="43.4" r="1.2" fill="#fff"/></g>';
+const CAT_EYES = '<g class="c-eyes"><ellipse cx="49" cy="45" rx="3.4" ry="4.4" fill="var(--cat-eye, var(--cat-ink))"/><ellipse cx="71" cy="45" rx="3.4" ry="4.4" fill="var(--cat-eye, var(--cat-ink))"/><circle cx="50.3" cy="43.4" r="1.2" fill="#fff"/><circle cx="72.3" cy="43.4" r="1.2" fill="#fff"/></g>';
 const CAT_FACE_BITS = '<path d="M57.4 52.2h5.2l-2.6 3z" fill="var(--cat-ear)"/><path d="M60 55.3q-2.6 3.6-5.6 1.6M60 55.3q2.6 3.6 5.6 1.6" stroke="var(--cat-ink)" stroke-width="1.7" fill="none" stroke-linecap="round"/>'
   + '<circle cx="42.5" cy="53.5" r="4" fill="var(--cat-ear)" opacity=".5"/><circle cx="77.5" cy="53.5" r="4" fill="var(--cat-ear)" opacity=".5"/>'
   + '<path d="M37 51l-11-2M37 55.5l-11 1M83 51l11-2M83 55.5l11 1" stroke="var(--cat-ink)" stroke-width="1.2" stroke-linecap="round" opacity=".45"/>';
@@ -1775,6 +1867,33 @@ function catSleep(cls = '') {
     <path d="M44 61.5h4l-2 2.3z" fill="var(--cat-ear)"/><circle cx="30" cy="63" r="3.6" fill="var(--cat-ear)" opacity=".5"/><circle cx="62" cy="63" r="3.6" fill="var(--cat-ear)" opacity=".5"/>
     <ellipse cx="62" cy="79" rx="10" ry="5.5" fill="var(--cat-belly)"/>
     <text x="104" y="22" class="c-z">z</text><text x="116" y="12" class="c-z" style="font-size:13px">z</text></svg>`;
+}
+// Котик-батон: лежит на карточке, хвост свисает
+function catLoaf(cls = '') {
+  return `<svg class="cat ${cls}" viewBox="0 0 140 64" aria-hidden="true">
+    <path class="c-tail" d="M119 58c9 1 12 8 10 19" fill="none" stroke="var(--cat-fur)" stroke-width="8" stroke-linecap="round" style="transform-origin:119px 58px"/>
+    <path d="M22 64c0-26 26-38 58-38s46 16 46 38z" fill="var(--cat-fur)"/>
+    <path d="M78 28q5 8 0 15M92 28q5 8 0 15M106 32q4 7 0 13" stroke="var(--cat-stripe)" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <g transform="translate(-12 -4) scale(.8)">${CAT_HEAD}${CAT_EYES}${CAT_FACE_BITS}</g>
+    <ellipse cx="26" cy="62" rx="9" ry="5" fill="var(--cat-belly)"/><ellipse cx="46" cy="62" rx="9" ry="5" fill="var(--cat-belly)"/></svg>`;
+}
+const CAT_COATS = ['c-gray', 'c-cream', 'c-black', 'c-calico', ''];
+const CAT_LOAF_AT = { meds: 'c-gray', labs: 'c-cream', docs: 'c-black', more: '', history: 'c-calico', doctors: 'c-gray', clinics: 'c-cream', money: 'c-black', tasks: 'c-calico', ccycles: 'c-gray', cstats: 'c-cream', creport: 'c-black', card: 'c-calico', prep: 'c-gray', data: 'c-cream', crem: 'c-calico', indicator: 'c-gray', labset: 'c-black' };
+const CAT_END = { today: 'Мур. На сегодня всё', cycle: 'Котик следит за календарём', meds: 'Котик напомнит о лекарствах', labs: 'Мяу! Анализы под присмотром', docs: 'Все бумажки на месте', more: 'Мрр… ты умничка' };
+// Котики на экранах: лежат на карточках, спят внизу страницы
+function decorateCats() {
+  if (!catsOn()) return;
+  const top = stack[stack.length - 1], main = $('#main');
+  if (top.v === 'today') { const pic = main.querySelector('.picture'); if (pic) pic.insertAdjacentHTML('beforebegin', `<div class="peek-spot">${catPeek('c-cream')}</div>`); }
+  const coat = CAT_LOAF_AT[top.v];
+  if (coat != null) {
+    const t = [...main.querySelectorAll('.list, .course, .card, .kv, .chart, .sos-card')].find(el => el.offsetHeight > 60);
+    if (t) t.insertAdjacentHTML('beforebegin', `<div class="loaf-spot${top.v.length % 2 ? ' left' : ''}">${catLoaf(coat)}</div>`);
+  }
+  if (stack.length === 1 && CAT_END[top.v]) {
+    const k = Object.keys(CAT_END).indexOf(top.v);
+    main.insertAdjacentHTML('beforeend', `<div class="page-end">${catSleep(CAT_COATS[k % CAT_COATS.length])}<p>${CAT_END[top.v]}</p></div>`);
+  }
 }
 // Котик-настроение: 9 мордочек
 function catMood(k, cls = '') {
@@ -1814,7 +1933,7 @@ function applyTheme() {
   if (t) root.dataset.theme = t; else delete root.dataset.theme;
   root.dataset.skin = SKIN();
   requestAnimationFrame(() => { const bg = getComputedStyle(root).getPropertyValue('--bg').trim(); document.querySelectorAll('meta[name="theme-color"]').forEach(m => { m.content = bg; m.removeAttribute('media'); }); });
-  const lc = $('#lockCat'); if (lc) lc.innerHTML = catsOn() ? catPeek('peek') : '';
+  const lc = $('#lockCat'); if (lc) lc.innerHTML = catsOn() ? catPeek('peek') + catPeek('peek c-gray') : '';
 }
 applyTheme();
 /* =========================================================
@@ -2207,8 +2326,10 @@ async function cSave(f) {
   if (day.weight != null && (day.weight < 20 || day.weight > 300)) throw 'Проверьте вес';
   const files = [...(f.querySelector('#cPhotos')?.files || [])];
   for (const file of files) { const k = `local/cycle/${d}/${Date.now().toString(36)}-${file.name}`; await idb.put('files', k, new Blob([await file.arrayBuffer()], { type: file.type || mimeOf(file.name) })); (day.photos ||= []).push(k); }
-  const had = cDay(d).flow;
+  const had = cDay(d).flow, before = cDay(d);
   const clean = cClean(day);
+  const changed = C_SECTIONS.filter(([k]) => cSecSum(k, before) !== cSecSum(k, clean || {})).map(([k, l]) => { const v = cSecSum(k, clean || {}); return v ? `${l.toLowerCase()}: ${v}` : `${l.toLowerCase()} — убрано`; });
+  if (changed.length || files.length) logAct(`Цикл, ${fd(d)}: ${changed.join('; ') || 'фото теста'}`);
   if (clean) CY().days[d] = clean; else delete CY().days[d];
   cSyncFlow(d, !!clean?.flow, !!had);
   CED = null; stack.pop();
@@ -2437,6 +2558,7 @@ FORMS.cperiod = {
     if (ps.some(q => q.id !== p.id && Math.abs(daysBetween(q.start, v.start)) < 10)) throw 'Рядом уже есть месячные с близкой датой';
     if (p.id) { Object.assign(ps.find(q => q.id === p.id), { start: v.start, end: v.end || null }); const prev = stack[stack.length - 2]; if (prev?.v === 'ccycle') prev.p = { s: v.start }; }
     else ps.push({ id: newId('per'), start: v.start, end: v.end || null });
+    logAct(`Цикл: месячные ${fd(v.start)}${v.end ? '–' + fd(v.end) : ''}${p.id ? ' (даты исправлены)' : ' добавлены'}`);
     CY().set.onboarded = true; saveLocal('Сохранено'); return { back: 1 };
   }
 };
@@ -2529,6 +2651,7 @@ V.csetup = () => {
         Object.assign(set, { cycle_len: len, period_len: per, luteal: lut, regular: g('cs_reg'), mode: g('cs_mode'), contraception: g('cs_con'), preg_lmp: g('cs_lmp') || null, onboarded: true });
         const last = g('cs_last');
         if (last && !CY().periods.length) { const end = addDays(last, per - 1); CY().periods.push({ id: newId('per'), start: last, end: end >= todayISO() ? null : end }); }
+        logAct(`Цикл: настройки — цикл ${len} дн., месячные ${per} дн., ${C_MODES.find(x => x[0] === set.mode)[1].toLowerCase()}${last ? ', последние месячные ' + fd(last) : ''}`);
         stack.pop(); if (!stack.length) stack = [{ v: 'cycle' }]; saveLocal('Сохранено');
       });
     }
@@ -2585,12 +2708,13 @@ Object.assign(A, {
     if (m.ps.some(p => p.start <= t && t <= m.pEnd(p) && daysBetween(p.start, t) < 10)) { toast('Месячные уже отмечены'); return; }
     CY().periods.push({ id: newId('per'), start: t, end: null });
     const d = CY().days[t] ||= {}; d.flow ||= 3;
-    saveLocal('Отмечено: месячные начались. Интенсивность можно уточнить');
+    logAct(`Цикл: месячные начались ${fd(t)}`);
+    saveLocal(catsOn() ? 'Отмечено. Котик приносит грелку и плед' : 'Отмечено: месячные начались. Интенсивность можно уточнить');
   },
   cEnd() {
     const t = todayISO(), p = cModel().last;
     if (!p || p.end || daysBetween(p.start, t) > 15) { toast('Сначала отметьте начало'); return; }
-    p.end = t; saveLocal('Отмечено: месячные закончились');
+    p.end = t; logAct(`Цикл: месячные закончились ${fd(t)}`); saveLocal('Отмечено: месячные закончились');
   },
   cChip({ f, v, m }, b) {
     const day = CED.day, typed = /^\d+$/.test(v) && ['flow', 'sleep.q', 'sleep.insomnia'].includes(f) ? +v : v;
@@ -2610,12 +2734,12 @@ Object.assign(A, {
     const y = scrollY; render(); scrollTo(0, y);
   },
   cTrack({ k }, b) { const t = CY().set.track ||= {}; t[k] = t[k] === false; b.setAttribute('aria-pressed', t[k] !== false); },
-  cDelDay({ d }) { for (const f of cDay(d).photos || []) idb.del('files', f).catch(() => { }); const had = cDay(d).flow; delete CY().days[d]; cSyncFlow(d, false, !!had); stack.pop(); saveLocal('Записи дня удалены'); },
-  cDelPhoto({ d, f }) { const day = CY().days[d]; if (day?.photos) { day.photos = day.photos.filter(x => x !== f); if (!day.photos.length) delete day.photos; } idb.del('files', f).catch(() => { }); saveLocal('Фото удалено'); },
-  cDelPeriod({ id }) { CY().periods = CY().periods.filter(p => p.id !== id); stack.pop(); saveLocal('Удалено'); },
+  cDelDay({ d }) { for (const f of cDay(d).photos || []) idb.del('files', f).catch(() => { }); const had = cDay(d).flow; delete CY().days[d]; cSyncFlow(d, false, !!had); logAct(`Цикл, ${fd(d)}: записи дня очищены`); stack.pop(); saveLocal('Записи дня удалены'); },
+  cDelPhoto({ d, f }) { logAct(`Цикл, ${fd(d)}: удалено фото теста`); const day = CY().days[d]; if (day?.photos) { day.photos = day.photos.filter(x => x !== f); if (!day.photos.length) delete day.photos; } idb.del('files', f).catch(() => { }); saveLocal('Фото удалено'); },
+  cDelPeriod({ id }) { logAct(`Цикл: удалены месячные с ${fd(CY().periods.find(p => p.id === id)?.start)}`); CY().periods = CY().periods.filter(p => p.id !== id); stack.pop(); saveLocal('Удалено'); },
   async cWipe() {
     for (const k of (await idb.keys('files').catch(() => [])).filter(k => String(k).startsWith('local/cycle/'))) await idb.del('files', k).catch(() => { });
-    LOCAL.cycle = emptyCycle(); stack = [{ v: 'cycle' }]; saveLocal('Данные цикла удалены');
+    LOCAL.cycle = emptyCycle(); logAct('Цикл: удалены все данные цикла'); stack = [{ v: 'cycle' }]; saveLocal('Данные цикла удалены');
   },
   cRange({ r }) { C_RANGE = r; render(); },
   cPrint() { window.print(); },
@@ -2684,6 +2808,8 @@ $('#lockForm').addEventListener('submit', async e => {
     KEY = await idb.get('kv', 'key');
     SALT = await idb.get('kv', 'salt');
   } catch (e) { LOCAL = LOCAL || emptyLocal(); }
+  LOCAL.log ||= []; if (!('backup_at' in LOCAL)) LOCAL.backup_at = null;
+  if (navigator.storage?.persist) navigator.storage.persist().catch(() => { });
   { const e = emptyCycle(), c = LOCAL.cycle || {}; LOCAL.cycle = { ...e, ...c, set: { ...e.set, ...(c.set || {}), track: { ...e.set.track, ...(c.set?.track || {}) } } }; }
   if (!KEY || !SERVER) { showLock(); return; }
   build(); showApp();
