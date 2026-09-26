@@ -27,18 +27,29 @@
   --good: #23864F; --good-strong: #1B6E40; --good-bg: #E3F3E8; --good-ink: #133824; --good-ink-2: #3E6650; --good-line: #CBE6D4; --good-track: #C6E4D0;
   --sans: "Golos Text", -apple-system, "Segoe UI", Roboto, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --per: #C2415B; --per-soft: #F8E1E6; --fert: #2F8F6B; --fert-soft: #DCF0E5; --ovu: #C98A0B;
   --r: 14px;
   --tabbar: 64px;
 }
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     color-scheme: dark;
     --bg: #101412; --surface: #181E1B; --surface-2: #212925; --ink: #E4EAE6; --muted: #95A39B;
     --line: #2B3530; --accent: #6CC3A0; --accent-ink: #0D1A14; --accent-soft: #1D3229;
     --hi: #F08A7C; --hi-soft: #3A221E; --lo: #8DB2EC; --lo-soft: #1E2A3C; --warn: #E0B060; --warn-soft: #352A17;
     --ok: #73C995;
     --good: #6FD39A; --good-strong: #8BE0AE; --good-bg: #15291D; --good-ink: #DDF3E5; --good-ink-2: #9CC7AE; --good-line: #22402E; --good-track: #23412F;
+    --per: #F28A9E; --per-soft: #3A1F27; --fert: #6FD3A6; --fert-soft: #173026; --ovu: #F0C04A;
   }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #101412; --surface: #181E1B; --surface-2: #212925; --ink: #E4EAE6; --muted: #95A39B;
+  --line: #2B3530; --accent: #6CC3A0; --accent-ink: #0D1A14; --accent-soft: #1D3229;
+  --hi: #F08A7C; --hi-soft: #3A221E; --lo: #8DB2EC; --lo-soft: #1E2A3C; --warn: #E0B060; --warn-soft: #352A17;
+  --ok: #73C995;
+  --good: #6FD39A; --good-strong: #8BE0AE; --good-bg: #15291D; --good-ink: #DDF3E5; --good-ink-2: #9CC7AE; --good-line: #22402E; --good-track: #23412F;
+  --per: #F28A9E; --per-soft: #3A1F27; --fert: #6FD3A6; --fert-soft: #173026; --ovu: #F0C04A;
 }
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html { -webkit-text-size-adjust: 100%; }
@@ -71,7 +82,7 @@ main { max-width: 680px; margin: 0 auto; padding: 8px 16px 32px; }
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; background: var(--surface);
   border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom, 0px);
 }
-.tabbar-in { max-width: 680px; margin: 0 auto; display: grid; grid-template-columns: repeat(5, 1fr); height: var(--tabbar); }
+.tabbar-in { max-width: 680px; margin: 0 auto; display: grid; grid-template-columns: repeat(6, 1fr); height: var(--tabbar); }
 .tab { border: 0; background: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 11px; font-weight: 500; color: var(--muted); }
 .tab svg { width: 24px; height: 24px; }
 .tab[aria-current="page"] { color: var(--accent); }
@@ -292,6 +303,66 @@ form.f { display: grid; gap: 14px; }
 .banner button { border: 0; background: none; color: var(--accent); font-weight: 600; padding: 0; }
 .empty { text-align: center; color: var(--muted); padding: 24px 16px; background: var(--surface); border-radius: var(--r); }
 .disclaimer { font-size: 13px; color: var(--muted); margin: 18px 4px 0; font-style: italic; }
+/* ---------- цикл ---------- */
+.cy-head { background: var(--surface); border-radius: 18px; padding: 16px; display: grid; grid-template-columns: 150px 1fr; gap: 14px; align-items: center; }
+.cy-head .bar { grid-column: 1 / -1; }
+.cy-big { font-size: 26px; font-weight: 700; line-height: 1.15; }
+.cy-head:has(.cy-big) { display: block; }
+.ring { width: 150px; height: 150px; display: block; }
+.ring text { fill: var(--ink); }
+.ring-n { font: 700 40px var(--sans); font-variant-numeric: tabular-nums; }
+.ring-s { font: 500 11.5px var(--sans); fill: var(--muted) !important; }
+.cy-facts { display: grid; gap: 10px; min-width: 0; }
+.cy-facts div { display: grid; }
+.cy-facts b { font-weight: 600; font-size: 16px; line-height: 1.25; overflow-wrap: anywhere; }
+.cy-facts span { font-size: 13px; color: var(--muted); line-height: 1.3; }
+@media (max-width: 360px) { .cy-head { grid-template-columns: 1fr; justify-items: center; } .cy-facts { justify-self: stretch; } }
+.qa-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.qa { border: 0; background: var(--surface); border-radius: 12px; min-height: 64px; padding: 8px 4px; display: grid; justify-items: center; align-content: center; gap: 2px; font-size: 13px; font-weight: 500; color: var(--ink); }
+.qa span { font-size: 20px; line-height: 1.1; }
+.qa:active { background: var(--surface-2); }
+.qa.per { background: var(--per-soft); color: var(--per); font-weight: 600; }
+.cal-nav { display: flex; gap: 4px; }
+h2.sec .cal-nav button { min-width: 36px; min-height: 32px; border-radius: 10px; background: var(--surface); font-size: 18px; padding: 0 10px; }
+h2.sec .cal-nav button:not([aria-label]) { font-size: 14px; }
+.cal { background: var(--surface); border-radius: var(--r); padding: 10px 8px; }
+.cal-w, .cal-g { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+.cal-w span { text-align: center; font-size: 11.5px; color: var(--muted); padding-bottom: 4px; }
+.cal-g button { border: 0; background: none; border-radius: 10px; min-height: 46px; padding: 3px 0 2px; display: grid; justify-items: center; align-content: start; gap: 0; color: var(--ink); position: relative; }
+.cal-g b { font: 500 15px var(--mono); font-variant-numeric: tabular-nums; line-height: 1.5; }
+.cal-g small { font-size: 9px; line-height: 1.2; letter-spacing: -1px; min-height: 11px; }
+.cal-g .per { background: var(--per-soft); color: var(--per); }
+.cal-g .per b { font-weight: 600; }
+.cal-g .pred { box-shadow: inset 0 0 0 1.5px var(--per); color: var(--per); border-radius: 10px; }
+.cal-g .fert { background: var(--fert-soft); }
+.cal-g .today { box-shadow: inset 0 0 0 2px var(--ink); }
+.cal-g .fut:not(.per):not(.pred):not(.fert) b { color: var(--muted); }
+.cal-g .star { font-style: normal; color: var(--ovu); font-size: 10px; position: absolute; top: 1px; right: 4px; }
+.cal-g button:active { background: var(--surface-2); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 8px 4px 0; font-size: 12.5px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 5px; }
+.lg { width: 12px; height: 12px; border-radius: 4px; display: inline-block; }
+.lg.per { background: var(--per-soft); box-shadow: inset 0 0 0 1px var(--per); }
+.lg.pred { box-shadow: inset 0 0 0 1.5px var(--per); }
+.lg.fert { background: var(--fert-soft); box-shadow: inset 0 0 0 1px var(--fert); }
+.ico.per { background: var(--per-soft); color: var(--per); font: 600 14px var(--mono); }
+.chip em { font-style: normal; font-size: 12px; opacity: .85; }
+.chip { min-height: 38px; }
+.card.stack > .field + .field { margin-top: 4px; }
+.scales { display: grid; gap: 4px; }
+.scale { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 0 10px; font-size: 15px; color: var(--ink); font-weight: 400; }
+.scale output { font: 500 15px var(--mono); color: var(--accent); min-width: 2ch; text-align: right; }
+.scale input { grid-column: 1 / -1; width: 100%; accent-color: var(--accent); min-height: 30px; }
+.scale input.unset { opacity: .45; }
+.banner.warnb { background: var(--warn-soft); }
+.report { white-space: pre-wrap; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+.field .chips .chip { font-size: 14.5px; padding: 7px 12px; }
+@media print {
+  body { background: #fff; padding: 0; }
+  body * { visibility: hidden; }
+  #cRep, #cRep * { visibility: visible; color: #000; }
+  #cRep { position: absolute; left: 0; top: 0; width: 100%; font-size: 12pt; }
+}
 @media (prefers-reduced-motion: no-preference) {
   main { animation: in .18s ease-out; }
   @keyframes in { from { opacity: .4; transform: translateY(4px); } to { opacity: 1; transform: none; } }
@@ -332,6 +403,7 @@ form.f { display: grid; gap: 14px; }
   <nav class="tabbar" aria-label="Разделы">
     <div class="tabbar-in">
       <button class="tab" data-tab="today" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/><circle cx="12" cy="15" r="1.6" fill="currentColor" stroke="none"/></svg>Сегодня</button>
+      <button class="tab" data-tab="cycle" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5c3.2 3.8 6 7.2 6 10.6a6 6 0 0 1-12 0c0-3.4 2.8-6.8 6-10.6z"/><path d="M9.5 14.5a2.6 2.6 0 0 0 2.5 2.4"/></svg>Цикл</button>
       <button class="tab" data-tab="meds" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="3" y="8.5" width="18" height="7" rx="3.5" transform="rotate(-40 12 12)"/><path d="m9.3 8.8 5.4 6.4"/></svg>Лечение</button>
       <button class="tab" data-tab="labs" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6l-5.2 9a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9V3"/><path d="M7.5 15h9"/></svg>Анализы</button>
       <button class="tab" data-tab="docs" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>Документы</button>
@@ -343,7 +415,7 @@ form.f { display: grid; gap: 14px; }
 
 <script>
 'use strict';
-const APP_VERSION = '26.09.2026 10:00';
+const APP_VERSION = '26.09.2026 20:00';
 /* =========================================================
    Справочники и форматирование
    ========================================================= */
@@ -671,6 +743,7 @@ V.today = () => {
   h += `<p class="lead">${doses.length ? (left ? `Осталось ${left} ${plural(left, 'приём', 'приёма', 'приёмов')} лекарств` : 'Все лекарства на сегодня отмечены') : 'Лекарств по расписанию сегодня нет'}${openTasks.length ? ` · ${openTasks.length} ${plural(openTasks.length, 'дело', 'дела', 'дел')}` : ''}</p>`;
   h += installBanner();
   h += summaryCard(true);
+  h += cycleMini();
 
   if (doses.length) {
     h += sec('Лекарства сегодня');
@@ -891,6 +964,7 @@ V.more = () => {
   h += sec('Врачи и приёмы') + group(['prep', 'tasks', 'doctors', 'clinics']);
   h += sec('Прочее') + group(['money', 'cases', 'data']);
   h += sec('Добавить');
+  h += list([row({ t: 'Отметка цикла: месячные, симптомы, настроение…', go: 'clog', p: { d: todayISO() } })]) + '<div style="height:10px"></div>';
   h += list([['lab', 'Анализ'], ['med', 'Лекарство'], ['appt', 'Запись к врачу'], ['event', 'Прошедший приём или обследование'], ['doc', 'Документ или фото'], ['task', 'Дело или напоминание'], ['question', 'Вопрос врачу'], ['expense', 'Расход'], ['doctor', 'Врач'], ['clinic', 'Клиника']]
     .map(([k, t]) => row({ t, go: 'form', p: { k } })));
   return { title: 'Ещё', html: h };
@@ -1229,12 +1303,14 @@ V.search = () => {
 
 V.data = () => {
   const m = D.meta;
-  const localCount = LIST_KEYS.reduce((s, k) => s + LOCAL.add[k].length, 0) + Object.keys(LOCAL.intakes).length + Object.keys(LOCAL.patch).length;
+  const localCount = LIST_KEYS.reduce((s, k) => s + LOCAL.add[k].length, 0) + Object.keys(LOCAL.intakes).length + Object.keys(LOCAL.patch).length + Object.keys(LOCAL.cycle.days).length + LOCAL.cycle.periods.length;
+  let th = 'auto'; try { th = localStorage.getItem('mk-theme') || 'auto'; } catch (e) { }
   let h = sec('Данные от вас') + kv([['Программа', `<span class="num">${APP_VERSION}</span>`], ['Версия', m.version ? `<span class="num">${esc(m.version)}</span>` : '—'], ['Обновлено', m.updated ? esc(m.updated) : '—'], ['Проверено', lastCheck ? lastCheck.toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : 'ещё нет']]);
   h += `<div class="btns"><button type="button" class="btn soft" data-act="refresh">Проверить обновления</button></div>`;
   h += sec('Записи, сделанные на телефоне') + kv([['Всего изменений', String(localCount)], ['Хранятся', 'только в этом телефоне']]);
-  h += `<div class="btns"><button type="button" class="btn" data-act="exportLocal">Отправить копию</button></div><p class="note">Файл с вашими отметками и добавленными документами. Перешлите его в Telegram, чтобы эти записи попали в общую медкарту.</p>`;
+  h += `<div class="btns"><button type="button" class="btn" data-act="exportLocal">Отправить копию</button></div><p class="note">Файл с вашими отметками, записями цикла и добавленными документами. Перешлите его в Telegram, чтобы эти записи попали в общую медкарту.</p>`;
   h += sec('Календарь iPhone') + `<div class="btns" style="margin-top:0"><button type="button" class="btn soft" data-act="calAll">Все напоминания в Календарь</button></div><p class="note">Лекарства по времени, конец курсов, записи к врачам и сроки дел. Если добавить повторно, события могут задвоиться.</p>`;
+  h += sec('Оформление') + `<div class="chips">${[['auto', 'Как на телефоне'], ['light', 'Светлая'], ['dark', 'Тёмная']].map(([k, l]) => `<button type="button" class="chip" data-act="theme" data-t="${k}" aria-pressed="${th === k}">${l}</button>`).join('')}</div>`;
   h += sec('Безопасность') + `<div class="btns" style="margin-top:0"><button type="button" class="btn ghost" data-act="confirm" data-then="lockNow">Выйти и забыть пароль</button></div><p class="note">После выхода для входа понадобится пароль. Ваши записи на телефоне сохранятся.</p>`;
   return { title: 'Данные и копия', html: h };
 };
@@ -1492,7 +1568,7 @@ function render() {
   if (r.after) r.after();
   hydratePhotos();
 }
-function go(v, p) { stack.push({ v, p }); render(); scrollTo(0, 0); try { history.pushState({ n: stack.length }, ''); } catch (e) { } }
+function go(v, p) { if (v === 'clog') CED = null; stack.push({ v, p }); render(); scrollTo(0, 0); try { history.pushState({ n: stack.length }, ''); } catch (e) { } }
 function back() { if (stack.length > 1) { stack.pop(); render(); } }
 window.addEventListener('popstate', () => { if (stack.length > 1) { stack.pop(); render(); } });
 $('#back').addEventListener('click', () => { if (history.state && history.state.n) history.back(); else back(); });
@@ -1537,6 +1613,818 @@ document.addEventListener('click', e => {
   if (b.dataset.go) go(b.dataset.go, b.dataset.p ? JSON.parse(b.dataset.p) : {});
   else if (A[b.dataset.act]) A[b.dataset.act](b.dataset, b, e);
 });
+
+/* =========================================================
+   Цикл и женское здоровье — записи только в этом телефоне (LOCAL.cycle)
+   ========================================================= */
+const C_SECTIONS = [['flow', 'Месячные', '🩸'], ['sym', 'Симптомы', '⚠️'], ['mood', 'Настроение', '🙂'], ['dis', 'Выделения', '💧'], ['sex', 'Секс', '❤️'],
+  ['sleep', 'Сон', '😴'], ['bbt', 'Базальная температура', '🌡️'], ['tests', 'Тесты и овуляция', '🧪'], ['food', 'Аппетит', '🍫'],
+  ['events', 'События', '📌'], ['body', 'Вес, вода, активность', '🏃'], ['note', 'Заметка', '📝']];
+const C_FLOW = ['', 'Очень слабое', 'Слабое', 'Среднее', 'Сильное', 'Очень сильное'];
+const C_FLOW_X = ['Сгустки', 'Необычный цвет', 'Необычный запах', 'Боль', 'Частая смена средств'];
+const C_PRODUCTS = ['Прокладки', 'Тампоны', 'Менструальная чаша', 'Менструальные трусы', 'Другое'];
+const C_SYM = {
+  'Физические': ['Боль внизу живота', 'Боль в пояснице', 'Головная боль', 'Мигрень', 'Тошнота', 'Головокружение', 'Слабость', 'Усталость', 'Сонливость', 'Бессонница',
+    'Вздутие', 'Газообразование', 'Запор', 'Диарея', 'Изменение аппетита', 'Чувствительность груди', 'Боль в груди', 'Отёчность', 'Акне', 'Жирность кожи',
+    'Сухость кожи', 'Выпадение волос', 'Изменение либидо', 'Приливы', 'Озноб'],
+  'Гинекологические': ['Зуд', 'Жжение', 'Сухость', 'Болезненность', 'Необычные выделения', 'Изменение количества выделений', 'Изменение цвета выделений',
+    'Изменение консистенции', 'Неприятный запах', 'Боль при мочеиспускании', 'Боль во время секса', 'Кровянистые выделения вне месячных'],
+};
+const C_LVL = ['', 'слабо', 'умеренно', 'сильно', 'очень сильно'];
+const C_MOODS = [['great', '😄', 'Отличное', 5], ['good', '🙂', 'Хорошее', 4], ['neutral', '😐', 'Нейтральное', 3], ['sad', '😔', 'Грустное', 2], ['vsad', '😢', 'Очень грустное', 1],
+  ['irrit', '😡', 'Раздражённое', 2], ['anx', '😰', 'Тревожное', 2], ['tired', '😴', 'Уставшее', 2], ['energ', '🤩', 'Энергичное', 4]];
+const C_SCALES = [['mood', 'Настроение'], ['energy', 'Энергия'], ['stress', 'Стресс'], ['anxiety', 'Тревожность'], ['motivation', 'Мотивация'], ['focus', 'Концентрация'],
+  ['irrit', 'Раздражительность'], ['social', 'Желание общаться'], ['esteem', 'Самооценка']];
+const C_FOOD = ['Повышенный аппетит', 'Сниженный аппетит', 'Тяга к сладкому', 'Тяга к солёному', 'Переедание', 'Тяга к определённым продуктам'];
+const C_DIS = {
+  amount: ['Количество', ['Отсутствуют', 'Очень мало', 'Мало', 'Средне', 'Много']],
+  color: ['Цвет', ['Прозрачные', 'Белые', 'Молочные', 'Кремовые', 'Желтоватые', 'Зелёные', 'Коричневые', 'Розовые', 'Красные', 'Сероватые']],
+  cons: ['Консистенция', ['Водянистые', 'Кремовые', 'Слизистые', 'Тягучие', 'Густые', 'Творожистые', 'Другое']],
+  smell: ['Запах', ['Обычный', 'Отсутствует', 'Необычный', 'Сильный', 'Неприятный']],
+};
+const C_DIS_X = ['Зуд', 'Жжение', 'Боль'];
+const C_SEX_ACTS = ['Секс', 'Мастурбация', 'Желание секса', 'Нет желания'];
+const C_SEX_PROT = ['Защищённый', 'Незащищённый'];
+const C_SEX_METHOD = ['Презерватив', 'Другой метод контрацепции'];
+const C_SEX_EJAC = ['Эякуляция во влагалище', 'Без эякуляции'];
+const C_SEX_X = ['Боль', 'Сухость', 'Кровотечение после секса'];
+const C_SAT = ['1', '2', '3', '4', '5'];
+const C_OVT = ['Отрицательный', 'Слабоположительный', 'Положительный', 'Неизвестный'];
+const C_PGT = ['Отрицательный', 'Сомнительный', 'Положительный'];
+const C_OVC = ['Тест на овуляцию', 'Базальная температура', 'УЗИ', 'Цервикальная слизь', 'Другое'];
+const C_BBT_M = ['Ректально', 'Орально', 'Вагинально', 'Подмышкой'];
+const C_EVENTS = ['Стресс', 'Путешествие', 'Болезнь', 'Антибиотики', 'Алкоголь', 'Изменение режима сна', 'Интенсивные тренировки', 'Перелёт', 'Изменение веса', 'Медицинская процедура'];
+const C_ACT = ['Прогулка', 'Тренировка', 'Йога', 'Бег', 'Силовая', 'Другое'];
+const C_SLEEP_Q = ['Плохой', 'Так себе', 'Нормальный', 'Хороший', 'Отличный'];
+const C_CONTRA = [['', 'Не использую'], ['coc', 'Комбинированные ОК'], ['pop', 'Прогестиновые таблетки'], ['ring', 'Кольцо'], ['patch', 'Пластырь'], ['iud', 'ВМС'], ['implant', 'Имплант'], ['condom', 'Презерватив'], ['other', 'Другое']];
+const C_HORMONAL = new Set(['coc', 'pop', 'ring', 'patch', 'implant']);
+const C_MODES = [['track', 'Отслеживаю цикл'], ['plan', 'Планирую беременность'], ['pregnant', 'Я беременна']];
+const C_PHASE = { men: 'Менструация', fol: 'Фолликулярная фаза', ovu: 'Овуляция', lut: 'Лютеиновая фаза' };
+const C_FORECAST = 'Расчёт — прогноз по вашим прошлым циклам. Он не определяет овуляцию точно и не является методом контрацепции.';
+const C_OBS_NOTE = 'Это наблюдения по вашим записям, а не диагноз и не доказанная причина. Если что-то беспокоит — обсудите с врачом.';
+
+const emptyCycle = () => ({ v: 1, set: { onboarded: false, cycle_len: 28, period_len: 5, luteal: 14, regular: 'yes', mode: 'track', contraception: '', preg_lmp: null,
+  track: Object.fromEntries(C_SECTIONS.map(s => [s[0], true])), diary_time: '21:00', bbt_time: '07:00' }, periods: [], days: {}, custom_sym: [] });
+const CY = () => LOCAL.cycle;
+const cTracked = k => k === 'note' || CY().set.track?.[k] !== false;
+const cDay = d => CY().days[d] || {};
+const mean = a => a.length ? a.reduce((s, x) => s + x, 0) / a.length : null;
+const median = a => { if (!a.length) return null; const s = a.slice().sort((x, y) => x - y), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+const dn = n => `${n} ${plural(Math.abs(n), 'день', 'дня', 'дней')}`;
+const r1 = x => x == null ? '—' : num(Math.round(x * 10) / 10);
+const getP = (o, p) => p.split('.').reduce((a, k) => a == null ? a : a[k], o);
+function setP(o, p, v) { const ks = p.split('.'), last = ks.pop(); let t = o; for (const k of ks) t = t[k] ||= {}; if (v == null || v === '') delete t[last]; else t[last] = v; }
+function cClean(o) {
+  if (Array.isArray(o)) return o.length ? o : undefined;
+  if (o && typeof o === 'object') { for (const k of Object.keys(o)) { const v = cClean(o[k]); if (v === undefined || v === '' || v === null) delete o[k]; else o[k] = v; } return Object.keys(o).length ? o : undefined; }
+  return o;
+}
+function sleepHours(s) {
+  if (!s?.bed || !s?.wake) return null;
+  const [a, b] = [s.bed, s.wake].map(t => +t.slice(0, 2) * 60 + +t.slice(3, 5));
+  let m = b - a; if (m <= 0) m += 1440; return m / 60;
+}
+const moodScore = d => { const m = cDay(d); if (m.sc?.mood != null) return m.sc.mood; const s = (m.mood || []).map(k => C_MOODS.find(x => x[0] === k)?.[3]).filter(Boolean); return s.length ? mean(s) * 2 : null; };
+
+/* ---------- модель цикла ---------- */
+function cModel() {
+  if (cModel.d === D && cModel.t === todayISO()) return cModel.m;
+  const set = CY().set, t = todayISO(), luteal = +set.luteal || 14;
+  const ps = CY().periods.slice().sort((a, b) => a.start.localeCompare(b.start));
+  const cycles = [];
+  for (let i = 0; i < ps.length - 1; i++) cycles.push({ n: i + 1, start: ps[i].start, end: addDays(ps[i + 1].start, -1), len: daysBetween(ps[i].start, ps[i + 1].start), p: ps[i] });
+  const valid = cycles.filter(c => c.len >= 15 && c.len <= 90), recent = valid.slice(-6);
+  const avgLen = recent.length ? Math.round(mean(recent.map(c => c.len))) : +set.cycle_len || 28;
+  const perLens = ps.filter(p => p.end).map(p => daysBetween(p.start, p.end) + 1).filter(n => n > 0 && n <= 15);
+  const avgPer = perLens.length ? Math.round(mean(perLens.slice(-6))) : +set.period_len || 5;
+  const last = ps[ps.length - 1] || null;
+  const m = { set, ps, cycles, valid, recent, avgLen, avgPer, perLens, last, luteal, t };
+  m.pEnd = p => {
+    if (p.end) return p.end;
+    let lastFlow = null;
+    for (let d = p.start; d <= addDays(p.start, 12); d = addDays(d, 1)) if (cDay(d).flow) lastFlow = d;
+    if (daysBetween(p.start, t) < avgPer + 3) return [t, lastFlow || p.start].sort().pop();
+    return lastFlow && lastFlow > addDays(p.start, avgPer - 1) ? lastFlow : addDays(p.start, avgPer - 1);
+  };
+  // Овуляция в цикле: подтверждённая, по тесту, по температуре, иначе расчётная
+  m.ovOf = (start, len) => {
+    const end = addDays(start, len - 1);
+    for (let d = start; d <= end; d = addDays(d, 1)) if (cDay(d).ovc) return { d, src: 'confirmed' };
+    for (let d = start; d <= end; d = addDays(d, 1)) if (cDay(d).ovt === 'Положительный') return { d: addDays(d, 1), src: 'test' };
+    const sh = bbtShift(start, end); if (sh) return { d: sh.ov, src: 'bbt' };
+    return { d: addDays(start, len - luteal), src: 'calc' };
+  };
+  if (last) {
+    m.nextStart = addDays(last.start, avgLen);
+    m.late = m.nextStart < t ? daysBetween(m.nextStart, t) : 0;
+    const curLen = m.late ? daysBetween(last.start, t) + 1 : avgLen;
+    m.cur = { start: last.start, len: curLen, day: daysBetween(last.start, t) + 1, ov: m.ovOf(last.start, m.late ? avgLen : curLen) };
+    // Прогноз на 4 цикла вперёд
+    // При задержке прогноз не строим: сначала нужно отметить начало месячных
+    m.future = m.late ? [] : [0, 1, 2, 3].map(k => addDays(m.nextStart, k * avgLen));
+  }
+  cModel.d = D; cModel.t = t; cModel.m = m;
+  return m;
+}
+function bbtShift(from, to) {
+  const pts = [];
+  for (let d = from; d <= to; d = addDays(d, 1)) { const v = cDay(d).bbt?.t; if (v) pts.push({ d, t: v }); }
+  for (let i = 6; i + 2 < pts.length; i++) {
+    const cover = Math.max(...pts.slice(i - 6, i).map(p => p.t));
+    if (pts[i].t > cover && pts[i + 1].t > cover && pts[i + 2].t >= cover + 0.2) return { at: pts[i].d, ov: pts[i - 1].d, cover };
+  }
+  return null;
+}
+// Что происходит в конкретный день
+function cInfo(d) {
+  const m = cModel(); if (!m.last) return {};
+  let p = null;
+  for (const x of m.ps) if (x.start <= d) p = x;
+  const o = {};
+  if (!p) return o;
+  const i = m.ps.indexOf(p), next = m.ps[i + 1];
+  if (!next && d > m.t) {
+    // будущее: остаток текущего цикла и прогнозные циклы
+    if (m.late) return o;
+    let s = null; for (const f of m.future) if (f <= d) s = f;
+    o.cday = daysBetween(s || p.start, d) + 1; o.predicted = true;
+    const ov = s ? addDays(s, m.avgLen - m.luteal) : m.cur.ov.d;
+    o.ov = ov;
+    if (s ? o.cday <= m.avgPer : !p.end && o.cday <= m.avgPer) o.predPeriod = true;
+    fillPhase(o, d, ov, !!o.predPeriod);
+    return o;
+  }
+  const len = next ? daysBetween(p.start, next.start) : m.late ? m.cur.len : m.avgLen;
+  o.cday = daysBetween(p.start, d) + 1; o.start = p.start;
+  o.inPeriod = d <= m.pEnd(p);
+  const ov = next ? m.ovOf(p.start, len) : m.cur.ov;
+  o.ov = ov.d; o.ovSrc = ov.src;
+  fillPhase(o, d, ov.d, o.inPeriod, !next);
+  return o;
+}
+function fillPhase(o, d, ov, inPeriod, current = true) {
+  const k = daysBetween(ov, d);
+  o.phase = inPeriod ? 'men' : k < -1 ? 'fol' : k <= 1 ? 'ovu' : 'lut';
+  if (current && !C_HORMONAL.has(CY().set.contraception)) {
+    o.fertile = k >= -5 && k <= 1; o.isOv = k === 0;
+    o.chance = k >= -2 && k <= 0 ? 'высокая' : o.fertile ? 'средняя' : 'низкая';
+  }
+}
+
+/* ---------- экран «Цикл» ---------- */
+let CAL_M = null;
+function cRing(m) {
+  const L = Math.max(m.cur.len, m.avgLen), R = 80, C = 2 * Math.PI * R, sw = 14;
+  const arc = (a, b, color) => { a = Math.max(0, a); b = Math.min(L, b); if (b <= a) return ''; return `<circle cx="100" cy="100" r="${R}" fill="none" stroke="${color}" stroke-width="${sw}" stroke-dasharray="${(b - a) / L * C} ${C}" stroke-dashoffset="${-a / L * C}" transform="rotate(-90 100 100)" stroke-linecap="butt"/>`; };
+  const ovIdx = daysBetween(m.cur.start, m.cur.ov.d);
+  const pos = (m.cur.day - 0.5) / L * 2 * Math.PI - Math.PI / 2;
+  const info = cInfo(m.t), per = daysBetween(m.cur.start, m.pEnd(m.last)) + 1;
+  let s = `<svg viewBox="0 0 200 200" class="ring" role="img" aria-label="День цикла ${m.cur.day} из примерно ${m.avgLen}">`;
+  s += `<circle cx="100" cy="100" r="${R}" fill="none" stroke="var(--surface-2)" stroke-width="${sw}"/>`;
+  s += arc(0, per, 'var(--per)');
+  if (!C_HORMONAL.has(m.set.contraception) && m.set.mode !== 'pregnant') { s += arc(ovIdx - 5, ovIdx + 2, 'var(--fert)'); s += arc(ovIdx, ovIdx + 1, 'var(--ovu)'); }
+  s += `<circle cx="${100 + R * Math.cos(pos)}" cy="${100 + R * Math.sin(pos)}" r="10" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/>`;
+  s += `<text x="100" y="78" text-anchor="middle" class="ring-s">день цикла</text><text x="100" y="118" text-anchor="middle" class="ring-n">${m.cur.day}</text>`;
+  s += `<text x="100" y="142" text-anchor="middle" class="ring-s">${m.late ? 'задержка ' + dn(m.late) : info.phase ? C_PHASE[info.phase].replace(' фаза', '') : ''}</text></svg>`;
+  return s;
+}
+function cHeadline(m) {
+  const t = m.t, info = cInfo(t);
+  if (m.late) return `Месячные ожидались ${fd(m.nextStart)} — задержка ${dn(m.late)}`;
+  const left = daysBetween(t, m.nextStart);
+  return `${info.phase ? C_PHASE[info.phase] : ''} · до месячных ~${dn(left)}`;
+}
+function pregnancyCard() {
+  const set = CY().set, lmp = set.preg_lmp || cModel().last?.start;
+  if (!lmp) return `<div class="card">Укажите первый день последних месячных в настройках, чтобы считать срок.</div>`;
+  const days = daysBetween(lmp, todayISO()), w = Math.floor(days / 7), dd = days % 7, due = addDays(lmp, 280);
+  const tri = w < 13 ? 'первый' : w < 27 ? 'второй' : 'третий';
+  return `<div class="cy-head"><div class="cy-big">${w} ${plural(w, 'неделя', 'недели', 'недель')}${dd ? ` ${dn(dd)}` : ''}</div><p class="muted" style="margin:2px 0 0">Акушерский срок от ${fd(lmp)} · ${tri} триместр</p>
+    <div class="bar"><i style="width:${Math.min(100, days / 280 * 100)}%"></i></div><p class="small muted" style="margin:0">Предполагаемая дата родов ~${fd(due)}</p></div>`;
+}
+function cQuick(d = todayISO()) {
+  const btn = (s, ic, t) => cTracked(s) ? `<button type="button" class="qa" ${nav('clog', { d, s })}><span>${ic}</span>${t}</button>` : '';
+  const m = cModel(), open = m.last && !m.last.end && daysBetween(m.last.start, m.t) < 15;
+  let h = `<div class="qa-grid">`;
+  if (cTracked('flow')) h += open ? `<button type="button" class="qa per" data-act="cEnd"><span>🩸</span>Закончились</button>` : `<button type="button" class="qa per" data-act="cStart"><span>🩸</span>Начались</button>`;
+  h += btn('flow', '💧', 'Интенсивность') + btn('sym', '⚠️', 'Симптомы') + btn('mood', '🙂', 'Настроение') + btn('dis', '🫧', 'Выделения') + btn('sex', '❤️', 'Секс')
+    + btn('bbt', '🌡️', 'Температура') + btn('note', '📝', 'Заметка') + `<button type="button" class="qa" data-act="tab" data-v="meds"><span>💊</span>Лекарства</button>`;
+  return h + `</div>`;
+}
+V.cycle = () => {
+  const set = CY().set;
+  if (!set.onboarded) {
+    let h = `<div class="big-title">Цикл и самочувствие</div><p class="lead">Календарь месячных, симптомы, настроение, выделения, температура, тесты и графики — всё в одном месте. Записи хранятся только в этом телефоне.</p>`;
+    h += `<div class="btns"><button type="button" class="btn wide" data-go="csetup">Начать: 1 минута</button></div>`;
+    h += `<p class="note">Спросим дату последних месячных, обычную длину цикла и что вы хотите отмечать. Лишнее можно скрыть.</p>`;
+    return { title: 'Цикл', html: h };
+  }
+  const m = cModel(), t = m.t;
+  let h = '';
+  if (set.mode === 'pregnant') h += pregnancyCard();
+  else if (!m.last) h += `<div class="card">Отметьте начало месячных — и программа начнёт считать цикл.</div>`;
+  else {
+    const info = cInfo(t);
+    h += `<div class="cy-head">${cRing(m)}<div class="cy-facts">
+      <div><b>${m.late ? 'Задержка' : fdLong(m.nextStart)}</b><span>${m.late ? dn(m.late) : 'следующие месячные, ~через ' + dn(daysBetween(t, m.nextStart))}</span></div>
+      ${info.chance ? `<div><b>${info.chance[0].toUpperCase() + info.chance.slice(1)}</b><span>вероятность зачатия сегодня</span></div>` : ''}
+      <div><b>${info.phase ? C_PHASE[info.phase] : '—'}</b><span>${m.cur.ov.src === 'calc' ? 'овуляция ~' : 'овуляция '}${fdLong(m.cur.ov.d)}${m.cur.ov.src !== 'calc' ? ' (' + { confirmed: 'отмечена', test: 'по тесту', bbt: 'по температуре' }[m.cur.ov.src] + ')' : ''}</span></div>
+    </div></div>`;
+    if (set.mode === 'plan' && info.fertile) h += `<div class="banner" style="margin-top:10px"><div>Сейчас фертильное окно. Самые вероятные дни — за 2 дня до овуляции и в день овуляции.</div></div>`;
+    if (m.late >= 5 && set.mode !== 'pregnant') h += `<div class="banner warnb" style="margin-top:10px"><div>Задержка ${dn(m.late)}. Можно сделать тест на беременность и отметить результат. Если задержка повторяется — обсудите с гинекологом.</div></div>`;
+    if (C_HORMONAL.has(set.contraception)) h += `<p class="note">При гормональной контрацепции кровотечение — реакция отмены, а не естественный цикл. Фертильное окно не показываем.</p>`;
+  }
+  h += sec('Сегодня, ' + fdLong(t), `<a href="#" ${nav('cday', { d: t })}>Весь день</a>`) + cDayChips(t) + cQuick(t);
+  h += cCalendar();
+  h += sec('Разделы');
+  h += list([
+    row({ left: '<span class="ico">📊</span>', t: 'Моё тело', s: 'Графики, закономерности, аналитика', go: 'cstats' }),
+    row({ left: '<span class="ico">🔁</span>', t: 'Мои циклы', s: `${m.cycles.length} ${plural(m.cycles.length, 'завершённый цикл', 'завершённых цикла', 'завершённых циклов')}`, go: 'ccycles' }),
+    row({ left: '<span class="ico">📄</span>', t: 'Отчёт для врача и экспорт', s: 'PDF, CSV для Excel, текст', go: 'creport' }),
+    row({ left: '<span class="ico">🔔</span>', t: 'Напоминания', s: 'В Календарь iPhone', go: 'crem' }),
+    row({ left: '<span class="ico">⚙️</span>', t: 'Настройки цикла', s: C_MODES.find(x => x[0] === set.mode)?.[1], go: 'csetup' }),
+  ]);
+  if (set.mode !== 'pregnant') h += `<p class="note">${C_FORECAST}</p>`;
+  return { title: 'Цикл', html: h };
+};
+function cDayChips(d) {
+  const day = cDay(d), s = C_SECTIONS.map(([k, l, ic]) => { const v = cSecSum(k, day); return v ? `<span class="pill">${ic} ${esc(v.length > 40 ? v.slice(0, 38) + '…' : v)}</span>` : ''; }).filter(Boolean);
+  return s.length ? `<div class="tags" style="margin:0 0 10px">${s.join('')}</div>` : `<p class="muted small" style="margin:0 4px 10px">Пока ничего не отмечено. Нажмите, что хотите записать.</p>`;
+}
+function cMarks(d) {
+  const day = cDay(d), out = [];
+  if (day.sex?.acts?.includes('Секс')) out.push('❤️');
+  if (day.mood?.length) out.push(C_MOODS.find(x => x[0] === day.mood[0])?.[1] || '🙂');
+  if (day.sym && Object.keys(day.sym).length) out.push('⚠️');
+  if (day.dis) out.push('💧');
+  if (cIntakeDays().has(d)) out.push('💊');
+  if (day.note) out.push('📝');
+  return out;
+}
+function cIntakeDays() {
+  if (cIntakeDays.d !== D) { cIntakeDays.d = D; cIntakeDays.s = new Set(Object.entries(D.intakes).filter(([, v]) => v === 'taken').map(([k]) => k.split('|')[1])); }
+  return cIntakeDays.s;
+}
+function cCalendar() {
+  const t = todayISO(); CAL_M ||= t.slice(0, 7);
+  const [y, mo] = CAL_M.split('-').map(Number), first = `${CAL_M}-01`;
+  const wd = (new Date(y, mo - 1, 1).getDay() + 6) % 7, dim = new Date(y, mo, 0).getDate();
+  const prev = mo === 1 ? `${y - 1}-12` : `${y}-${pad(mo - 1)}`, next = mo === 12 ? `${y + 1}-01` : `${y}-${pad(mo + 1)}`;
+  let h = sec(`${MN[mo - 1]} ${y}`, `<span class="cal-nav"><button type="button" data-act="cMonth" data-m="${prev}" aria-label="Предыдущий месяц">‹</button>${CAL_M !== t.slice(0, 7) ? `<button type="button" data-act="cMonth" data-m="${t.slice(0, 7)}">Сегодня</button>` : ''}<button type="button" data-act="cMonth" data-m="${next}" aria-label="Следующий месяц">›</button></span>`);
+  h += `<div class="cal"><div class="cal-w">${['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map(x => `<span>${x}</span>`).join('')}</div><div class="cal-g">`;
+  for (let i = 0; i < wd; i++) h += `<span></span>`;
+  const preg = CY().set.mode === 'pregnant';
+  for (let n = 1; n <= dim; n++) {
+    const d = `${CAL_M}-${pad(n)}`, o = preg ? {} : cInfo(d), day = cDay(d), cls = [];
+    if (o.inPeriod || day.flow) cls.push('per'); else if (o.predPeriod) cls.push('pred');
+    else if (o.fertile && d >= cModel().cur?.start) cls.push('fert');
+    if (d === t) cls.push('today');
+    if (d > t) cls.push('fut');
+    const mk = cMarks(d);
+    h += `<button type="button" class="${cls.join(' ')}" ${nav('cday', { d })} aria-label="${fdLong(d)}${o.cday ? ', день цикла ' + o.cday : ''}"><b>${n}${o.isOv && !o.inPeriod ? '<i class="star">★</i>' : ''}</b><small>${mk.slice(0, 3).join('')}</small></button>`;
+  }
+  h += `</div></div><div class="legend"><span><i class="lg per"></i>месячные</span><span><i class="lg pred"></i>прогноз</span><span><i class="lg fert"></i>фертильное окно</span><span>★ овуляция</span></div>`;
+  return h;
+}
+
+/* ---------- день ---------- */
+function cSecSum(k, day) {
+  const j = a => (a || []).join(', ');
+  switch (k) {
+    case 'flow': return day.flow ? [C_FLOW[day.flow], j(day.flow_x), j(day.products)].filter(Boolean).join(' · ') : '';
+    case 'sym': return day.sym ? Object.entries(day.sym).map(([n, l]) => `${n}${l > 1 ? ` (${C_LVL[l]})` : ''}`).join(', ') + (day.sym_note ? ` · ${day.sym_note}` : '') : '';
+    case 'mood': return [(day.mood || []).map(k => { const x = C_MOODS.find(y => y[0] === k); return x ? x[1] + ' ' + x[2] : ''; }).join(', '), day.sc ? C_SCALES.filter(([k]) => day.sc[k] != null).map(([k, l]) => `${l} ${day.sc[k]}/10`).join(', ') : ''].filter(Boolean).join(' · ');
+    case 'dis': return day.dis ? [day.dis.amount, day.dis.color, day.dis.cons, day.dis.smell ? 'запах: ' + day.dis.smell.toLowerCase() : '', j(day.dis.x)].filter(Boolean).join(', ') : '';
+    case 'sex': return day.sex ? [j(day.sex.acts), day.sex.prot, day.sex.method, day.sex.ejac, j(day.sex.x), day.sex.sat ? `удовлетворённость ${day.sex.sat}/5` : ''].filter(Boolean).join(', ') : '';
+    case 'sleep': { const s = day.sleep; if (!s) return ''; const hrs = sleepHours(s); return [s.bed && s.wake ? `${s.bed}–${s.wake}` : '', hrs ? r1(hrs) + ' ч' : '', s.q ? 'сон ' + C_SLEEP_Q[s.q - 1].toLowerCase() : '', s.wakes ? `пробуждений ${s.wakes}` : '', s.insomnia ? 'бессонница' : '', s.nap ? `дневной сон ${s.nap} мин` : ''].filter(Boolean).join(', '); }
+    case 'bbt': return day.bbt?.t ? [`${num(day.bbt.t)} °C`, day.bbt.time, day.bbt.method, day.bbt.note].filter(Boolean).join(', ') : '';
+    case 'tests': return [day.ovt ? 'тест на овуляцию: ' + day.ovt.toLowerCase() : '', day.pgt ? 'тест на беременность: ' + day.pgt.toLowerCase() : '', day.ovc ? 'овуляция подтверждена: ' + day.ovc.toLowerCase() : '', day.photos?.length ? `фото: ${day.photos.length}` : ''].filter(Boolean).join(' · ');
+    case 'food': return [j(day.food), day.food_note].filter(Boolean).join(' · ');
+    case 'events': return [j(day.ev), day.ev_note].filter(Boolean).join(' · ');
+    case 'body': return [day.weight ? `${num(day.weight)} кг` : '', day.water ? `вода ${day.water} мл` : '', j(day.act), day.act_min ? `${day.act_min} мин` : ''].filter(Boolean).join(', ');
+    case 'note': return day.note || '';
+  }
+  return '';
+}
+V.cday = ({ d }) => {
+  const day = cDay(d), o = CY().set.mode === 'pregnant' ? {} : cInfo(d);
+  let h = `<div class="big-title">${fdLong(d)} ${d.slice(0, 4)}</div><p class="meta">${WD[new Date(d + 'T12:00').getDay()]}</p>`;
+  const facts = [o.cday ? `День цикла: ${o.cday}` : '', o.phase ? C_PHASE[o.phase] : '', o.inPeriod ? 'месячные' : o.predPeriod ? 'прогноз месячных' : '', o.isOv ? (o.predicted || o.ovSrc === 'calc' ? 'предполагаемая овуляция' : 'овуляция') : o.fertile ? 'фертильное окно' : ''].filter(Boolean);
+  if (facts.length) h += `<p class="facts">${facts.join(' · ')}</p>`;
+  const rows = C_SECTIONS.filter(([k]) => cTracked(k) || cSecSum(k, day)).map(([k, l, ic]) => { const v = cSecSum(k, day); return row({ left: `<span class="ico">${ic}</span>`, t: l, s: v ? esc(v) : '<span class="muted">не отмечено</span>', go: 'clog', p: { d, s: k } }); });
+  h += list(rows);
+  if (day.photos?.length) h += sec('Фото тестов') + `<div class="stack">${day.photos.map((f, i) => `<div class="file-view" id="cph${i}"><div class="file-missing">Загружаю…</div></div>`).join('')}</div>`;
+  const meds = D.medications.filter(mm => (mm.schedule?.times || []).some(tm => D.intakes[`${mm.id}|${d}|${tm}`] === 'taken'));
+  if (meds.length) h += sec('Принято лекарств') + list(meds.map(mm => row({ t: medTitle(mm), s: esc((mm.schedule.times || []).filter(tm => D.intakes[`${mm.id}|${d}|${tm}`] === 'taken').join(', ')), go: 'med', p: { id: mm.id } })));
+  h += `<div class="btns"><button type="button" class="btn" ${nav('clog', { d })}>Отметить всё за день</button></div>`;
+  if (Object.keys(day).length) h += `<div class="btns"><button type="button" class="btn danger" data-act="confirm" data-then="cDelDay" data-d="${d}">Очистить записи дня</button></div>`;
+  return {
+    title: fds(d), html: h, async after() {
+      for (const [i, f] of (day.photos || []).entries()) {
+        const box = $('#cph' + i); if (!box) return;
+        const b = await idb.get('files', f).catch(() => null); if (!box.isConnected) return;
+        box.innerHTML = b ? `<img src="${URL.createObjectURL(b)}" alt="Фото теста ${i + 1}"><div class="btns" style="margin:0"><button type="button" class="btn danger sm" data-act="confirm" data-then="cDelPhoto" data-d="${d}" data-f="${esc(f)}">Удалить фото</button></div>` : `<div class="file-missing">Фото не найдено</div>`;
+      }
+    }
+  };
+};
+
+/* ---------- ввод записей дня ---------- */
+let CED = null;
+const cChips = (path, opts, multi, labels) => `<div class="chips">${opts.map((v, i) => {
+  const cur = getP(CED.day, path), on = multi ? (cur || []).includes(v) : String(cur ?? '') === String(v);
+  return `<button type="button" class="chip" data-act="cChip" data-f="${path}" data-v="${esc(v)}"${multi ? ' data-m="1"' : ''} aria-pressed="${on}">${esc(labels ? labels[i] : v)}</button>`;
+}).join('')}</div>`;
+const cLabeledChips = (path, pairs) => `<div class="chips">${pairs.map(([v, l]) => `<button type="button" class="chip" data-act="cChip" data-f="${path}" data-v="${esc(v)}" aria-pressed="${String(getP(CED.day, path) ?? '') === String(v)}">${esc(l)}</button>`).join('')}</div>`;
+const cField = (label, inner, hint) => `<div class="field"><label>${label}</label>${inner}${hint ? `<div class="hint">${hint}</div>` : ''}</div>`;
+const cInput = (path, type, ph, extra = '') => `<input data-in="${path}" type="${type}" value="${esc(getP(CED.day, path) ?? '')}" placeholder="${esc(ph || '')}"${type === 'number' ? ' inputmode="decimal" step="any"' : ''} ${extra} autocomplete="off">`;
+function cSecForm(k) {
+  const day = CED.day;
+  switch (k) {
+    case 'flow': return cField('Интенсивность', cLabeledChips('flow', C_FLOW.slice(1).map((l, i) => [i + 1, l])), 'Первый день с кровотечением станет началом месячных, если оно ещё не отмечено.')
+      + cField('Особенности', cChips('flow_x', C_FLOW_X, 1)) + cField('Средства гигиены', cChips('products', C_PRODUCTS, 1));
+    case 'sym': {
+      const all = { ...C_SYM, ...(CY().custom_sym.length ? { 'Мои': CY().custom_sym } : {}) };
+      return `<p class="small muted" style="margin:0">Нажимайте на симптом, чтобы выбрать силу: слабо → умеренно → сильно → очень сильно → убрать.</p>`
+        + Object.entries(all).map(([g, arr]) => cField(g, `<div class="chips">${arr.map(n => { const l = day.sym?.[n] || 0; return `<button type="button" class="chip sym" data-act="cSym" data-v="${esc(n)}" aria-pressed="${l > 0}">${esc(n)}${l ? ` <em>${C_LVL[l]}</em>` : ''}</button>`; }).join('')}</div>`)).join('')
+        + cField('Свой симптом', `<div style="display:flex;gap:8px"><input id="cNewSym" placeholder="Например: судороги в ногах" autocomplete="off"><button type="button" class="btn sm" data-act="cAddSym">Добавить</button></div>`)
+        + cField('Длительность и подробности', cInput('sym_note', 'text', 'Например: с утра, около 3 часов'), 'Если симптом отмечен несколько дней подряд, программа посчитает, сколько он длится.');
+    }
+    case 'mood': return cField('Настроение', cChips('mood', C_MOODS.map(x => x[0]), 1, C_MOODS.map(x => x[1] + ' ' + x[2])))
+      + `<div class="field"><label>Шкалы от 0 до 10 <span style="font-weight:400">— двигайте только нужные</span></label><div class="scales">${C_SCALES.map(([k, l]) => { const v = day.sc?.[k]; return `<label class="scale"><span>${l}</span><output id="o_${k}">${v ?? '—'}</output><input type="range" min="0" max="10" step="1" data-sc="${k}" value="${v ?? 5}"${v == null ? ' class="unset"' : ''}></label>`; }).join('')}</div></div>`;
+    case 'dis': return Object.entries(C_DIS).map(([k2, [l, o]]) => cField(l, cChips('dis.' + k2, o))).join('') + cField('Дополнительно', cChips('dis.x', C_DIS_X, 1));
+    case 'sex': return cField('Что было', cChips('sex.acts', C_SEX_ACTS, 1)) + cField('Защита', cChips('sex.prot', C_SEX_PROT)) + cField('Метод', cChips('sex.method', C_SEX_METHOD))
+      + cField('Эякуляция', cChips('sex.ejac', C_SEX_EJAC)) + cField('Дополнительно', cChips('sex.x', C_SEX_X, 1)) + cField('Удовлетворённость, 1–5', cChips('sex.sat', C_SAT));
+    case 'sleep': return `<div class="grid2">${cField('Легла', cInput('sleep.bed', 'time'))}${cField('Встала', cInput('sleep.wake', 'time'))}</div>`
+      + cField('Качество сна', cLabeledChips('sleep.q', C_SLEEP_Q.map((l, i) => [i + 1, l]))) + `<div class="grid2">${cField('Пробуждений ночью', cInput('sleep.wakes', 'number', '0'))}${cField('Дневной сон, мин', cInput('sleep.nap', 'number', '0'))}</div>`
+      + cField('Бессонница', cLabeledChips('sleep.insomnia', [[1, 'Была']]));
+    case 'bbt': return `<div class="grid2">${cField('Температура, °C', cInput('bbt.t', 'text', '36,6', 'inputmode="decimal"'))}${cField('Время', cInput('bbt.time', 'time'))}</div>`
+      + cField('Как измеряли', cChips('bbt.method', C_BBT_M)) + cField('Комментарий', cInput('bbt.note', 'text', 'Например: спала 4 часа, простуда'), 'Мерить лучше сразу после сна, в одно время и одним способом.');
+    case 'tests': return cField('Тест на овуляцию', cChips('ovt', C_OVT)) + cField('Тест на беременность', cChips('pgt', C_PGT))
+      + cField('Овуляция подтверждена', cChips('ovc', C_OVC), 'Отметьте, если овуляцию увидели на УЗИ, по тесту или иначе. Расчёт цикла учтёт это.')
+      + cField('Фото теста', `<input type="file" id="cPhotos" accept="image/*" multiple>`, day.photos?.length ? `Уже сохранено фото: ${day.photos.length}` : '');
+    case 'food': return cField('Аппетит и тяга', cChips('food', C_FOOD, 1)) + cField('Заметка', cInput('food_note', 'text', 'Например: весь день хотелось сладкого'));
+    case 'events': return cField('Что было', cChips('ev', C_EVENTS, 1)) + cField('Своё событие', cInput('ev_note', 'text', 'Например: смена часового пояса'), 'Потом можно сравнить события с изменениями цикла.');
+    case 'body': return `<div class="grid2">${cField('Вес, кг', cInput('weight', 'text', '55,5', 'inputmode="decimal"'))}${cField('Вода, мл', cInput('water', 'number', '1500'))}</div>`
+      + cField('Активность', cChips('act', C_ACT, 1)) + cField('Сколько минут', cInput('act_min', 'number', '30'));
+    case 'note': return cField('Заметка', `<textarea data-in="note" placeholder="Всё, что хочется запомнить">${esc(day.note || '')}</textarea>`);
+  }
+  return '';
+}
+V.clog = ({ d, s }) => {
+  if (!CED || CED.d !== d || CED.s !== s) CED = { d, s, day: JSON.parse(JSON.stringify(cDay(d))) };
+  const secs = s ? C_SECTIONS.filter(x => x[0] === s) : C_SECTIONS.filter(([k]) => cTracked(k));
+  let h = `<p class="muted" style="margin:0 4px 8px">${fdLong(d)} ${d.slice(0, 4)}${cInfo(d).cday ? ` · день цикла ${cInfo(d).cday}` : ''}</p><form class="f" id="cForm" novalidate>`;
+  h += secs.map(([k, l, ic]) => `${s ? '' : `<h2 class="sec" style="margin-top:18px"><span>${ic} ${l}</span></h2>`}<div class="card stack">${cSecForm(k)}</div>`).join('');
+  h += `<div class="err" id="cErr" hidden></div><div class="btns"><button class="btn wide" type="submit">Сохранить</button></div></form>`;
+  return {
+    title: s ? C_SECTIONS.find(x => x[0] === s)[1] : 'Отметить день', html: h, after() {
+      const f = $('#cForm');
+      f.querySelectorAll('input[type=range]').forEach(r => r.addEventListener('input', () => { r.classList.remove('unset'); $('#o_' + r.dataset.sc).textContent = r.value; setP(CED.day, 'sc.' + r.dataset.sc, +r.value); }));
+      f.addEventListener('submit', async ev => {
+        ev.preventDefault();
+        const err = $('#cErr'); err.hidden = true;
+        try { await cSave(f); } catch (e) { err.textContent = typeof e === 'string' ? e : 'Не удалось сохранить: ' + (e.message || e); err.hidden = false; }
+      });
+    }
+  };
+};
+async function cSave(f) {
+  const day = CED.day, d = CED.d;
+  for (const el of f.querySelectorAll('[data-in]')) {
+    const p = el.dataset.in, raw = el.value.trim();
+    let v = raw;
+    if (['bbt.t', 'weight'].includes(p)) { v = raw ? parseNum(raw) : null; if (raw && v == null) throw p === 'weight' ? 'Вес числом, например 55,5' : 'Температура числом, например 36,6'; }
+    else if (['sleep.wakes', 'sleep.nap', 'water', 'act_min'].includes(p)) v = raw === '' ? null : Math.max(0, Math.round(+raw));
+    setP(day, p, v === '' ? null : v);
+  }
+  if (day.bbt?.t != null && (day.bbt.t < 34 || day.bbt.t > 42)) throw 'Температура должна быть от 34 до 42 °C';
+  if (day.weight != null && (day.weight < 20 || day.weight > 300)) throw 'Проверьте вес';
+  const files = [...(f.querySelector('#cPhotos')?.files || [])];
+  for (const file of files) { const k = `local/cycle/${d}/${Date.now().toString(36)}-${file.name}`; await idb.put('files', k, new Blob([await file.arrayBuffer()], { type: file.type || mimeOf(file.name) })); (day.photos ||= []).push(k); }
+  const had = cDay(d).flow;
+  const clean = cClean(day);
+  if (clean) CY().days[d] = clean; else delete CY().days[d];
+  cSyncFlow(d, !!clean?.flow, !!had);
+  CED = null; stack.pop();
+  await saveLocal('Сохранено');
+}
+// Кровотечение в день d: расширить или начать месячные; убрали — сузить
+function cSyncFlow(d, has, had) {
+  const ps = CY().periods, m = cModel();
+  if (has) {
+    if (ps.some(p => p.start <= d && d <= (p.end || m.pEnd(p)))) return;
+    const after = ps.find(p => p.end && addDays(p.end, 1) === d); if (after) { after.end = d; return; }
+    const before = ps.find(p => addDays(p.start, -1) === d); if (before) { before.start = d; return; }
+    const open = ps.find(p => !p.end && p.start < d && daysBetween(p.start, d) <= 12); if (open) return;
+    ps.push({ id: newId('per'), start: d, end: d === todayISO() ? null : d });
+  } else if (had) {
+    const p = ps.find(x => x.start <= d && d <= (x.end || d));
+    if (!p) return;
+    if (p.start === d && (p.end === d || !p.end && d === todayISO())) ps.splice(ps.indexOf(p), 1);
+    else if (p.end === d) p.end = addDays(d, -1);
+    else if (p.start === d) p.start = addDays(d, 1);
+  }
+}
+
+/* ---------- аналитика «Моё тело» ---------- */
+function cBars(items, unit, avg) {
+  if (!items.length) return '';
+  const W = 340, H = 170, L = 8, R = 8, T = 18, B = 26, max = Math.max(...items.map(x => x.v), avg || 0) * 1.1 || 1;
+  const bw = (W - L - R) / items.length, y = v => T + (1 - v / max) * (H - T - B);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="График">`;
+  items.forEach((x, i) => {
+    const bx = L + i * bw + bw * 0.18, w = bw * 0.64;
+    s += `<rect x="${bx}" y="${y(x.v)}" width="${w}" height="${H - B - y(x.v)}" rx="4" fill="${x.c || 'var(--accent)'}"/>`;
+    s += `<text x="${bx + w / 2}" y="${y(x.v) - 4}" text-anchor="middle">${x.v}</text><text x="${bx + w / 2}" y="${H - 9}" text-anchor="middle">${esc(x.l)}</text>`;
+  });
+  if (avg) s += `<line x1="${L}" x2="${W - R}" y1="${y(avg)}" y2="${y(avg)}" stroke="var(--muted)" stroke-dasharray="4 4"/>`;
+  return `<div class="chart">${s}</svg></div>${avg ? `<p class="note">Пунктир — среднее: ${r1(avg)} ${unit}.</p>` : ''}`;
+}
+function cLines(series, { x0, x1, y0, y1, xl = x => x, band, h = 190, marks = [] }) {
+  const W = 340, H = h, L = 34, R = 10, T = 12, B = 26;
+  const x = v => x1 === x0 ? L + (W - L - R) / 2 : L + (v - x0) / (x1 - x0) * (W - L - R), y = v => T + (y1 - v) / (y1 - y0) * (H - T - B);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="График">`;
+  if (band) s += `<rect x="${x(band[0])}" y="${T}" width="${Math.max(0, x(band[1]) - x(band[0]))}" height="${H - T - B}" fill="var(--fert-soft)"/>`;
+  const step = (y1 - y0) / 4;
+  for (let i = 0; i <= 4; i++) { const v = y0 + step * i; s += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${L - 5}" y="${y(v) + 3.5}" text-anchor="end">${num(Math.round(v * 100) / 100)}</text>`; }
+  const xt = [x0, Math.round((x0 + x1) / 2), x1].filter((v, i, a) => a.indexOf(v) === i);
+  for (const v of xt) s += `<text x="${x(v)}" y="${H - 9}" text-anchor="${xt.length > 1 && v === x0 ? 'start' : xt.length > 1 && v === x1 ? 'end' : 'middle'}">${esc(xl(v))}</text>`;
+  for (const mk of marks) s += `<line x1="${L}" x2="${W - R}" y1="${y(mk.v)}" y2="${y(mk.v)}" stroke="${mk.c}" stroke-dasharray="5 4"/>`;
+  for (const se of series) {
+    const pts = se.pts.filter(p => p.y != null);
+    if (pts.length > 1) s += `<polyline fill="none" stroke="${se.c}" stroke-width="2" stroke-linejoin="round" points="${pts.map(p => `${x(p.x)},${y(p.y)}`).join(' ')}"/>`;
+    for (const p of pts) s += `<circle cx="${x(p.x)}" cy="${y(p.y)}" r="${pts.length > 20 ? 2.2 : 3.2}" fill="${se.c}"/>`;
+  }
+  s += `</svg>`;
+  const leg = series.length > 1 ? `<div class="legend">${series.map(se => `<span><i class="lg" style="background:${se.c}"></i>${esc(se.n)}</span>`).join('')}</div>` : '';
+  return `<div class="chart">${s}</div>${leg}`;
+}
+function cHeat(rows, n) {
+  const W = 340, cw = Math.min(10, (W - 118) / n), rh = 22, H = rows.length * rh + 22;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Симптомы по дням цикла">`;
+  rows.forEach((r, i) => {
+    s += `<text x="0" y="${i * rh + 15}" style="font-family:var(--sans);font-size:10.5px">${esc(r.name.length > 20 ? r.name.slice(0, 19) + '…' : r.name)}</text>`;
+    for (let k = 0; k < n; k++) { const v = r.vals[k] || 0; s += `<rect x="${118 + k * cw}" y="${i * rh + 4}" width="${cw - 1.5}" height="${rh - 7}" rx="2" fill="${v ? 'var(--per)' : 'var(--surface-2)'}" fill-opacity="${v ? 0.2 + 0.8 * v : 1}"/>`; }
+  });
+  for (const k of [1, 7, 14, 21, 28, 35].filter(k => k <= n)) s += `<text x="${118 + (k - 0.5) * cw}" y="${H - 4}" text-anchor="middle">${k}</text>`;
+  return `<div class="chart">${s}</svg></div><p class="note">Чем темнее клетка, тем чаще и сильнее симптом в этот день цикла.</p>`;
+}
+// Все отмеченные дни с их днём цикла (только завершённые и текущий цикл)
+function cDaysWithCd() {
+  const m = cModel(), out = [];
+  for (const [d, day] of Object.entries(CY().days)) {
+    let p = null; for (const x of m.ps) if (x.start <= d) p = x;
+    if (!p) continue;
+    const i = m.ps.indexOf(p), next = m.ps[i + 1];
+    out.push({ d, day, cd: daysBetween(p.start, d) + 1, toNext: next ? daysBetween(d, next.start) : null, start: p.start, len: next ? daysBetween(p.start, next.start) : null, info: cInfo(d) });
+  }
+  return out.sort((a, b) => a.d.localeCompare(b.d));
+}
+function cObservations() {
+  const m = cModel(), obs = [], days = cDaysWithCd();
+  if (m.recent.length >= 3) {
+    const ls = m.recent.map(c => c.len), mn = Math.min(...ls), mx = Math.max(...ls);
+    obs.push(`В последних ${m.recent.length} циклах длина была от ${mn} до ${dn(mx)}${mx - mn <= 7 ? ' — это стабильный разброс' : ''}.`);
+    if (mx - mn > 7) obs.push(`Длина цикла менялась больше чем на 7 дней. Это стоит показать гинекологу на плановом приёме.`);
+    if (ls.some(l => l < 21 || l > 35)) obs.push(`Были циклы короче 21 или длиннее 35 дней — это повод обсудить с гинекологом.`);
+  }
+  const sym = {};
+  for (const x of days) for (const [n, l] of Object.entries(x.day.sym || {})) (sym[n] ||= []).push({ ...x, l });
+  for (const [n, arr] of Object.entries(sym).sort((a, b) => b[1].length - a[1].length).slice(0, 6)) {
+    if (arr.length < 3) continue;
+    const pre = arr.filter(a => a.toNext != null && a.toNext >= 1 && a.toNext <= 3).length, inPer = arr.filter(a => a.info.inPeriod).length;
+    const lut = arr.filter(a => a.info.phase === 'lut').length, cyc = new Set(arr.map(a => a.start)).size;
+    if (pre / arr.length >= 0.5) obs.push(`«${n}» чаще отмечается за 1–3 дня до начала месячных (${pre} из ${arr.length} раз, циклов: ${cyc}).`);
+    else if (inPer / arr.length >= 0.5) obs.push(`«${n}» чаще отмечается во время месячных (${inPer} из ${arr.length}).`);
+    else if (lut / arr.length >= 0.6) obs.push(`«${n}» чаще отмечается во второй половине цикла (${lut} из ${arr.length}).`);
+    // длительность: подряд идущие дни
+    const ds = arr.map(a => a.d).sort(); let runs = [], cur = 1;
+    for (let i = 1; i < ds.length; i++) { if (daysBetween(ds[i - 1], ds[i]) === 1) cur++; else { runs.push(cur); cur = 1; } } runs.push(cur);
+    if (runs.length >= 2 && mean(runs) >= 1.5) obs.push(`«${n}» обычно длится ~${dn(Math.round(mean(runs)))} подряд.`);
+  }
+  const fat = days.filter(x => sleepHours(x.day.sleep) != null);
+  const short = fat.filter(x => sleepHours(x.day.sleep) < 7), long = fat.filter(x => sleepHours(x.day.sleep) >= 7);
+  const fl = a => mean(a.map(x => x.day.sym?.['Усталость'] || 0));
+  if (short.length >= 3 && long.length >= 3 && fl(short) - fl(long) >= 0.5) obs.push(`В дни, когда сна было меньше 7 часов, усталость в среднем была сильнее (${r1(fl(short))} против ${r1(fl(long))} по шкале 0–4).`);
+  const byPh = {};
+  for (const x of days) { const s = moodScore(x.d); if (s != null && x.info.phase) (byPh[x.info.phase] ||= []).push(s); }
+  const ph = Object.entries(byPh).filter(([, a]) => a.length >= 3).map(([k, a]) => [k, mean(a)]).sort((a, b) => a[1] - b[1]);
+  if (ph.length >= 2 && ph[ph.length - 1][1] - ph[0][1] >= 1) obs.push(`Настроение в среднем ниже в фазе «${C_PHASE[ph[0][0]].replace(' фаза', '').toLowerCase()}» (${r1(ph[0][1])} из 10) и выше в фазе «${C_PHASE[ph[ph.length - 1][0]].replace(' фаза', '').toLowerCase()}» (${r1(ph[ph.length - 1][1])}).`);
+  const sweet = days.filter(x => x.day.food?.includes('Тяга к сладкому'));
+  if (sweet.length >= 3 && sweet.filter(x => x.toNext != null && x.toNext <= 5).length / sweet.length >= 0.5) obs.push(`Тяга к сладкому чаще бывает в последние 5 дней перед месячными.`);
+  const evs = days.filter(x => x.day.ev?.length);
+  for (const c of m.valid.slice(-6)) {
+    if (Math.abs(c.len - m.avgLen) < 5) continue;
+    const e = evs.filter(x => x.d >= c.start && x.d <= c.end).flatMap(x => x.day.ev);
+    if (e.length) obs.push(`Цикл с ${fd(c.start)} был ${c.len > m.avgLen ? 'длиннее' : 'короче'} обычного (${dn(c.len)}); в нём отмечено: ${[...new Set(e)].join(', ').toLowerCase()}.`);
+  }
+  return obs;
+}
+V.cstats = () => {
+  const m = cModel(), days = cDaysWithCd();
+  let h = '';
+  const ls = m.valid.map(c => c.len);
+  const freqSym = {}, freqMood = {};
+  for (const x of days) { for (const n of Object.keys(x.day.sym || {})) freqSym[n] = (freqSym[n] || 0) + 1; for (const k of x.day.mood || []) freqMood[k] = (freqMood[k] || 0) + 1; }
+  const topSym = Object.entries(freqSym).sort((a, b) => b[1] - a[1]).slice(0, 3).map(x => x[0]);
+  const topMood = Object.entries(freqMood).sort((a, b) => b[1] - a[1])[0];
+  const info = m.last ? cInfo(m.t) : {};
+  h += `<div class="card"><dl class="kv" style="padding:0">${[
+    ['Цикл', m.last ? `день ${m.cur.day}${info.phase ? ', ' + C_PHASE[info.phase].toLowerCase() : ''}` : '—'],
+    ['До месячных', m.last ? (m.late ? `задержка ${dn(m.late)}` : `~${dn(daysBetween(m.t, m.nextStart))}`) : '—'],
+    ['Средняя длина цикла', `${dn(m.avgLen)}${m.recent.length ? '' : ' (из настроек)'}`],
+    ['Последний цикл', m.valid.length ? dn(m.valid[m.valid.length - 1].len) : '—'],
+    ['Средняя длительность месячных', dn(m.avgPer)],
+    ['Частые симптомы', topSym.length ? esc(topSym.join(', ')) : '—'],
+    ['Частое настроение', topMood ? C_MOODS.find(x => x[0] === topMood[0])?.slice(1, 3).join(' ') : '—'],
+  ].map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl></div>`;
+  const obs = cObservations();
+  h += sec('Наблюдения') + (obs.length ? `<div class="list">${obs.map(o => `<div class="row"><div class="row-main">${esc(o)}</div></div>`).join('')}</div><p class="note">${C_OBS_NOTE}</p>` : empty('Наблюдения появятся, когда накопится 2–3 цикла записей.'));
+  if (ls.length) {
+    h += sec('Длина цикла') + `<div class="card small">${kv([['Средняя', dn(Math.round(mean(ls)))], ['Медиана', dn(Math.round(median(ls)))], ['Минимум', dn(Math.min(...ls))], ['Максимум', dn(Math.max(...ls))]]).replace('class="kv"', 'class="kv" style="padding:0"')}</div>`;
+    h += cBars(m.valid.slice(-12).map(c => ({ l: fds(c.start), v: c.len })), 'дн', mean(m.valid.slice(-12).map(c => c.len)));
+  }
+  const pl = m.ps.filter(p => p.end).slice(-12);
+  if (pl.length) h += sec('Длительность месячных') + cBars(pl.map(p => ({ l: fds(p.start), v: daysBetween(p.start, p.end) + 1, c: 'var(--per)' })), 'дн', mean(pl.map(p => daysBetween(p.start, p.end) + 1)));
+  // Симптомы по дням цикла
+  const n = Math.min(40, Math.max(m.avgLen, ...days.map(x => x.cd).filter(x => x <= 40), 28));
+  const ncyc = Math.max(1, new Set(days.map(x => x.start)).size);
+  const symRows = Object.entries(freqSym).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([name]) => {
+    const vals = Array(n).fill(0);
+    for (const x of days) if (x.cd <= n && x.day.sym?.[name]) vals[x.cd - 1] += x.day.sym[name] / 4 / ncyc;
+    return { name, vals: vals.map(v => Math.min(1, v)) };
+  });
+  if (symRows.length) h += sec('Симптомы по дням цикла') + cHeat(symRows, n);
+  // Средняя сила боли по дням цикла
+  const painN = ['Боль внизу живота', 'Боль в пояснице', 'Головная боль'].filter(p => freqSym[p]);
+  if (painN.length) {
+    const cols = ['var(--per)', 'var(--lo)', 'var(--warn)'];
+    h += sec('Боль: средняя сила по дням цикла') + cLines(painN.map((p, i) => ({ n: p, c: cols[i], pts: Array.from({ length: n }, (_, k) => { const a = days.filter(x => x.cd === k + 1 && x.day.sym?.[p]).map(x => x.day.sym[p]); return { x: k + 1, y: a.length ? mean(a) : null }; }) })), { x0: 1, x1: n, y0: 0, y1: 4, xl: v => 'д' + v });
+  }
+  // Настроение, энергия, стресс, сон по дням цикла
+  const avgBy = f => Array.from({ length: n }, (_, k) => { const a = days.filter(x => x.cd === k + 1).map(f).filter(v => v != null); return { x: k + 1, y: a.length ? mean(a) : null }; });
+  const ser = [
+    { n: 'Настроение', c: 'var(--accent)', pts: avgBy(x => moodScore(x.d)) },
+    { n: 'Энергия', c: 'var(--ovu)', pts: avgBy(x => x.day.sc?.energy) },
+    { n: 'Стресс', c: 'var(--per)', pts: avgBy(x => x.day.sc?.stress) },
+    { n: 'Сон, ч', c: 'var(--lo)', pts: avgBy(x => sleepHours(x.day.sleep)) },
+  ].filter(se => se.pts.some(p => p.y != null));
+  if (ser.length) h += sec('Самочувствие по дням цикла') + cLines(ser, { x0: 1, x1: n, y0: 0, y1: 12, xl: v => 'д' + v, band: m.last ? [m.avgLen - m.luteal - 5, m.avgLen - m.luteal + 1] : null }) + `<p class="note">Шкалы 0–10, сон — в часах. Зелёная полоса — обычное фертильное окно.</p>`;
+  // Базальная температура — текущий цикл
+  if (m.last) {
+    const from = m.cur.start, pts = [];
+    for (let d = from; d <= m.t; d = addDays(d, 1)) { const v = cDay(d).bbt?.t; if (v) pts.push({ x: daysBetween(from, d) + 1, y: v }); }
+    if (pts.length) {
+      const sh = bbtShift(from, m.t), ys = pts.map(p => p.y);
+      h += sec('Базальная температура, текущий цикл') + cLines([{ n: 'БТ', c: 'var(--per)', pts }], { x0: 1, x1: Math.max(m.avgLen, pts[pts.length - 1].x), y0: Math.floor((Math.min(...ys) - 0.1) * 10) / 10, y1: Math.ceil((Math.max(...ys) + 0.1) * 10) / 10, xl: v => 'д' + v, marks: sh ? [{ v: sh.cover, c: 'var(--muted)' }] : [] });
+      h += `<p class="note">${sh ? `Похоже на температурный сдвиг с ${fd(sh.at)}: три дня выше предыдущих шести. Возможная овуляция около ${fd(sh.ov)}. Это наблюдение, а не подтверждение.` : 'Температурного сдвига пока не видно. Нужно хотя бы 9 измерений подряд.'}</p>`;
+    }
+  }
+  // Вес
+  const w = Object.entries(CY().days).filter(([, x]) => x.weight).map(([d, x]) => ({ x: dayNum(d), y: x.weight, d })).sort((a, b) => a.x - b.x);
+  if (w.length >= 2) { const ys = w.map(p => p.y); h += sec('Вес') + cLines([{ n: 'Вес', c: 'var(--accent)', pts: w }], { x0: w[0].x, x1: w[w.length - 1].x, y0: Math.floor(Math.min(...ys) - 1), y1: Math.ceil(Math.max(...ys) + 1), xl: v => { const p = w.find(q => q.x === v); return p ? fds(p.d) : ''; } }) + `<p class="note">Изменение за период: ${num(Math.round((ys[ys.length - 1] - ys[0]) * 10) / 10)} кг. Только для наблюдения за динамикой.</p>`; }
+  // Вода и активность за 30 дней
+  const last30 = Array.from({ length: 30 }, (_, i) => addDays(m.t, i - 29));
+  const water = last30.map(d => cDay(d).water).filter(Boolean), act = last30.filter(d => cDay(d).act?.length);
+  if (water.length || act.length) h += sec('Последние 30 дней') + kv([['Вода в среднем', water.length ? `${Math.round(mean(water))} мл в день (${water.length} ${plural(water.length, 'день', 'дня', 'дней')} с записью)` : null], ['Дни с активностью', act.length ? String(act.length) : null]]);
+  h += `<p class="disclaimer">${C_OBS_NOTE}</p>`;
+  return { title: 'Моё тело', html: h };
+};
+
+/* ---------- циклы ---------- */
+V.ccycles = () => {
+  const m = cModel();
+  let h = `<div class="btns" style="margin-top:4px"><button type="button" class="btn soft" data-go="form" data-p='{"k":"cperiod"}'>+ Месячные в прошлом</button></div>`;
+  if (m.valid.length) h += sec('Сравнение') + cBars(m.valid.slice(-8).map(c => ({ l: '№' + c.n, v: c.len })), 'дн', m.avgLen);
+  const rows = m.ps.slice().reverse().map((p, ri) => {
+    const i = m.ps.length - 1 - ri, next = m.ps[i + 1], len = next ? daysBetween(p.start, next.start) : null, per = daysBetween(p.start, m.pEnd(p)) + 1;
+    return row({ left: `<div class="date-col">№${i + 1}</div>`, t: `${fd(p.start)}${next ? ' – ' + fd(addDays(next.start, -1)) : ' – сейчас'}`, s: `месячные ${dn(per)}${p.end ? '' : ', идут или не отмечен конец'}`, r: len ? `<span class="num">${dn(len)}</span>` : '<span class="pill ok">текущий</span>', go: 'ccycle', p: { s: p.start } });
+  });
+  h += sec('Все циклы') + (rows.length ? list(rows) : empty('Пока нет ни одного цикла'));
+  return { title: 'Мои циклы', html: h };
+};
+V.ccycle = ({ s }) => {
+  const m = cModel(), p = m.ps.find(x => x.start === s); if (!p) return gone();
+  const i = m.ps.indexOf(p), next = m.ps[i + 1], end = next ? addDays(next.start, -1) : m.t;
+  const len = next ? daysBetween(p.start, next.start) : null, ov = m.ovOf(p.start, len || m.avgLen);
+  let h = `<div class="big-title">Цикл №${i + 1}</div><p class="facts">${fd(p.start)} – ${next ? fd(end) : 'сейчас'}${len ? ` · ${dn(len)}` : ''} · месячные ${dn(daysBetween(p.start, m.pEnd(p)) + 1)} · овуляция ${ov.src === 'calc' ? '~' : ''}${fd(ov.d)}</p>`;
+  h += `<div class="btns"><button type="button" class="btn ghost sm" data-go="form" data-p='${esc(JSON.stringify({ k: 'cperiod', id: p.id }))}'>Изменить даты месячных</button><button type="button" class="btn danger sm" data-act="confirm" data-then="cDelPeriod" data-id="${p.id}">Удалить эти месячные</button></div>`;
+  const rows = [];
+  for (let d = p.start; d <= end; d = addDays(d, 1)) {
+    const day = cDay(d), parts = C_SECTIONS.map(([k, , ic]) => { const v = cSecSum(k, day); return v ? `${ic} ${v}` : ''; }).filter(Boolean);
+    const o = cInfo(d);
+    rows.push(row({ left: `<div class="date-col">д${daysBetween(p.start, d) + 1}<br>${fds(d)}</div>`, t: parts.length ? esc(parts.join(' · ')) : '<span class="muted">—</span>', s: o.phase ? C_PHASE[o.phase] : '', go: 'cday', p: { d } }));
+  }
+  h += sec('По дням') + list(rows);
+  return { title: 'Цикл', html: h };
+};
+FORMS.cperiod = {
+  title: 'Месячные', fields: p => {
+    const x = p.id ? CY().periods.find(q => q.id === p.id) || {} : {};
+    return [{ n: 'start', l: 'Первый день', t: 'date', req: 1, val: x.start }, { n: 'end', l: 'Последний день', t: 'date', val: x.end, hint: 'Можно оставить пустым, если ещё идут.' }];
+  },
+  save(v, _, p) {
+    if (v.start > todayISO()) throw 'Дата начала в будущем';
+    if (v.end && v.end < v.start) throw 'Конец раньше начала';
+    if (v.end && daysBetween(v.start, v.end) > 15) throw 'Слишком долго: больше 15 дней. Проверьте даты';
+    const ps = CY().periods;
+    if (ps.some(q => q.id !== p.id && Math.abs(daysBetween(q.start, v.start)) < 10)) throw 'Рядом уже есть месячные с близкой датой';
+    if (p.id) { Object.assign(ps.find(q => q.id === p.id), { start: v.start, end: v.end || null }); const prev = stack[stack.length - 2]; if (prev?.v === 'ccycle') prev.p = { s: v.start }; }
+    else ps.push({ id: newId('per'), start: v.start, end: v.end || null });
+    CY().set.onboarded = true; saveLocal('Сохранено'); return { back: 1 };
+  }
+};
+
+/* ---------- отчёт и экспорт ---------- */
+let C_RANGE = '6m';
+function cRangeFrom() { const m = cModel(); return C_RANGE === 'last' ? (m.ps.length >= 2 ? m.ps[m.ps.length - 2].start : m.last?.start || todayISO()) : C_RANGE === '6m' ? addDays(todayISO(), -183) : '0000'; }
+function cReportText(forDoctor) {
+  const m = cModel(), from = cRangeFrom(), set = CY().set, p = D.profile, L = [];
+  L.push(forDoctor ? 'Отчёт о менструальном цикле' : 'Дневник цикла', `${p.display_name || ''}${p.birth_date ? ', ' + age(p.birth_date) + ' ' + plural(age(p.birth_date), 'год', 'года', 'лет') : ''}`.trim(), `Период: ${from === '0000' ? 'все записи' : 'с ' + fd(from)} по ${fd(todayISO())}`, '');
+  L.push(`Средняя длина цикла: ${dn(m.avgLen)}${m.recent.length ? ` (по ${m.recent.length} ${plural(m.recent.length, 'циклу', 'циклам', 'циклам')})` : ' (со слов)'}`);
+  const ls = m.valid.filter(c => c.start >= from).map(c => c.len);
+  if (ls.length) L.push(`Длина циклов: от ${Math.min(...ls)} до ${Math.max(...ls)} дней, медиана ${median(ls)}`);
+  L.push(`Средняя длительность месячных: ${dn(m.avgPer)}`);
+  if (m.last) L.push(`Последние месячные: ${fd(m.last.start)}${m.late ? `; задержка ${dn(m.late)}` : `; следующие ожидаются ~${fd(m.nextStart)}`}`);
+  L.push(`Контрацепция: ${C_CONTRA.find(x => x[0] === set.contraception)?.[1] || 'не указана'}`);
+  if (set.mode !== 'track') L.push(`Режим: ${C_MODES.find(x => x[0] === set.mode)[1].toLowerCase()}`);
+  L.push('', 'Месячные:');
+  for (const q of m.ps.filter(q => q.start >= from)) {
+    const i = m.ps.indexOf(q), nx = m.ps[i + 1], fl = [];
+    for (let d = q.start; d <= m.pEnd(q); d = addDays(d, 1)) if (cDay(d).flow) fl.push(cDay(d).flow);
+    const xs = new Set(); for (let d = q.start; d <= m.pEnd(q); d = addDays(d, 1)) (cDay(d).flow_x || []).forEach(x => xs.add(x));
+    L.push(`— ${fd(q.start)}–${fd(m.pEnd(q))} (${dn(daysBetween(q.start, m.pEnd(q)) + 1)})${nx ? `, цикл ${dn(daysBetween(q.start, nx.start))}` : ''}${fl.length ? `, обильность до «${C_FLOW[Math.max(...fl)].toLowerCase()}»` : ''}${xs.size ? `; ${[...xs].join(', ').toLowerCase()}` : ''}`);
+  }
+  const days = cDaysWithCd().filter(x => x.d >= from);
+  const sym = {};
+  for (const x of days) for (const [n, l] of Object.entries(x.day.sym || {})) { const s = sym[n] ||= { c: 0, max: 0, cds: [] }; s.c++; s.max = Math.max(s.max, l); s.cds.push(x.cd); }
+  if (Object.keys(sym).length) {
+    L.push('', 'Симптомы (сколько дней, максимальная сила, обычно в дни цикла):');
+    for (const [n, s] of Object.entries(sym).sort((a, b) => b[1].c - a[1].c)) { const sc = s.cds.sort((a, b) => a - b); L.push(`— ${n}: ${s.c} ${plural(s.c, 'день', 'дня', 'дней')}, до «${C_LVL[s.max]}», дни ${sc[0]}–${sc[sc.length - 1]}`); }
+  }
+  const dis = days.filter(x => x.day.dis && (x.day.dis.x?.length || ['Необычный', 'Сильный', 'Неприятный'].includes(x.day.dis.smell) || ['Зелёные', 'Сероватые', 'Творожистые'].some(c => [x.day.dis.color, x.day.dis.cons].includes(c))));
+  if (dis.length) { L.push('', 'Выделения с особенностями:'); dis.forEach(x => L.push(`— ${fd(x.d)}: ${cSecSum('dis', x.day)}`)); }
+  const oth = days.filter(x => x.day.sym?.['Кровянистые выделения вне месячных'] || x.day.sex?.x?.includes('Кровотечение после секса') || x.day.sex?.x?.includes('Боль'));
+  if (oth.length) { L.push('', 'Кровянистые выделения и боль при сексе:'); oth.forEach(x => L.push(`— ${fd(x.d)}: ${[x.day.sym?.['Кровянистые выделения вне месячных'] ? 'кровянистые выделения вне месячных' : '', x.day.sex?.x?.includes('Кровотечение после секса') ? 'кровотечение после секса' : '', x.day.sex?.x?.includes('Боль') ? 'боль во время секса' : ''].filter(Boolean).join(', ')}`)); }
+  const tests = days.filter(x => x.day.ovt || x.day.pgt || x.day.ovc);
+  if (tests.length) { L.push('', 'Тесты:'); tests.forEach(x => L.push(`— ${fd(x.d)}: ${cSecSum('tests', x.day)}`)); }
+  const bbt = days.filter(x => x.day.bbt?.t);
+  if (bbt.length) L.push('', `Базальная температура: ${bbt.length} измерений, от ${num(Math.min(...bbt.map(x => x.day.bbt.t)))} до ${num(Math.max(...bbt.map(x => x.day.bbt.t)))} °C`);
+  const meds = activeMeds(todayISO()); if (meds.length) { L.push('', 'Принимает сейчас:'); meds.forEach(mm => L.push(`— ${mm.name}${mm.dose ? ', ' + mm.dose : ''}`)); }
+  if (!forDoctor) {
+    const notes = days.filter(x => x.day.note); if (notes.length) { L.push('', 'Заметки:'); notes.forEach(x => L.push(`— ${fd(x.d)}: ${x.day.note}`)); }
+    const obs = cObservations(); if (obs.length) { L.push('', 'Наблюдения по записям (не диагноз):'); obs.forEach(o => L.push('— ' + o)); }
+  }
+  L.push('', 'Составлено по записям пациентки в приложении. Прогнозы овуляции — расчётные.');
+  return L.join('\n');
+}
+function cCSV() {
+  const from = cRangeFrom(), q = v => { const s = v == null ? '' : String(v); return /[;"\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
+  const head = ['Дата', 'День цикла', 'Фаза', ...C_SECTIONS.map(s => s[1])];
+  const rows = Object.keys(CY().days).filter(d => d >= from).sort().map(d => { const o = cInfo(d), day = cDay(d); return [fd(d), o.cday || '', o.phase ? C_PHASE[o.phase] : '', ...C_SECTIONS.map(([k]) => cSecSum(k, day))]; });
+  const per = cModel().ps.filter(p => p.start >= from).map(p => ['Месячные', fd(p.start), fd(cModel().pEnd(p))]);
+  return '﻿' + [head, ...rows, [], ['Месячные', 'Начало', 'Конец'], ...per].map(r => r.map(q).join(';')).join('\r\n');
+}
+V.creport = () => {
+  const opt = [['last', 'Последний цикл'], ['6m', 'Последние 6 месяцев'], ['all', 'Весь период']];
+  let h = sec('Период') + `<div class="chips">${opt.map(([k, l]) => `<button type="button" class="chip" data-act="cRange" data-r="${k}" aria-pressed="${C_RANGE === k}">${l}</button>`).join('')}</div>`;
+  h += sec('Отчёт для врача') + `<p class="small muted" style="margin:0 4px 8px">Коротко и по делу: даты, длина циклов, симптомы, тесты, лекарства. Без заметок, настроения и подробностей о сексе.</p>`;
+  h += `<div class="card report" id="cRep">${esc(cReportText(true))}</div>`;
+  h += `<div class="btns"><button type="button" class="btn" data-act="cPrint">PDF / печать</button><button type="button" class="btn soft" data-act="cCopy" data-w="doc">Скопировать</button><button type="button" class="btn ghost" data-act="cShareTxt" data-w="doc">Файлом</button></div>`;
+  h += sec('Полный экспорт') + `<div class="btns" style="margin-top:0"><button type="button" class="btn soft" data-act="cCsv">Таблица CSV для Excel</button><button type="button" class="btn ghost" data-act="cShareTxt" data-w="full">Полный дневник текстом</button></div>`;
+  h += `<p class="note">PDF: нажмите «PDF / печать», затем в окне печати — «Поделиться» или «Сохранить в Файлы». CSV открывается в Excel и Numbers. Графики — в разделе «Моё тело»; их можно сохранить снимком экрана.</p>`;
+  return { title: 'Отчёт и экспорт', html: h };
+};
+
+/* ---------- настройки и напоминания ---------- */
+V.csetup = () => {
+  const set = CY().set, m = cModel();
+  const f = (id, l, inner, hint) => `<div class="field"><label for="${id}">${l}</label>${inner}${hint ? `<div class="hint">${hint}</div>` : ''}</div>`;
+  const sel = (id, opts, v) => `<select id="${id}">${opts.map(([k, l]) => `<option value="${k}"${String(k) === String(v) ? ' selected' : ''}>${l}</option>`).join('')}</select>`;
+  let h = `<form class="f" id="csForm" novalidate>`;
+  if (!m.last) h += f('cs_last', 'Первый день последних месячных', `<input id="cs_last" type="date" max="${todayISO()}">`, 'Если не помните точно — укажите примерно.');
+  h += `<div class="grid2">${f('cs_len', 'Обычная длина цикла, дней', `<input id="cs_len" type="number" inputmode="numeric" value="${set.cycle_len}">`)}${f('cs_per', 'Месячные длятся, дней', `<input id="cs_per" type="number" inputmode="numeric" value="${set.period_len}">`)}</div>`;
+  h += f('cs_reg', 'Цикл', sel('cs_reg', [['yes', 'Регулярный'], ['no', 'Нерегулярный'], ['unknown', 'Не знаю']], set.regular));
+  h += f('cs_mode', 'Режим', sel('cs_mode', C_MODES, set.mode));
+  h += f('cs_lmp', 'Для беременности: первый день последних месячных', `<input id="cs_lmp" type="date" value="${set.preg_lmp || ''}">`, 'Нужно только в режиме «Я беременна». Если пусто — берём последние отмеченные месячные.');
+  h += f('cs_con', 'Контрацепция', sel('cs_con', C_CONTRA, set.contraception), 'Таблетки добавьте в «Лечение» — там будут отметки и напоминания.');
+  h += f('cs_lut', 'Длина второй фазы, дней', `<input id="cs_lut" type="number" inputmode="numeric" value="${set.luteal}">`, 'Обычно 14. Меняйте, только если так сказал врач или показывают ваши тесты.');
+  h += `<div class="field"><label>Что отмечать</label><div class="chips">${C_SECTIONS.filter(([k]) => k !== 'note').map(([k, l, ic]) => `<button type="button" class="chip" data-act="cTrack" data-k="${k}" aria-pressed="${set.track?.[k] !== false}">${ic} ${l}</button>`).join('')}</div><div class="hint">Невыбранное не показывается при вводе. Лишнее можно скрыть — не нужно заполнять всё каждый день.</div></div>`;
+  h += `<div class="err" id="csErr" hidden></div><div class="btns"><button class="btn wide" type="submit">Сохранить</button></div></form>`;
+  if (set.onboarded) h += sec('Удаление') + `<div class="btns" style="margin-top:0"><button type="button" class="btn danger" data-act="confirm" data-then="cWipe">Удалить все данные цикла</button></div><p class="note">Удалятся месячные, отметки дней и фото тестов на этом телефоне. Остальная медкарта не изменится.</p>`;
+  return {
+    title: 'Настройки цикла', html: h, after() {
+      $('#csForm').addEventListener('submit', ev => {
+        ev.preventDefault();
+        const err = $('#csErr'), g = id => $('#' + id)?.value.trim();
+        const len = +g('cs_len'), per = +g('cs_per'), lut = +g('cs_lut');
+        const bad = !(len >= 15 && len <= 90) ? 'Длина цикла — от 15 до 90 дней' : !(per >= 1 && per <= 15) ? 'Месячные — от 1 до 15 дней' : !(lut >= 8 && lut <= 20) ? 'Вторая фаза — от 8 до 20 дней' : g('cs_last') && g('cs_last') > todayISO() ? 'Дата в будущем' : '';
+        if (bad) { err.textContent = bad; err.hidden = false; return; }
+        Object.assign(set, { cycle_len: len, period_len: per, luteal: lut, regular: g('cs_reg'), mode: g('cs_mode'), contraception: g('cs_con'), preg_lmp: g('cs_lmp') || null, onboarded: true });
+        const last = g('cs_last');
+        if (last && !CY().periods.length) { const end = addDays(last, per - 1); CY().periods.push({ id: newId('per'), start: last, end: end >= todayISO() ? null : end }); }
+        stack.pop(); if (!stack.length) stack = [{ v: 'cycle' }]; saveLocal('Сохранено');
+      });
+    }
+  };
+};
+V.crem = () => {
+  const set = CY().set;
+  let h = `<p class="lead" style="margin:4px 4px 0">Сайт не может сам присылать уведомления, поэтому напоминания добавляются в Календарь iPhone. Выберите нужные.</p>`;
+  const r = (w, t, s) => row({ t, s, act: 'cCal', data: { w } });
+  h += sec('По прогнозу цикла') + list([
+    r('period', 'Скоро месячные', 'За 2 дня до ожидаемой даты, на 4 цикла вперёд'),
+    r('fertile', 'Начало фертильного окна', 'Утром в первый день окна'),
+    r('ovulation', 'Предполагаемая овуляция', 'Утром в день овуляции'),
+    r('test', 'Сделать тест на беременность', 'Через 3 дня после ожидаемых месячных'),
+  ]);
+  h += sec('Каждый день') + `<form class="f" id="crForm" style="grid-template-columns:1fr 1fr;gap:10px"><div class="field"><label for="cr_d">Дневник, время</label><input id="cr_d" type="time" value="${set.diary_time}"></div><div class="field"><label for="cr_b">Температура, время</label><input id="cr_b" type="time" value="${set.bbt_time}"></div></form>`;
+  h += list([r('diary', 'Заполнить дневник', 'Каждый день в выбранное время'), r('bbt', 'Измерить базальную температуру', 'Каждое утро, до подъёма с постели')]);
+  h += sec('Лекарства и контрацепция') + list([row({ t: 'Напоминания о лекарствах', s: 'Раздел «Лечение» → у курса «Напоминания в Календарь»', act: 'tab', data: { v: 'meds' } })]);
+  h += `<p class="note">Прогноз меняется, когда вы отмечаете новые месячные. Добавляйте прогнозные напоминания заново раз в пару месяцев. Если добавить повторно, события могут задвоиться.</p>`;
+  return {
+    title: 'Напоминания', html: h, after() {
+      $('#cr_d').addEventListener('change', e => { set.diary_time = e.target.value || '21:00'; idb.put('kv', 'local', LOCAL).catch(() => { }); });
+      $('#cr_b').addEventListener('change', e => { set.bbt_time = e.target.value || '07:00'; idb.put('kv', 'local', LOCAL).catch(() => { }); });
+    }
+  };
+};
+function cIcs(w) {
+  const m = cModel(), t = todayISO(), set = CY().set, allDay = d => ({ start: d.replace(/-/g, ''), allDay: addDays(d, 1).replace(/-/g, '') });
+  const starts = m.last ? [m.late ? null : m.nextStart, ...m.future].filter((d, i, a) => d && d >= t && a.indexOf(d) === i).slice(0, 4) : [];
+  if (w === 'period') return starts.map(d => icsEvent({ uid: `cyc-per-${d}`, ...allDay(d), summary: '🩸 Ожидаются месячные', desc: C_FORECAST, alarms: ['-P1DT15H'] }));
+  if (w === 'fertile') return starts.map(d => addDays(d, -m.luteal - 5)).filter(d => d >= t).map(d => icsEvent({ uid: `cyc-fert-${d}`, ...allDay(d), summary: '🟢 Начало фертильного окна', desc: C_FORECAST, alarms: ['PT9H'] }));
+  if (w === 'ovulation') return starts.map(d => addDays(d, -m.luteal)).filter(d => d >= t).map(d => icsEvent({ uid: `cyc-ov-${d}`, ...allDay(d), summary: '⭐ Предполагаемая овуляция', desc: C_FORECAST, alarms: ['PT9H'] }));
+  if (w === 'test') return starts.slice(0, 2).map(d => addDays(d, 3)).map(d => icsEvent({ uid: `cyc-test-${d}`, ...allDay(d), summary: '🧪 Тест на беременность, если месячные не начались', alarms: ['PT9H'] }));
+  if (w === 'diary') return [icsEvent({ uid: 'cyc-diary', start: icsDT(t, set.diary_time), rrule: 'FREQ=DAILY', summary: '📝 Отметить день в медкарте', desc: 'Самочувствие, настроение, симптомы — только то, что хочется.' })];
+  if (w === 'bbt') return [icsEvent({ uid: 'cyc-bbt', start: icsDT(addDays(t, 1), set.bbt_time), rrule: 'FREQ=DAILY', summary: '🌡️ Измерить базальную температуру', desc: 'До подъёма с постели, одним способом.' })];
+  return [];
+}
+
+/* ---------- мини-карточка на «Сегодня» ---------- */
+function cycleMini() {
+  if (!LOCAL.cycle?.set.onboarded) return '';
+  const set = CY().set, m = cModel();
+  if (set.mode === 'pregnant') { const lmp = set.preg_lmp || m.last?.start; if (!lmp) return ''; const days = daysBetween(lmp, m.t); return sec('Беременность') + list([row({ left: '<span class="ico">🤰</span>', t: `${Math.floor(days / 7)} ${plural(Math.floor(days / 7), 'неделя', 'недели', 'недель')} ${days % 7 ? dn(days % 7) : ''}`, s: `ПДР ~${fd(addDays(lmp, 280))}`, go: 'cycle' })]); }
+  if (!m.last) return '';
+  const info = cInfo(m.t);
+  return sec('Цикл', `<a href="#" ${nav('cday', { d: m.t })}>Отметить</a>`) + list([row({ left: `<span class="ico per">${m.cur.day}</span>`, t: `День цикла ${m.cur.day}${info.phase ? ' · ' + C_PHASE[info.phase].replace(' фаза', '').toLowerCase() : ''}`, s: m.late ? `Задержка ${dn(m.late)}` : `До месячных ~${dn(daysBetween(m.t, m.nextStart))} · ${fdLong(m.nextStart)}${info.fertile ? ' · фертильное окно' : ''}`, go: 'cycle' })]);
+}
+
+Object.assign(A, {
+  tab({ v }) { stack = [{ v }]; render(); scrollTo(0, 0); },
+  cMonth({ m }) { CAL_M = m; const y = scrollY; render(); scrollTo(0, y); },
+  cStart() {
+    const t = todayISO(), m = cModel();
+    if (m.ps.some(p => p.start <= t && t <= m.pEnd(p) && daysBetween(p.start, t) < 10)) { toast('Месячные уже отмечены'); return; }
+    CY().periods.push({ id: newId('per'), start: t, end: null });
+    const d = CY().days[t] ||= {}; d.flow ||= 3;
+    saveLocal('Отмечено: месячные начались. Интенсивность можно уточнить');
+  },
+  cEnd() {
+    const t = todayISO(), p = cModel().last;
+    if (!p || p.end || daysBetween(p.start, t) > 15) { toast('Сначала отметьте начало'); return; }
+    p.end = t; saveLocal('Отмечено: месячные закончились');
+  },
+  cChip({ f, v, m }, b) {
+    const day = CED.day, typed = /^\d+$/.test(v) && ['flow', 'sleep.q', 'sleep.insomnia'].includes(f) ? +v : v;
+    if (m) { const a = getP(day, f) || []; const i = a.indexOf(typed); if (i >= 0) a.splice(i, 1); else a.push(typed); setP(day, f, a.length ? a : null); b.setAttribute('aria-pressed', i < 0); }
+    else { const on = String(getP(day, f) ?? '') === String(typed); setP(day, f, on ? null : typed); b.parentElement.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', !on && c === b)); }
+  },
+  cSym({ v }, b) {
+    const s = CED.day.sym ||= {}, l = ((s[v] || 0) + 1) % 5;
+    if (l) s[v] = l; else delete s[v];
+    b.setAttribute('aria-pressed', l > 0); b.innerHTML = `${esc(v)}${l ? ` <em>${C_LVL[l]}</em>` : ''}`;
+  },
+  cAddSym() {
+    const inp = $('#cNewSym'), v = inp.value.trim(); if (!v) return;
+    const all = [...Object.values(C_SYM).flat(), ...CY().custom_sym];
+    if (!all.some(x => x.toLowerCase() === v.toLowerCase())) CY().custom_sym.push(v);
+    (CED.day.sym ||= {})[all.find(x => x.toLowerCase() === v.toLowerCase()) || v] ||= 1;
+    const y = scrollY; render(); scrollTo(0, y);
+  },
+  cTrack({ k }, b) { const t = CY().set.track ||= {}; t[k] = t[k] === false; b.setAttribute('aria-pressed', t[k] !== false); },
+  cDelDay({ d }) { for (const f of cDay(d).photos || []) idb.del('files', f).catch(() => { }); const had = cDay(d).flow; delete CY().days[d]; cSyncFlow(d, false, !!had); stack.pop(); saveLocal('Записи дня удалены'); },
+  cDelPhoto({ d, f }) { const day = CY().days[d]; if (day?.photos) { day.photos = day.photos.filter(x => x !== f); if (!day.photos.length) delete day.photos; } idb.del('files', f).catch(() => { }); saveLocal('Фото удалено'); },
+  cDelPeriod({ id }) { CY().periods = CY().periods.filter(p => p.id !== id); stack.pop(); saveLocal('Удалено'); },
+  async cWipe() {
+    for (const k of (await idb.keys('files').catch(() => [])).filter(k => String(k).startsWith('local/cycle/'))) await idb.del('files', k).catch(() => { });
+    LOCAL.cycle = emptyCycle(); stack = [{ v: 'cycle' }]; saveLocal('Данные цикла удалены');
+  },
+  cRange({ r }) { C_RANGE = r; render(); },
+  cPrint() { window.print(); },
+  async cCopy() { try { await navigator.clipboard.writeText(cReportText(true)); toast('Скопировано'); } catch (e) { shareFile(`Отчёт о цикле ${todayISO()}.txt`, new Blob([cReportText(true)], { type: 'text/plain' })); } },
+  cShareTxt({ w }) { shareFile(w === 'doc' ? `Отчёт о цикле ${todayISO()}.txt` : `Дневник цикла ${todayISO()}.txt`, new Blob([cReportText(w === 'doc')], { type: 'text/plain' }), 'Файл сохранён'); },
+  cCsv() { shareFile(`cikl-${todayISO()}.csv`, new Blob([cCSV()], { type: 'text/csv' }), 'Файл сохранён'); },
+  cCal({ w }) { openCalendar(cIcs(w), 'напоминания'); },
+  theme({ t }) { try { if (t === 'auto') localStorage.removeItem('mk-theme'); else localStorage.setItem('mk-theme', t); } catch (e) { } applyTheme(); render(); },
+});
+function applyTheme() {
+  let t = null; try { t = localStorage.getItem('mk-theme'); } catch (e) { }
+  if (t) document.documentElement.dataset.theme = t; else delete document.documentElement.dataset.theme;
+}
+applyTheme();
 
 /* =========================================================
    Запуск: пароль, загрузка, обновления
@@ -1594,6 +2482,7 @@ $('#lockForm').addEventListener('submit', async e => {
     KEY = await idb.get('kv', 'key');
     SALT = await idb.get('kv', 'salt');
   } catch (e) { LOCAL = LOCAL || emptyLocal(); }
+  { const e = emptyCycle(), c = LOCAL.cycle || {}; LOCAL.cycle = { ...e, ...c, set: { ...e.set, ...(c.set || {}), track: { ...e.set.track, ...(c.set?.track || {}) } } }; }
   if (!KEY || !SERVER) { showLock(); return; }
   build(); showApp();
   const r = await syncServer(); if (r === 'new') { render(); toast('Данные обновлены'); }
