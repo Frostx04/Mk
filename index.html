@@ -567,7 +567,7 @@ h2.sec .i { width: 16px; height: 16px; vertical-align: -3px; margin-right: 4px; 
 
 <script>
 'use strict';
-const APP_VERSION = '28.09.2026 12:00';
+const APP_VERSION = '01.10.2026 12:00';
 /* =========================================================
    Справочники и форматирование
    ========================================================= */
@@ -1482,6 +1482,7 @@ V.data = () => {
   h += list([row({ left: `<span class="ico">${icon('file')}</span>`, t: 'Журнал записей', s: 'Что и когда отмечено на телефоне', go: 'journal' })]);
   h += `<p class="note">Копия — файл со всеми отметками, лекарствами, записями цикла, фото и журналом. Перешлите его в Telegram: так записи попадут в общую медкарту и не потеряются. «Восстановить» добавляет записи из файла к тем, что есть, ничего не стирая.</p>
     <p class="note"><b>Не удаляйте медкарту с экрана «Домой» без свежей копии:</b> вместе с иконкой iPhone стирает записи, сделанные в ней.</p>`;
+  h += sec('Уведомления') + `<div class="card" id="pushBox"><span class="muted">Проверяю…</span></div>`;
   h += sec('Календарь iPhone') + `<div class="btns" style="margin-top:0"><button type="button" class="btn soft" data-act="calAll">Все напоминания в Календарь</button></div><p class="note">Лекарства по времени, конец курсов, записи к врачам и сроки дел. Если добавить повторно, события могут задвоиться.</p>`;
   h += sec('Оформление') + `<div class="chips" style="margin-bottom:8px">${[['cats', 'Котики'], ['classic', 'Строгое']].map(([k, l]) => `<button type="button" class="chip" data-act="skin" data-s="${k}" aria-pressed="${SKIN() === k}">${k === 'cats' ? catMood('good') + ' ' : ''}${l}</button>`).join('')}</div><div class="chips">${[['auto', 'Как на телефоне'], ['light', 'Светлая'], ['dark', 'Тёмная']].map(([k, l]) => `<button type="button" class="chip" data-act="theme" data-t="${k}" aria-pressed="${th === k}">${l}</button>`).join('')}</div>`;
   h += sec('Безопасность') + `<div class="btns" style="margin-top:0"><button type="button" class="btn ghost" data-act="confirm" data-then="lockNow">Выйти и забыть пароль</button></div><p class="note">После выхода для входа понадобится пароль. Ваши записи на телефоне сохранятся.</p>`;
@@ -1491,6 +1492,7 @@ V.data = () => {
       const el = $('#persistState'); let st = 'не удалось проверить';
       try { const ok = await navigator.storage?.persisted?.(); st = ok ? 'надёжное: iPhone не очистит само' : 'обычное: откройте медкарту с экрана «Домой», тогда iPhone хранит записи надёжно'; } catch (e) { }
       if (el?.isConnected) el.textContent = st;
+      pushRender();
     }
   };
 };
@@ -1530,6 +1532,27 @@ async function importLocal(file) {
   for (const [k, b64] of Object.entries(data.files || {})) { if (await idb.get('files', k).catch(() => null)) continue; await idb.put('files', k, new Blob([b64d(b64)], { type: mimeOf(k) })); nf++; }
   logAct(`Восстановлено из копии от ${fd((data.exported || '').slice(0, 10))}: ${n} ${plural(n, 'запись', 'записи', 'записей')}${nf ? `, файлов ${nf}` : ''}`);
   await saveLocal(n || nf ? `Восстановлено: ${n} ${plural(n, 'запись', 'записи', 'записей')}${nf ? `, файлов ${nf}` : ''}` : 'Всё из этой копии уже есть в телефоне');
+}
+
+// Уведомления: телефон подписывается, код подписки один раз пересылается и вставляется в секреты GitHub
+const VAPID_PUBLIC = 'BFcC-pn4Nptx9HULxhs0izzG_KmlNrmRdaC0Vz4m_CmKt4cNC5MaR_J0duJ28p87gnS-R74-npGKstCoREoqdFc';
+const b64u = s => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - s.length % 4) % 4)), c => c.charCodeAt(0));
+const pushSupported = () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+async function pushRender(sub) {
+  const box = $('#pushBox'); if (!box) return;
+  const standalone = navigator.standalone || matchMedia('(display-mode: standalone)').matches;
+  if (!pushSupported()) { box.innerHTML = `<p class="small" style="margin:0">${standalone ? 'Этот телефон не умеет получать уведомления от медкарты. Нужна iOS 16.4 или новее: Настройки → Основные → Обновление ПО.' : 'Уведомления работают, только если открыть медкарту с иконки на экране «Домой» (iOS 16.4 и новее).'}</p>`; return; }
+  if (Notification.permission === 'denied') { box.innerHTML = `<p class="small" style="margin:0">Уведомления запрещены. Включите: Настройки iPhone → Уведомления → Медкарта.</p>`; return; }
+  try { sub ||= await (await navigator.serviceWorker.ready).pushManager.getSubscription(); } catch (e) { }
+  if (!box.isConnected) return;
+  if (!sub || Notification.permission !== 'granted') {
+    box.innerHTML = `<p class="small" style="margin:0 0 4px">Медкарта будет присылать: время приёма лекарств и два контрольных «ты приняла?» через 10 и 20 минут, записи к врачу накануне и за 2 часа, сроки дел.</p><div class="btns"><button type="button" class="btn wide" data-act="pushOn">Включить уведомления</button></div>`;
+    return;
+  }
+  box.innerHTML = `<p style="margin:0 0 8px"><b>Включены на этом телефоне</b></p>
+    <div class="field"><label for="pushCode">Код для подключения — перешлите его один раз</label><textarea id="pushCode" readonly style="min-height:72px;font:12px/1.3 var(--mono)">${esc(JSON.stringify(sub))}</textarea></div>
+    <div class="btns"><button type="button" class="btn soft sm" data-act="pushCopy">Скопировать код</button><button type="button" class="btn ghost sm" data-act="pushShare">Отправить файлом</button><button type="button" class="btn ghost sm" data-act="pushTest">Проверить</button></div>
+    <p class="note" style="margin:10px 0 0">Код вставляется в настройки GitHub (секрет PUSH_SUBSCRIPTIONS). Пока его не вставили, напоминания не приходят. Если удалить медкарту с экрана «Домой», код поменяется — тогда его нужно переслать заново.</p>`;
 }
 
 function gone() { return { title: 'Не найдено', html: empty('Запись не найдена. Возможно, её удалили.') }; }
@@ -1826,6 +1849,22 @@ const A = {
   },
   pickImport() { $('#impFile')?.click(); },
   journalMore() { JOURNAL_N += 200; const y = scrollY; render(); scrollTo(0, y); },
+  async pushOn() {
+    if (!pushSupported()) { pushRender(); return; }
+    try {
+      const perm = await Notification.requestPermission();
+      if (perm !== 'granted') { toast('Уведомления не разрешены'); pushRender(); return; }
+      const reg = await navigator.serviceWorker.ready;
+      const sub = (await reg.pushManager.getSubscription()) || await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64u(VAPID_PUBLIC) });
+      logAct('Уведомления включены на этом телефоне');
+      await idb.put('kv', 'local', LOCAL).catch(() => { });
+      toast('Уведомления включены. Перешлите код');
+      pushRender(sub);
+    } catch (e) { toast('Не получилось включить: ' + (e.message || e)); }
+  },
+  async pushTest() { const reg = await navigator.serviceWorker.ready; reg.showNotification('Медкарта 🐾', { body: 'Так будут выглядеть напоминания о лекарствах.', icon: 'icon-192.png', tag: 'test' }); },
+  async pushCopy() { const t = $('#pushCode')?.value; try { await navigator.clipboard.writeText(t); toast('Код скопирован'); } catch (e) { shareFile('medkarta-uvedomleniya.txt', new Blob([t], { type: 'text/plain' })); } },
+  pushShare() { shareFile('medkarta-uvedomleniya.txt', new Blob([$('#pushCode')?.value || ''], { type: 'text/plain' })); },
   async lockNow() { await idb.del('kv', 'key').catch(() => { }); KEY = null; showLock(); },
 };
 
