@@ -1,0 +1,49 @@
+name: Уведомления медкарты
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+    inputs:
+      test:
+        description: 'Прислать проверочное уведомление'
+        type: boolean
+        default: true
+
+concurrency:
+  group: push
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Что уже отправлено
+        uses: actions/cache/restore@v4
+        with:
+          path: .push-state
+          key: push-state-${{ github.run_id }}
+          restore-keys: push-state-
+      - run: npm install --no-save --no-audit --no-fund --prefix .github/push web-push@3.6.7
+      - name: Отправить напоминания
+        run: node .github/push/send.mjs
+        env:
+          MEDKARTA_PASSWORD: ${{ secrets.MEDKARTA_PASSWORD }}
+          VAPID_PRIVATE_KEY: ${{ secrets.VAPID_PRIVATE_KEY }}
+          PUSH_SUBSCRIPTIONS: ${{ secrets.PUSH_SUBSCRIPTIONS }}
+          VAPID_PUBLIC_KEY: BFcC-pn4Nptx9HULxhs0izzG_KmlNrmRdaC0Vz4m_CmKt4cNC5MaR_J0duJ28p87gnS-R74-npGKstCoREoqdFc
+          TEST: ${{ inputs.test }}
+      - name: Запомнить отправленное
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: .push-state
+          key: push-state-${{ github.run_id }}
