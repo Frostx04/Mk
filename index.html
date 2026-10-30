@@ -567,7 +567,7 @@ h2.sec .i { width: 16px; height: 16px; vertical-align: -3px; margin-right: 4px; 
 
 <script>
 'use strict';
-const APP_VERSION = '01.10.2026 12:00';
+const APP_VERSION = '30.10.2026 12:00';
 /* =========================================================
    Справочники и форматирование
    ========================================================= */
@@ -2262,7 +2262,7 @@ function cQuick(d = todayISO()) {
   const btn = (s, ic, t) => cTracked(s) ? `<button type="button" class="qa" ${nav('clog', { d, s })}>${icon(ic)}${t}</button>` : '';
   const m = cModel(), open = m.last && !m.last.end && daysBetween(m.last.start, m.t) < 15;
   let h = `<div class="qa-grid">`;
-  if (cTracked('flow')) h += open ? `<button type="button" class="qa per" data-act="cEnd">${icon('drop')}Закончились</button>` : `<button type="button" class="qa per" data-act="cStart">${icon('drop')}Начались</button>`;
+  if (cTracked('flow')) h += open ? `<button type="button" class="qa per" ${nav('cmark', { w: 'end' })}>${icon('drop')}Закончились</button>` : `<button type="button" class="qa per" ${nav('cmark', { w: 'start' })}>${icon('drop')}Начались</button>`;
   h += btn('flow', 'flow', 'Интенсивность') + btn('sym', 'pulse', 'Симптомы') + btn('mood', 'cat', 'Настроение') + btn('dis', 'waves', 'Выделения') + btn('sex', 'heart', 'Секс')
     + btn('bbt', 'thermo', 'Температура') + btn('note', 'pencil', 'Заметка') + `<button type="button" class="qa" data-act="tab" data-v="meds">${icon('pill')}Лекарства</button>`;
   return h + `</div>`;
@@ -2292,6 +2292,7 @@ V.cycle = () => {
     if (C_HORMONAL.has(set.contraception)) h += `<p class="note">При гормональной контрацепции кровотечение — реакция отмены, а не естественный цикл. Фертильное окно не показываем.</p>`;
   }
   h += sec('Сегодня, ' + fdLong(t), `<a href="#" ${nav('cday', { d: t })}>Весь день</a>`) + cDayChips(t) + cQuick(t);
+  if (cTracked('flow') && set.mode !== 'pregnant') h += cLastPeriodRow();
   h += cCalendar();
   h += sec('Разделы');
   h += list([
@@ -2369,6 +2370,11 @@ V.cday = ({ d }) => {
   let h = `<div class="big-title">${fdLong(d)} ${d.slice(0, 4)}</div><p class="meta">${WD[new Date(d + 'T12:00').getDay()]}</p>`;
   const facts = [o.cday ? `День цикла: ${o.cday}` : '', o.phase ? C_PHASE[o.phase] : '', o.inPeriod ? 'месячные' : o.predPeriod ? 'прогноз месячных' : '', o.isOv ? (o.predicted || o.ovSrc === 'calc' ? 'предполагаемая овуляция' : 'овуляция') : o.fertile ? 'фертильное окно' : ''].filter(Boolean);
   if (facts.length) h += `<p class="facts">${facts.join(' · ')}</p>`;
+  if (cTracked('flow') && d <= todayISO() && CY().set.mode !== 'pregnant') {
+    const p = cPeriodFor(d), canEnd = p && d >= p.start && daysBetween(p.start, d) <= 15;
+    h += `<div class="btns" style="margin:0 0 10px">${!p || d > cModel().pEnd(p) ? `<button type="button" class="btn soft" data-act="cMarkAt" data-w="start" data-d="${d}">Начались в этот день</button>` : ''}${canEnd && p.end !== d ? `<button type="button" class="btn soft" data-act="cMarkAt" data-w="end" data-d="${d}">Закончились в этот день</button>` : ''}</div>`;
+    if (p && canEnd) h += `<p class="note" style="margin:0 4px 12px">Месячные с ${fd(p.start)}${p.end ? ` по ${fd(p.end)}` : ', конец не отмечен'}. <a href="#" ${nav('form', { k: 'cperiod', id: p.id })}>Изменить даты</a></p>`;
+  }
   const rows = C_SECTIONS.filter(([k]) => cTracked(k) || cSecSum(k, day)).map(([k, l, ic]) => { const v = cSecSum(k, day); return row({ left: `<span class="ico">${icon(ic)}</span>`, t: l, s: v ? esc(v) : '<span class="muted">не отмечено</span>', go: 'clog', p: { d, s: k } }); });
   h += list(rows);
   if (day.photos?.length) h += sec('Фото тестов') + `<div class="stack">${day.photos.map((f, i) => `<div class="file-view" id="cph${i}"><div class="file-missing">Загружаю…</div></div>`).join('')}</div>`;
@@ -2682,11 +2688,12 @@ V.ccycle = ({ s }) => {
 FORMS.cperiod = {
   title: 'Месячные', fields: p => {
     const x = p.id ? CY().periods.find(q => q.id === p.id) || {} : {};
-    return [{ n: 'start', l: 'Первый день', t: 'date', req: 1, val: x.start }, { n: 'end', l: 'Последний день', t: 'date', val: x.end, hint: 'Можно оставить пустым, если ещё идут.' }];
+    return [{ n: 'start', l: 'Первый день', t: 'date', req: 1, val: x.start }, { n: 'end', l: 'Последний день', t: 'date', val: x.end, hint: 'Можно поставить любой прошедший день. Пусто — если ещё идут.' }];
   },
   save(v, _, p) {
     if (v.start > todayISO()) throw 'Дата начала в будущем';
     if (v.end && v.end < v.start) throw 'Конец раньше начала';
+    if (v.end && v.end > todayISO()) throw 'Дата окончания в будущем';
     if (v.end && daysBetween(v.start, v.end) > 15) throw 'Слишком долго: больше 15 дней. Проверьте даты';
     const ps = CY().periods;
     if (ps.some(q => q.id !== p.id && Math.abs(daysBetween(q.start, v.start)) < 10)) throw 'Рядом уже есть месячные с близкой датой';
@@ -2695,6 +2702,54 @@ FORMS.cperiod = {
     logAct(`Цикл: месячные ${fd(v.start)}${v.end ? '–' + fd(v.end) : ''}${p.id ? ' (даты исправлены)' : ' добавлены'}`);
     CY().set.onboarded = true; saveLocal('Сохранено'); return { back: 1 };
   }
+};
+
+/* ---------- начало и конец месячных в любой день ---------- */
+// Месячные, к которым относится день d: последние с началом не позже d
+function cPeriodFor(d) { let p = null; for (const x of cModel().ps) if (x.start <= d) p = x; return p; }
+function cMarkStart(d) {
+  const m = cModel();
+  if (d > todayISO()) return 'Этот день ещё не наступил';
+  const inside = m.ps.find(p => p.start <= d && d <= m.pEnd(p));
+  if (inside) return inside.start === d ? 'Начало уже отмечено в этот день' : `Этот день уже внутри месячных с ${fd(inside.start)}. Чтобы сдвинуть начало — «Изменить даты»`;
+  const near = m.ps.find(p => Math.abs(daysBetween(p.start, d)) < 10);
+  if (near) return `Рядом уже есть месячные с ${fd(near.start)}. Чтобы сдвинуть начало — «Изменить даты»`;
+  CY().periods.push({ id: newId('per'), start: d, end: null });
+  const day = CY().days[d] ||= {}; day.flow ||= 3;
+  logAct(`Цикл: месячные начались ${fd(d)}`);
+  saveLocal(catsOn() ? `Отмечено ${fdLong(d)}. Котик приносит грелку и плед` : `Отмечено: месячные начались ${fdLong(d)}`);
+  return null;
+}
+function cMarkEnd(d) {
+  if (d > todayISO()) return 'Этот день ещё не наступил';
+  const p = cPeriodFor(d);
+  if (!p || daysBetween(p.start, d) > 15) return 'Сначала отметьте начало месячных — они должны начаться не раньше чем за 15 дней до этого дня';
+  if (p.end === d) return 'Конец уже отмечен в этот день';
+  const was = p.end; p.end = d;
+  logAct(`Цикл: месячные закончились ${fd(d)}${was ? ` (было ${fd(was)})` : ''}`);
+  saveLocal(was ? `Исправлено: закончились ${fdLong(d)}` : `Отмечено: месячные закончились ${fdLong(d)}`);
+  return null;
+}
+function cLastPeriodRow() {
+  const m = cModel(), p = m.last; if (!p) return '';
+  const end = p.end ? fd(p.end) : daysBetween(p.start, m.t) < 15 ? 'идут' : 'конец не отмечен';
+  return `<div style="margin-top:10px">${list([row({ left: `<span class="ico per">${icon('drop')}</span>`, t: 'Последние месячные', s: `${fd(p.start)} – ${end}`, r: '<span class="small" style="color:var(--accent)">Изменить</span>', go: 'form', p: { k: 'cperiod', id: p.id } })])}</div>`;
+}
+V.cmark = ({ w }) => {
+  const t = todayISO(), m = cModel(), p = w === 'end' ? cPeriodFor(t) : null;
+  const min = p ? p.start : addDays(t, -60);
+  const days = Array.from({ length: 7 }, (_, i) => addDays(t, -i)).filter(d => d >= min);
+  const word = ['Сегодня', 'Вчера', 'Позавчера'];
+  let h = `<p class="lead" style="margin:4px 4px 12px">${w === 'end' ? `Месячные с ${fd(p?.start || t)}. В какой день они закончились?` : 'В какой день начались месячные?'}</p>`;
+  h += `<div class="list">${days.map((d, i) => row({ t: `${word[i] || WD[new Date(d + 'T12:00').getDay()][0].toUpperCase() + WD[new Date(d + 'T12:00').getDay()].slice(1)}`, s: fdLong(d), r: w === 'end' && p?.end === d ? '<span class="pill ok">сейчас</span>' : '', act: 'cMarkAt', data: { w, d, back: 1 } })).join('')}</div>`;
+  h += `<form class="f" id="cmForm" style="margin-top:14px;grid-template-columns:1fr auto;align-items:end"><div class="field"><label for="cmDate">Другой день</label><input id="cmDate" type="date" max="${t}" min="${min}" value="${addDays(t, -7) >= min ? addDays(t, -7) : min}"></div><button class="btn" type="submit">Отметить</button></form>`;
+  h += `<div class="err" id="cmErr" hidden></div>`;
+  if (m.last) h += `<p class="note">Ошиблись датой? <a href="#" ${nav('form', { k: 'cperiod', id: m.last.id })}>Изменить даты последних месячных</a> или откройте нужный цикл в «Мои циклы».</p>`;
+  return {
+    title: w === 'end' ? 'Месячные закончились' : 'Месячные начались', html: h, after() {
+      $('#cmForm').addEventListener('submit', ev => { ev.preventDefault(); const d = $('#cmDate').value; if (d) A.cMarkAt({ w, d, back: 1 }); });
+    }
+  };
 };
 
 /* ---------- отчёт и экспорт ---------- */
@@ -2837,6 +2892,11 @@ function cycleMini() {
 Object.assign(A, {
   tab({ v }) { stack = [{ v }]; render(); scrollTo(0, 0); },
   cMonth({ m }) { CAL_M = m; const y = scrollY; render(); scrollTo(0, y); },
+  cMarkAt({ w, d, back }) {
+    if (back) stack.pop();
+    const err = w === 'end' ? cMarkEnd(d) : cMarkStart(d);
+    if (err) { if (back) stack.push({ v: 'cmark', p: { w } }); const box = $('#cmErr'); if (box && back) { render(); const b2 = $('#cmErr'); b2.textContent = err; b2.hidden = false; } else toast(err); }
+  },
   cStart() {
     const t = todayISO(), m = cModel();
     if (m.ps.some(p => p.start <= t && t <= m.pEnd(p) && daysBetween(p.start, t) < 10)) { toast('Месячные уже отмечены'); return; }
